@@ -1,0 +1,198 @@
+﻿<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Java Journey — OneCompiler</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="stylesheet" href="java-journey-oc.css">
+</head>
+<body class="flex h-screen overflow-hidden">
+
+<!-- ═══════════════════ SIDEBAR ═══════════════════ -->
+<aside id="sidebar" class="flex flex-col">
+  <div class="p-4 border-b border-slate-800">
+    <div class="flex items-center gap-3">
+      <div id="logo-icon" class="w-9 h-9 rounded-xl bg-indigo-600/30 border border-indigo-500/40 flex items-center justify-center text-lg" title="Java Journey">☕</div>
+      <div>
+        <div class="font-bold text-sm">Java Journey</div>
+        <div class="text-xs text-slate-500">Nivel Principiante</div>
+      </div>
+    </div>
+    <div class="text-xs text-slate-500 mt-3" id="lessons-label">0 / 12 lecciones</div>
+  </div>
+  <nav class="flex-1 py-2" id="lesson-list"></nav>
+</aside>
+
+<!-- ═══════════════════ MAIN ═══════════════════ -->
+<main class="flex-1 flex overflow-hidden">
+
+  <!-- Explanation panel -->
+  <div class="w-80 min-w-[280px] border-r border-slate-800 overflow-y-auto p-5 flex-shrink-0" id="explanation-panel">
+    <p class="text-slate-400 text-sm">Seleccionar una lección del panel izquierdo para comenzar.</p>
+  </div>
+
+  <!-- OneCompiler ocupa toda la derecha -->
+  <div class="flex-1 flex flex-col overflow-hidden">
+
+    <!-- Toolbar mínima -->
+    <div class="flex items-center gap-2 px-4 py-2 border-b border-slate-800 bg-slate-900 flex-shrink-0">
+      <div class="ml-auto flex gap-2">
+        <button class="btn-hint" onclick="showHint()">💡 Pista</button>
+        <button class="btn-hint" onclick="showShare()">📤 Compartir</button>
+      </div>
+    </div>
+
+    <!-- OneCompiler ocupa la mayor parte del espacio -->
+    <div style="flex:1; overflow:hidden;">
+      <iframe id="oc-iframe"
+        src="https://onecompiler.com/java?hideTitle=true&hideNew=true&hideLanguages=true&theme=dark&hideStdin=false&disableLocalStorage=true"
+        style="width:100%;height:100%;border:none;"
+        onload="ocLoaded()">
+      </iframe>
+    </div>
+
+    <!-- Panel de verificación de salida -->
+    <div id="verify-panel" style="display:none;" class="flex-shrink-0 border-t border-slate-700 bg-slate-900 px-4 py-3">
+      <div class="flex items-center gap-2 mb-1">
+        <span class="text-xs text-slate-400 font-medium">Ejecutar el programa y pegar la salida aquí:</span>
+      </div>
+      <div class="flex gap-2 items-start">
+        <textarea id="output-input"
+          rows="2"
+          placeholder="Pegar salida del programa..."
+          class="flex-1 bg-slate-800 border border-slate-600 rounded text-sm text-white font-mono px-3 py-2 resize-none focus:outline-none focus:border-emerald-500"
+          style="min-width:0;"
+          onkeydown="if(event.ctrlKey&&event.key==='Enter')verifyOutput()"></textarea>
+        <button onclick="verifyOutput()"
+          class="bg-emerald-600 hover:bg-emerald-500 text-white text-sm font-semibold px-4 py-2 rounded transition-colors whitespace-nowrap">
+          ✔ Verificar
+        </button>
+      </div>
+      <div id="verify-result" class="mt-2 text-sm hidden"></div>
+    </div>
+
+  </div>
+</main>
+
+<!-- ═══════════════════ QUIZ MODAL ═══════════════════ -->
+<div id="quiz-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:60;align-items:center;justify-content:center;">
+  <div style="background:#161b27;border:1px solid #2d3748;border-radius:16px;padding:28px;max-width:520px;width:94%;animation:pop .2s ease;">
+    <div class="flex items-center justify-between mb-4">
+      <div id="qz-topic" class="text-xs font-bold uppercase tracking-wider text-indigo-400"></div>
+      <div id="qz-counter" class="text-xs text-slate-500"></div>
+    </div>
+    <!-- progress bar -->
+    <div style="height:4px;background:#1e2535;border-radius:2px;margin-bottom:20px;">
+      <div id="qz-progress" style="height:4px;background:#22c55e;border-radius:2px;transition:width .3s;width:0%"></div>
+    </div>
+    <!-- question -->
+    <div id="qz-question" class="text-sm font-semibold text-slate-100 mb-3 leading-relaxed"></div>
+    <div id="qz-code" class="mono text-xs bg-slate-900 rounded-lg p-3 mb-4 text-slate-300 leading-6" style="display:none;white-space:pre;"></div>
+    <!-- options -->
+    <div id="qz-options" class="flex flex-col gap-2 mb-4"></div>
+    <!-- feedback -->
+    <div id="qz-feedback" style="display:none;" class="text-sm rounded-lg p-3 mb-4"></div>
+    <!-- nav buttons -->
+    <div class="flex justify-between items-center">
+      <button onclick="closeQuiz()" class="text-xs text-slate-500 hover:text-slate-300">Cerrar</button>
+      <button id="qz-next" onclick="nextQuestion()" style="display:none;" class="btn-run px-6">Siguiente →</button>
+    </div>
+    <!-- score screen -->
+    <div id="qz-score" style="display:none;" class="text-center py-4">
+      <div class="text-5xl mb-3" id="qz-score-emoji"></div>
+      <div class="text-xl font-bold mb-2" id="qz-score-text"></div>
+      <div class="text-slate-400 text-sm mb-5" id="qz-score-sub"></div>
+      <div class="flex gap-3 justify-center">
+        <button onclick="restartQuiz()" class="btn-hint px-5">Repetir quiz</button>
+        <button onclick="closeQuiz()" class="btn-run px-5">Cerrar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════ SHARE MODAL ═══════════════════ -->
+<div id="share-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:50;align-items:center;justify-content:center;">
+  <div style="background:#161b27;border:1px solid #2d3748;border-radius:16px;padding:28px;max-width:500px;width:94%;animation:pop .2s ease;">
+    <div style="font-size:15px;font-weight:700;color:#e2e8f0;margin-bottom:4px;">📤 Compartir completo</div>
+    <div style="font-size:12px;color:#64748b;margin-bottom:16px;">Mensaje listo para enviar a la docente. Pegar el link de OneCompiler si guardaste el código.</div>
+
+    <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#818cf8;margin-bottom:6px;">Link de OneCompiler <span style="color:#4a5568;font-weight:400;text-transform:none;">(opcional)</span></div>
+    <input id="share-oc-input" type="text" placeholder="Pegar el link aquí (ej: onecompiler.com/java/...)" oninput="updateShareMessage()"
+      style="width:100%;box-sizing:border-box;background:#0f1117;border:1px solid #2d3748;border-radius:8px;padding:9px 12px;font-size:13px;color:#e2e8f0;outline:none;margin-bottom:16px;">
+
+    <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#818cf8;margin-bottom:6px;">Mensaje para enviar</div>
+    <textarea id="share-message" readonly rows="9"
+      style="width:100%;box-sizing:border-box;background:#0f1117;border:1px solid #2d3748;border-radius:8px;padding:10px 12px;font-size:12px;color:#94a3b8;line-height:1.6;resize:none;font-family:inherit;margin-bottom:20px;"></textarea>
+
+    <div style="display:flex;gap:8px;justify-content:flex-end;">
+      <button onclick="document.getElementById('share-modal').style.display='none'" style="padding:9px 20px;background:transparent;border:1px solid #2d3748;border-radius:8px;color:#64748b;cursor:pointer;font-size:13px;">Cerrar</button>
+      <button id="share-copy-btn" onclick="copyShareMessage()" style="padding:9px 24px;background:#4f6ef7;border:none;border-radius:8px;color:#fff;cursor:pointer;font-size:13px;font-weight:600;">Copiar mensaje</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════ HINT MODAL ═══════════════════ -->
+<div id="modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:50;align-items:center;justify-content:center;">
+  <div style="background:#161b27;border:1px solid #2d3748;border-radius:16px;padding:28px;max-width:400px;width:90%;text-align:center;animation:pop .2s ease;">
+    <div id="modal-icon" class="text-4xl mb-3"></div>
+    <div id="modal-title" class="text-lg font-bold mb-2"></div>
+    <div id="modal-body" class="text-slate-400 text-sm mb-5 mono"></div>
+    <button onclick="closeModal()" class="btn-run px-8">Cerrar</button>
+  </div>
+</div>
+
+<!-- ═══════════════════ TEACHER LOGIN ═══════════════════ -->
+<div id="teacher-login" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:90;align-items:center;justify-content:center;">
+  <div style="background:#161b27;border:1px solid #4f6ef7;border-radius:16px;padding:28px;width:320px;animation:pop .2s ease;">
+    <div style="font-size:28px;text-align:center;margin-bottom:8px;">🔐</div>
+    <div style="font-size:15px;font-weight:700;text-align:center;color:#e2e8f0;margin-bottom:4px;">Acceso docente</div>
+    <div style="font-size:11px;color:#4a5568;text-align:center;margin-bottom:20px;">Panel de administración</div>
+    <input id="teacher-pw-input" type="password" placeholder="Contraseña"
+      onkeydown="if(event.key==='Enter')submitTeacherLogin()"
+      style="width:100%;padding:10px 14px;background:#0f1117;border:1px solid #2d3748;border-radius:8px;color:#e2e8f0;font-size:13px;outline:none;box-sizing:border-box;margin-bottom:8px;">
+    <div id="teacher-pw-error" style="display:none;color:#ef4444;font-size:12px;margin-bottom:8px;">Contraseña incorrecta.</div>
+    <div style="display:flex;gap:8px;">
+      <button onclick="document.getElementById('teacher-login').style.display='none'"
+        style="flex:1;padding:9px;background:transparent;border:1px solid #2d3748;border-radius:8px;color:#64748b;cursor:pointer;font-size:13px;">Cancelar</button>
+      <button onclick="submitTeacherLogin()"
+        style="flex:1;padding:9px;background:#4f6ef7;border:none;border-radius:8px;color:#fff;cursor:pointer;font-size:13px;font-weight:600;">Acceder</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════ TEACHER PANEL ═══════════════════ -->
+<div id="teacher-panel" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:90;align-items:center;justify-content:center;">
+  <div style="background:#161b27;border:1px solid #4f6ef7;border-radius:16px;padding:28px;width:400px;max-height:88vh;overflow-y:auto;animation:pop .2s ease;">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;">
+      <div style="font-size:15px;font-weight:700;color:#e2e8f0;">⚙️ Panel docente</div>
+      <button onclick="closeTeacherPanel()" style="background:none;border:none;color:#64748b;cursor:pointer;font-size:18px;line-height:1;">✕</button>
+    </div>
+
+    <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#818cf8;margin-bottom:12px;">Temas habilitados para estudiantes</div>
+    <div id="tp-topic-list"></div>
+
+    <div style="display:flex;gap:8px;margin-top:14px;">
+      <button onclick="enableAllTopics()" style="flex:1;padding:8px;background:transparent;border:1px solid #4f6ef7;border-radius:8px;color:#818cf8;cursor:pointer;font-size:12px;">Habilitar todos</button>
+      <button onclick="disableAllTopics()" style="flex:1;padding:8px;background:transparent;border:1px solid #2d3748;border-radius:8px;color:#64748b;cursor:pointer;font-size:12px;">Deshabilitar todos</button>
+    </div>
+
+    <div style="border-top:1px solid #1e2535;margin:22px 0;"></div>
+
+    <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#818cf8;margin-bottom:12px;">Cambiar contraseña</div>
+    <div style="display:flex;gap:8px;align-items:center;">
+      <input id="tp-new-pw" type="password" placeholder="Nueva contraseña"
+        style="flex:1;padding:8px 12px;background:#0f1117;border:1px solid #2d3748;border-radius:8px;color:#e2e8f0;font-size:13px;outline:none;">
+      <button onclick="changeTeacherPassword()" style="padding:8px 14px;background:#1e2535;border:1px solid #2d3748;border-radius:8px;color:#94a3b8;cursor:pointer;font-size:12px;white-space:nowrap;">Guardar</button>
+    </div>
+    <div id="tp-pw-saved" style="display:none;font-size:12px;color:#22c55e;margin-top:6px;">✓ Contraseña guardada</div>
+
+    <div style="margin-top:24px;text-align:center;">
+      <button onclick="closeTeacherPanel()" style="padding:9px 36px;background:#4f6ef7;border:none;border-radius:8px;color:#fff;cursor:pointer;font-size:13px;font-weight:600;">Cerrar panel</button>
+    </div>
+  </div>
+</div>
+
+<script src="java-journey-oc.js"></script>
+</body>
+</html>

@@ -1,0 +1,61 @@
+﻿@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+
+* { box-sizing: border-box; }
+body { font-family: 'Plus Jakarta Sans', sans-serif; background: #0f1117; color: #e2e8f0; margin: 0; height: 100vh; overflow: hidden; }
+code, pre, textarea, .mono { font-family: 'JetBrains Mono', monospace; }
+
+/* Sidebar */
+#sidebar { width: 260px; min-width: 260px; background: #161b27; border-right: 1px solid #1e2535; overflow-y: auto; display: flex; flex-direction: column; }
+#sidebar::-webkit-scrollbar { width: 4px; }
+#sidebar::-webkit-scrollbar-thumb { background: #2d3748; border-radius: 4px; }
+
+.lesson-item { padding: 10px 16px; cursor: pointer; border-left: 3px solid transparent; transition: all .15s; display: flex; align-items: center; gap: 10px; }
+.lesson-item:hover { background: #1e2535; border-left-color: #4f6ef7; }
+.lesson-item.active { background: #1a2240; border-left-color: #4f6ef7; }
+.lesson-num { width: 24px; height: 24px; border-radius: 50%; background: #2d3748; font-size: 11px; font-weight: 700; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.lesson-item.active .lesson-num { background: #4f6ef7; color: #fff; }
+
+.quiz-item { padding: 8px 16px 8px 28px; cursor: pointer; border-left: 3px solid transparent; transition: all .15s; display: flex; align-items: center; gap: 10px; }
+.quiz-item:hover { background: #1a2d1e; border-left-color: #22c55e; }
+.quiz-item.done { border-left-color: #22c55e; }
+.quiz-icon { width: 24px; height: 24px; border-radius: 6px; background: #14532d; font-size: 12px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+
+/* Accordion topic header */
+.topic-header { padding: 10px 12px 10px 16px; cursor: pointer; display: flex; align-items: center; gap: 8px; user-select: none; transition: background .15s; border-top: 1px solid #1e2535; }
+.topic-header:first-child { border-top: none; }
+.topic-header:hover { background: #1a1f2e; }
+.topic-arrow { font-size: 10px; color: #4a5568; transition: transform .2s; flex-shrink: 0; margin-right: 8px; }
+.topic-arrow.open { transform: rotate(90deg); color: #818cf8; }
+.topic-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .05em; color: #818cf8; flex: 1; }
+.topic-header.disabled .topic-label { color: #4a5568; }
+.topic-header.disabled .topic-arrow { color: #374151; }
+
+/* Disabled lesson/quiz */
+.lesson-item.locked { opacity: .35; cursor: not-allowed; }
+.lesson-item.locked:hover { background: transparent; border-left-color: transparent; }
+.quiz-item.locked { opacity: .35; cursor: not-allowed; }
+.quiz-item.locked:hover { background: transparent; border-left-color: transparent; }
+
+/* Collapsible content */
+.topic-content { overflow: hidden; transition: max-height .25s ease; }
+.topic-content.closed { max-height: 0 !important; }
+
+/* Editor */
+#editor-wrap { position: relative; }
+#code-editor { width: 100%; height: 100%; background: #1a1f2e; color: #a9b7d0; border: none; outline: none; resize: none; padding: 16px; font-size: 13px; line-height: 1.7; tab-size: 4; }
+.line-numbers { position: absolute; left: 0; top: 0; bottom: 0; width: 40px; background: #141820; color: #3d4a5c; font-size: 13px; line-height: 1.7; padding: 16px 6px; text-align: right; user-select: none; pointer-events: none; }
+
+/* Buttons */
+.btn-run { background: #4f6ef7; color: #fff; border: none; cursor: pointer; padding: 8px 20px; border-radius: 8px; font-size: 13px; font-weight: 600; transition: background .15s; }
+.btn-run:hover { background: #3d5ce8; }
+.btn-hint { background: transparent; color: #8b9dc3; border: 1px solid #2d3748; cursor: pointer; padding: 8px 16px; border-radius: 8px; font-size: 13px; font-weight: 500; transition: all .15s; }
+.btn-hint:hover { border-color: #f59e0b; color: #f59e0b; }
+.btn-sol { background: transparent; color: #6b7280; border: 1px solid #1e2535; cursor: pointer; padding: 8px 16px; border-radius: 8px; font-size: 13px; font-weight: 500; transition: all .15s; }
+.btn-sol:hover { border-color: #ef4444; color: #ef4444; }
+
+/* Divider drag handle */
+#drag-handle { height: 5px; background: #1e2535; cursor: row-resize; flex-shrink: 0; transition: background .15s; }
+#drag-handle:hover { background: #4f6ef7; }
+
+@media (max-width: 700px) { #sidebar { display: none; } }
+@keyframes pop { from { transform:scale(.85);opacity:0; } to { transform:scale(1);opacity:1; } }
