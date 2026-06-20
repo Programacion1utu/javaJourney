@@ -1907,7 +1907,7 @@ function toggleExpand(topicId) {
 }
 
 // ─── TEACHER PANEL ────────────────────────────────────────────────────────────
-const DEFAULT_PASS_HASH = 'ea1a37adfd7675332cd064a92f94ce09ae421750f0a308f2bce80db6f5e8f192'; // profe2025
+const DEFAULT_PASS_HASH = 'ea1a37adfd7675332cd064a92f94ce09ae421750f0a308f2bce80db6f5e8f192';
 
 async function hashPassword(pw) {
   const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(pw));
@@ -1981,7 +1981,7 @@ function disableAllTopics() {
 
 async function changeTeacherPassword() {
   const pw = document.getElementById('tp-new-pw').value.trim();
-  if (pw.length < 4) { alert('La contraseña debe tener al menos 4 caracteres.'); return; }
+  if (pw.length < 8) { alert('La contraseña debe tener al menos 8 caracteres.'); return; }
   const hash = await hashPassword(pw);
   localStorage.setItem('jj-passhash', hash);
   document.getElementById('tp-new-pw').value = '';
@@ -2139,7 +2139,7 @@ function postToOC(code) {
 window.addEventListener('message', (e) => {
   const iframe = document.getElementById('oc-iframe');
   // Solo mensajes que vienen del iframe de OneCompiler
-  if (iframe && e.source === iframe.contentWindow) {
+  if (iframe && e.origin === 'https://onecompiler.com' && e.source === iframe.contentWindow) {
     console.log('[OC EVENT]', JSON.stringify(e.data));
   }
 });
