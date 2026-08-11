@@ -14,23 +14,24 @@ const TOPICS = [
   { id: 3,  label: "Scanner",                    lessons: [5, 6] },
   { id: 21, label: "System.out.print",           lessons: [41, 42] },
   { id: 22, label: "Formato de salida",          lessons: [43, 44] },
+  { id: 6,  label: "Números Random",             lessons: [25, 26] },
   { id: 7,  label: "Condicional if / else",      lessons: [11, 12] },
-  { id: 23, label: "Switch",                     lessons: [45, 46] },
-  { id: 24, label: "Operador ternario",          lessons: [47, 48] },
   { id: 25, label: "Comparación de Strings",     lessons: [49, 50] },
   { id: 26, label: "Métodos de String",          lessons: [51, 52] },
   { id: 8,  label: "Bucle while",                lessons: [13, 14] },
   { id: 9,  label: "Bucle do-while",             lessons: [19, 20] },
   { id: 10, label: "Bucle for",                  lessons: [15, 16] },
-  { id: 27, label: "Break y Continue",           lessons: [53, 54] },
+  { id: 23, label: "Switch",                     lessons: [45, 46] },
   { id: 28, label: "Bucles anidados",            lessons: [55, 56] },
-  { id: 6,  label: "Números Random",             lessons: [25, 26] },
   { id: 11, label: "Procedimientos",             lessons: [21, 22] },
   { id: 29, label: "Sobrecarga de métodos",      lessons: [57, 58] },
   { id: 12, label: "Funciones",                  lessons: [23, 24] },
   { id: 13, label: "Arrays",                     lessons: [17, 18] },
   { id: 30, label: "Proyecto Calculadora",       lessons: [59, 60] },
   { id: 31, label: "Desafíos Finales",           lessons: [61, 62] },
+  // ── Extras / Opcionales ──
+  { id: 24, label: "⭐ Operador ternario",       lessons: [47, 48] },
+  { id: 27, label: "⭐ Break y Continue",        lessons: [53, 54] },
 ];
 
 // ─── QUIZZES ─────────────────────────────────────────────────────────────────
@@ -1881,11 +1882,37 @@ let currentQuiz = null;
 let currentQIndex = 0;
 let quizScore = 0;
 let quizAnswered = false;
-const quizDone = new Set();
+const quizDone = new Set(JSON.parse(localStorage.getItem('jj-quizdone') || '[]'));
+const completedLessons = new Set(JSON.parse(localStorage.getItem('jj-lessonsdone') || '[]'));
 
 // accordion & enable state (persisted in localStorage)
 const expandedTopics = new Set(JSON.parse(localStorage.getItem('jj-expanded') || '[]'));
 const enabledTopics  = new Set(JSON.parse(localStorage.getItem('jj-enabled')  || JSON.stringify(TOPICS.map(t => t.id))));
+
+function saveProgress() {
+  localStorage.setItem('jj-quizdone', JSON.stringify([...quizDone]));
+  localStorage.setItem('jj-lessonsdone', JSON.stringify([...completedLessons]));
+}
+
+function isTopicCompleted(topicId) {
+  const topic = TOPICS.find(t => t.id === topicId);
+  if (!topic) return false;
+  const lessonsOk = topic.lessons.every(lid =>
+    completedLessons.has(lid) || EXPECTED_OUTPUTS[lid] === undefined
+  );
+  const quizOk = quizDone.has(topicId) || !QUIZZES.find(q => q.topicId === topicId);
+  return lessonsOk && quizOk;
+}
+
+function isTopicAccessible(topicId) {
+  if (!enabledTopics.has(topicId)) return false;
+  const enabledList = TOPICS.filter(t => enabledTopics.has(t.id));
+  for (const t of enabledList) {
+    if (t.id === topicId) return true;
+    if (!isTopicCompleted(t.id)) return false;
+  }
+  return true;
+}
 
 // ─── INIT ─────────────────────────────────────────────────────────────────────
 function init() {
@@ -1907,7 +1934,7 @@ function toggleExpand(topicId) {
 }
 
 // ─── TEACHER PANEL ────────────────────────────────────────────────────────────
-const DEFAULT_PASS_HASH = 'ea1a37adfd7675332cd064a92f94ce09ae421750f0a308f2bce80db6f5e8f192';
+const DEFAULT_PASS_HASH = '44d1460f1b679387e77c36728b28aafe69003f12a3fd52dcc5cdadf4a9414cc1';
 
 async function hashPassword(pw) {
   const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(pw));
@@ -2008,17 +2035,25 @@ function renderSidebar() {
   nav.innerHTML = '';
 
   TOPICS.forEach((topic, topicIdx) => {
-    const isOpen    = expandedTopics.has(topic.id);
-    const isEnabled = enabledTopics.has(topic.id);
+    const isEnabled    = enabledTopics.has(topic.id);
+    const isAccessible = isTopicAccessible(topic.id);
+    if (!isAccessible) expandedTopics.delete(topic.id);
+    const isOpen       = expandedTopics.has(topic.id);
+    const isDone       = isTopicCompleted(topic.id);
 
     // ── Topic header ──────────────────────────────────────────
     const header = document.createElement('div');
-    header.className = `topic-header${isEnabled ? '' : ' disabled'}`;
+    header.className = `topic-header${isAccessible ? '' : ' disabled'}`;
+    const lockIcon = !isEnabled
+      ? '<span style="font-size:11px;color:#4a5568;margin-left:auto;">🔒</span>'
+      : (!isAccessible
+        ? '<span style="font-size:11px;color:#4a5568;margin-left:auto;" title="Completar el tema anterior primero">🔒</span>'
+        : (isDone ? '<span style="font-size:11px;color:#22c55e;margin-left:auto;">✅</span>' : ''));
     header.innerHTML = `
       <span class="topic-arrow${isOpen ? ' open' : ''}">▶</span>
       <span class="topic-label">${topicIdx + 1}. ${topic.label}</span>
-      ${!isEnabled ? '<span style="font-size:11px;color:#4a5568;margin-left:auto;">🔒</span>' : ''}`;
-    header.onclick = () => { if (isEnabled) toggleExpand(topic.id); };
+      ${lockIcon}`;
+    header.onclick = () => { if (isAccessible) toggleExpand(topic.id); };
     nav.appendChild(header);
 
     // ── Collapsible content ───────────────────────────────────
@@ -2028,16 +2063,17 @@ function renderSidebar() {
     if (isOpen) content.style.maxHeight = '9999px';
 
     // Lessons
-    topic.lessons.forEach(lid => {
+    topic.lessons.forEach((lid, lessonIdx) => {
       const l = LESSONS.find(x => x.id === lid);
       if (!l) return;
       const isActive = currentLesson === l.id;
-      const locked   = !isEnabled;
+      const locked   = !isAccessible;
+      const lessonDone = completedLessons.has(l.id);
       const div = document.createElement('div');
       div.className = `lesson-item${isActive ? ' active' : ''}${locked ? ' locked' : ''}`;
       div.style.paddingLeft = '28px';
       div.innerHTML = `
-        <div class="lesson-num">${l.id}</div>
+        <div class="lesson-num">${lessonDone ? '✅' : (lessonIdx + 1)}</div>
         <div class="flex-1 min-w-0">
           <div class="text-sm font-medium truncate">${l.title}</div>
           <div class="text-xs text-slate-500 truncate">${l.subtitle}</div>
@@ -2050,7 +2086,7 @@ function renderSidebar() {
     const quiz = QUIZZES.find(q => q.topicId === topic.id);
     if (quiz) {
       const done   = quizDone.has(topic.id);
-      const locked = !isEnabled;
+      const locked = !isAccessible;
       const qDiv   = document.createElement('div');
       qDiv.className = `quiz-item${done ? ' done' : ''}${locked ? ' locked' : ''}`;
       qDiv.innerHTML = `
@@ -2081,21 +2117,16 @@ function selectLesson(id) {
   document.getElementById('explanation-panel').innerHTML = lesson.explanation;
   renderSidebar();
 
-  const iframe = document.getElementById('oc-iframe');
-  if (lesson.snippetId) {
-    // Cambiar la URL del iframe al snippet guardado en OneCompiler
-    ocReady = false;
-    pendingCode = null;
-    iframe.src = `https://onecompiler.com/java/${lesson.snippetId}?${OC_PARAMS}`;
-  } else {
-    // Enviar código vía postMessage
-    const code = lesson.starterCode;
-    if (ocReady) {
-      postToOC(code);
-    } else {
-      pendingCode = code;
-    }
-  }
+  // TEST: no cambiar iframe src — dejar el challenge embebido
+  // const iframe = document.getElementById('oc-iframe');
+  // ocReady = false;
+  // if (lesson.snippetId) {
+  //   pendingCode = null;
+  //   iframe.src = `https://onecompiler.com/java/${lesson.snippetId}?${OC_PARAMS}`;
+  // } else {
+  //   pendingCode = lesson.starterCode;
+  //   iframe.src = `https://onecompiler.com/java?${OC_PARAMS}&_=${Date.now()}`;
+  // }
   // Mostrar u ocultar el panel de verificación
   const verifyPanel = document.getElementById('verify-panel');
   const verifyResult = document.getElementById('verify-result');
@@ -2107,6 +2138,8 @@ function selectLesson(id) {
   }
   if (verifyResult) { verifyResult.className = 'mt-2 text-sm hidden'; verifyResult.textContent = ''; }
   if (outputInput) outputInput.value = '';
+  const shareInput = document.getElementById('share-oc-input');
+  if (shareInput) shareInput.value = '';
 }
 
 // ─── ONECOMPILER ──────────────────────────────────────────────────────────────
@@ -2231,6 +2264,9 @@ function verifyOutput() {
   if (normInput === normExpected) {
     result.className = 'mt-2 text-sm rounded-lg px-3 py-2 bg-emerald-900/40 border border-emerald-700/50 text-emerald-300';
     result.innerHTML = '✅ <strong>¡Correcto!</strong> La salida coincide exactamente con lo esperado.';
+    completedLessons.add(currentLesson);
+    saveProgress();
+    renderSidebar();
   } else {
     result.className = 'mt-2 text-sm rounded-lg px-3 py-2 bg-red-900/40 border border-red-700/50 text-red-300';
     const escapedExp = normExpected.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/\t/g,'→ ');
@@ -2349,6 +2385,7 @@ function showScore() {
   document.getElementById('qz-score-sub').textContent = `${pct}% de respuestas correctas`;
   document.getElementById('qz-score').style.display = 'block';
   quizDone.add(currentQuiz.topicId);
+  saveProgress();
   renderSidebar();
 }
 
