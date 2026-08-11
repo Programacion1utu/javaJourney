@@ -1,18 +1,19 @@
-import { hashPassword, signTeacher } from '../../lib/auth.js';
+const { hashPassword, signTeacher } = require('../../lib/auth');
 
-export default async function handler(req, res) {
-  res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
-  if (req.method === 'OPTIONS') return res.status(200).end();
+module.exports = async function handler(req, res) {
   if (req.method !== 'POST') return res.status(405).end();
+  try {
+    const { password } = req.body;
+    if (!password) return res.status(400).json({ error: 'Contraseña requerida' });
 
-  const { password } = req.body;
-  if (!password) return res.status(400).json({ error: 'Falta la contraseña' });
+    const hash = hashPassword(password);
+    if (hash !== process.env.TEACHER_PASSWORD_HASH)
+      return res.status(401).json({ error: 'Contraseña incorrecta' });
 
-  const hash = hashPassword(password);
-  if (hash !== process.env.TEACHER_PASSWORD_HASH)
-    return res.status(401).json({ error: 'Contraseña incorrecta' });
-
-  const token = signTeacher();
-  res.json({ token });
-}
+    const token = signTeacher();
+    res.status(200).json({ token });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Error interno' });
+  }
+};

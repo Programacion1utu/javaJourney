@@ -1,28 +1,26 @@
-import { getDb } from '../../lib/db.js';
-import { requireStudent } from '../../lib/auth.js';
+const { getDb } = require('../../lib/db');
+const { requireStudent } = require('../../lib/auth');
 
-export default async function handler(req, res) {
-  res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
-  if (req.method === 'OPTIONS') return res.status(200).end();
-
-  let student;
+module.exports = async function handler(req, res) {
+  if (req.method !== 'GET') return res.status(405).end();
   try {
-    student = requireStudent(req);
-  } catch {
-    return res.status(401).json({ error: 'No autorizado' });
-  }
+    const student = requireStudent(req);
+    const sql = getDb();
 
-  const sql = getDb();
+    const lessons = await sql`
+      SELECT lesson_id FROM lesson_progress WHERE student_id = ${student.id}
+    `;
+    const quizzes = await sql`
+      SELECT topic_id, score FROM quiz_progress WHERE student_id = ${student.id}
+    `;
 
-  if (req.method === 'GET') {
-    const lessons = await sql`SELECT lesson_id FROM lesson_progress WHERE student_id = ${student.id}`;
-    const quizzes = await sql`SELECT topic_id, score FROM quiz_progress WHERE student_id = ${student.id}`;
-    return res.json({
+    res.status(200).json({
       completedLessons: lessons.map(r => r.lesson_id),
-      completedQuizzes: quizzes.map(r => ({ topicId: r.topic_id, score: r.score })),
+      completedQuizzes: quizzes.map(r => ({ topicId: r.topic_id, score: r.score }))
     });
+  } catch (err) {
+    console.error(err);
+    const status = err.message === 'No autorizado' ? 401 : 500;
+    res.status(status).json({ error: err.message });
   }
-
-  res.status(405).end();
-}
+};
