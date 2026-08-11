@@ -1811,66 +1811,17 @@ s.<span class="text-blue-300">trim</span>()                   <span class="text-
 
 ];
 
-// ─── OUTPUTS ESPERADOS ───────────────────────────────────────────────────────
-// Lessons con Scanner o Random no tienen expectedOutput (el panel no aparece).
-const EXPECTED_OUTPUTS = {
-  1:  "Hola, Java!",
-  2:  "Nombre: Ana\nEdad: 17\nCurso: 2do BT",
-  3:  "Cantidad: 5\nPrecio: 200",
-  4:  "Total: 74.97",
-  7:  "Ciudad: Montevideo, País: Uruguay",
-  8:  "Aprobado: true\nCalificación: B",
-  9:  "Suma: 13\nResta: 3\nProducto: 40",
-  10: "Grupos: 4\nSobran: 2",
-  11: "Hace calor",
-  12: "Buenas tardes",
-  13: "1\n2\n3\n4\n5",
-  14: "Suma de pares: 30",
-  15: "3 x 1 = 3\n3 x 2 = 6\n3 x 3 = 9\n3 x 4 = 12\n3 x 5 = 15",
-  16: "5! = 120",
-  17: "Primera: Matemática\nÚltima: Programación\nTotal: 3",
-  18: "Total: 900",
-  19: "1\n2\n3\n4",
-  20: "Suma de impares: 25",
-  21: "----------\n----------\n----------",
-  22: "Producto: Arroz — Precio: $45.5\nProducto: Aceite — Precio: $120.0\nProducto: Azúcar — Precio: $38.75",
-  23: "Área: 12.0",
-  24: "Destacado\nLogrado\nEn proceso",
-  27: "Nombre: Lucía\nEdad: 17",
-  28: "Área: 24.0",
-  29: "Precio final: 850.0",
-  30: "Horas en una semana: 168",
-  31: "Resultado: 3.5",
-  32: "División entera: 3\nCon cast: 3",
-  33: "Vidas: 4\nVidas: 2",
-  34: "a: 5 — i: 6\nb: 6 — j: 6",
-  35: "Puntos: 240",
-  36: "Estudiantes sin mesa completa: 3",
-  37: "¿Aprobado? true",
-  38: "Fiebre",
-  39: "Aprobado",
-  40: "Pago pendiente",
-  41: "1 2 3 4 5",
-  42: "Producto:\tYerba\nPrecio:\t$85.50",
-  43: "Producto: Aceite\nPrecio: $125.00\nStock: 48 unidades",
-  44: "Estudiante: Valentina — Promedio: 8.75",
-  45: "Marzo",
-  46: "Buenas tardes",
-  47: "-7 es: no positivo",
-  48: "El mayor es: 28",
-  49: "Acceso concedido",
-  50: "País verificado: true",
-  51: "Largo: 10\nPrimera letra: M\nPrimeras 5 letras: Monte",
-  52: "JAVA ES GENIAL\njava es poderoso",
-  53: "Primer múltiplo de 7: 7",
-  54: "1 2 4 5 7 8 10",
-  55: "2 x 1 = 2\n2 x 2 = 4\n2 x 3 = 6\n2 x 4 = 8\n2 x 5 = 10\n3 x 1 = 3\n3 x 2 = 6\n3 x 3 = 9\n3 x 4 = 12\n3 x 5 = 15",
-  56: "*\n* *\n* * *\n* * * *\n* * * * *",
-  57: "Número: 42\nTexto: Hola",
-  58: "Promedio de 2: 7.5\nPromedio de 3: 8.0",
-  61: "1\n1 2\n1 2 3\n1 2 3 4\n1 2 3 4 5",
-  62: "Promedio: 86.60\nClasificación: Destacado",
-};
+// ─── LESSONS CON VERIFICACIÓN (IDs que tienen output esperado en el servidor) ─
+const VERIFIABLE_LESSONS = new Set([
+  1,2,3,4,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,
+  27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,
+  47,48,49,50,51,52,53,54,55,56,57,58,61,62
+]);
+
+// ─── AUTH ─────────────────────────────────────────────────────────────────────
+let studentToken = localStorage.getItem('jj-student-token');
+let currentStudent = JSON.parse(localStorage.getItem('jj-student-info') || 'null');
+let teacherToken = null;
 
 // ─── STATE ────────────────────────────────────────────────────────────────────
 let currentLesson = null;
@@ -1882,23 +1833,47 @@ let currentQuiz = null;
 let currentQIndex = 0;
 let quizScore = 0;
 let quizAnswered = false;
-const quizDone = new Set(JSON.parse(localStorage.getItem('jj-quizdone') || '[]'));
-const completedLessons = new Set(JSON.parse(localStorage.getItem('jj-lessonsdone') || '[]'));
+const quizDone = new Set();
+const completedLessons = new Set();
 
-// accordion & enable state (persisted in localStorage)
+// accordion state (persisted locally); enabledTopics se carga desde API
 const expandedTopics = new Set(JSON.parse(localStorage.getItem('jj-expanded') || '[]'));
-const enabledTopics  = new Set(JSON.parse(localStorage.getItem('jj-enabled')  || JSON.stringify(TOPICS.map(t => t.id))));
+const enabledTopics  = new Set();
 
-function saveProgress() {
-  localStorage.setItem('jj-quizdone', JSON.stringify([...quizDone]));
-  localStorage.setItem('jj-lessonsdone', JSON.stringify([...completedLessons]));
+function saveAccordionState() {
+  localStorage.setItem('jj-expanded', JSON.stringify([...expandedTopics]));
+}
+
+async function apiPost(url, body, token) {
+  const res = await fetch(url, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', ...(token ? { 'Authorization': 'Bearer ' + token } : {}) },
+    body: JSON.stringify(body)
+  });
+  return res;
+}
+
+async function apiGet(url, token) {
+  const res = await fetch(url, {
+    headers: token ? { 'Authorization': 'Bearer ' + token } : {}
+  });
+  return res;
+}
+
+async function apiPut(url, body, token) {
+  const res = await fetch(url, {
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token },
+    body: JSON.stringify(body)
+  });
+  return res;
 }
 
 function isTopicCompleted(topicId) {
   const topic = TOPICS.find(t => t.id === topicId);
   if (!topic) return false;
   const lessonsOk = topic.lessons.every(lid =>
-    completedLessons.has(lid) || EXPECTED_OUTPUTS[lid] === undefined
+    completedLessons.has(lid) || !VERIFIABLE_LESSONS.has(lid)
   );
   const quizOk = quizDone.has(topicId) || !QUIZZES.find(q => q.topicId === topicId);
   return lessonsOk && quizOk;
@@ -1915,16 +1890,49 @@ function isTopicAccessible(topicId) {
 }
 
 // ─── INIT ─────────────────────────────────────────────────────────────────────
-function init() {
-  renderSidebar();
-  selectLesson(LESSONS[0].id);
+async function init() {
+  if (!studentToken) {
+    showStudentLogin();
+    return;
+  }
+  await loadAppData();
+}
+
+async function loadAppData() {
+  try {
+    const [configRes, progressRes] = await Promise.all([
+      apiGet('/api/config'),
+      apiGet('/api/student/progress', studentToken)
+    ]);
+
+    if (progressRes.status === 401) {
+      // Token expirado
+      logoutStudent();
+      return;
+    }
+
+    const config = await configRes.json();
+    const progress = await progressRes.json();
+
+    config.enabledTopics.forEach(id => enabledTopics.add(id));
+    progress.completedLessons.forEach(id => completedLessons.add(id));
+    progress.completedQuizzes.forEach(q => quizDone.add(q.topicId));
+
+    updateStudentBadge();
+    renderSidebar();
+    selectLesson(LESSONS[0].id);
+  } catch (err) {
+    console.error('Error cargando datos:', err);
+  }
+}
+
+function updateStudentBadge() {
+  if (!currentStudent) return;
+  const badge = document.getElementById('student-badge');
+  if (badge) badge.textContent = `${currentStudent.nombre} ${currentStudent.apellido}`;
 }
 
 // ─── SIDEBAR ──────────────────────────────────────────────────────────────────
-function saveAccordionState() {
-  localStorage.setItem('jj-expanded', JSON.stringify([...expandedTopics]));
-  localStorage.setItem('jj-enabled',  JSON.stringify([...enabledTopics]));
-}
 
 function toggleExpand(topicId) {
   if (expandedTopics.has(topicId)) expandedTopics.delete(topicId);
@@ -1933,14 +1941,57 @@ function toggleExpand(topicId) {
   renderSidebar();
 }
 
-// ─── TEACHER PANEL ────────────────────────────────────────────────────────────
-const DEFAULT_PASS_HASH = '44d1460f1b679387e77c36728b28aafe69003f12a3fd52dcc5cdadf4a9414cc1';
-
-async function hashPassword(pw) {
-  const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(pw));
-  return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2, '0')).join('');
+// ─── STUDENT LOGIN ────────────────────────────────────────────────────────────
+function showStudentLogin() {
+  document.getElementById('student-login').style.display = 'flex';
+  setTimeout(() => document.getElementById('sl-nombre').focus(), 50);
 }
 
+async function submitStudentLogin() {
+  const nombre   = document.getElementById('sl-nombre').value.trim();
+  const apellido = document.getElementById('sl-apellido').value.trim();
+  const password = document.getElementById('sl-password').value;
+  const errEl    = document.getElementById('sl-error');
+  errEl.style.display = 'none';
+
+  if (!nombre || !apellido || !password) {
+    errEl.textContent = 'Completar todos los campos.';
+    errEl.style.display = 'block';
+    return;
+  }
+
+  try {
+    const res = await apiPost('/api/auth/student', { nombre, apellido, password });
+    const data = await res.json();
+    if (!res.ok) {
+      errEl.textContent = data.error || 'Error al iniciar sesión.';
+      errEl.style.display = 'block';
+      return;
+    }
+    studentToken = data.token;
+    currentStudent = data.student;
+    localStorage.setItem('jj-student-token', studentToken);
+    localStorage.setItem('jj-student-info', JSON.stringify(currentStudent));
+    document.getElementById('student-login').style.display = 'none';
+    await loadAppData();
+  } catch {
+    errEl.textContent = 'Error de conexión. Intentar nuevamente.';
+    errEl.style.display = 'block';
+  }
+}
+
+function logoutStudent() {
+  localStorage.removeItem('jj-student-token');
+  localStorage.removeItem('jj-student-info');
+  studentToken = null;
+  currentStudent = null;
+  completedLessons.clear();
+  quizDone.clear();
+  enabledTopics.clear();
+  showStudentLogin();
+}
+
+// ─── TEACHER PANEL ────────────────────────────────────────────────────────────
 function openTeacherLogin() {
   document.getElementById('teacher-login').style.display = 'flex';
   document.getElementById('teacher-pw-error').style.display = 'none';
@@ -1950,12 +2001,17 @@ function openTeacherLogin() {
 
 async function submitTeacherLogin() {
   const pw = document.getElementById('teacher-pw-input').value;
-  const hash = await hashPassword(pw);
-  const stored = localStorage.getItem('jj-passhash') || DEFAULT_PASS_HASH;
-  if (hash === stored) {
+  try {
+    const res = await apiPost('/api/auth/teacher', { password: pw });
+    const data = await res.json();
+    if (!res.ok) {
+      document.getElementById('teacher-pw-error').style.display = 'block';
+      return;
+    }
+    teacherToken = data.token;
     document.getElementById('teacher-login').style.display = 'none';
     openTeacherPanel();
-  } else {
+  } catch {
     document.getElementById('teacher-pw-error').style.display = 'block';
   }
 }
@@ -1984,37 +2040,30 @@ function renderTeacherPanel() {
   });
 }
 
-function toggleTopicFromPanel(topicId) {
+async function saveEnabledTopics() {
+  await apiPut('/api/teacher/topics', { enabledTopics: [...enabledTopics] }, teacherToken);
+}
+
+async function toggleTopicFromPanel(topicId) {
   if (enabledTopics.has(topicId)) enabledTopics.delete(topicId);
   else enabledTopics.add(topicId);
-  saveAccordionState();
+  await saveEnabledTopics();
   renderTeacherPanel();
   renderSidebar();
 }
 
-function enableAllTopics() {
+async function enableAllTopics() {
   TOPICS.forEach(t => enabledTopics.add(t.id));
-  saveAccordionState();
+  await saveEnabledTopics();
   renderTeacherPanel();
   renderSidebar();
 }
 
-function disableAllTopics() {
+async function disableAllTopics() {
   enabledTopics.clear();
-  saveAccordionState();
+  await saveEnabledTopics();
   renderTeacherPanel();
   renderSidebar();
-}
-
-async function changeTeacherPassword() {
-  const pw = document.getElementById('tp-new-pw').value.trim();
-  if (pw.length < 8) { alert('La contraseña debe tener al menos 8 caracteres.'); return; }
-  const hash = await hashPassword(pw);
-  localStorage.setItem('jj-passhash', hash);
-  document.getElementById('tp-new-pw').value = '';
-  const saved = document.getElementById('tp-pw-saved');
-  saved.style.display = 'block';
-  setTimeout(() => { saved.style.display = 'none'; }, 2500);
 }
 
 function closeTeacherPanel() {
@@ -2131,7 +2180,7 @@ function selectLesson(id) {
   const verifyPanel = document.getElementById('verify-panel');
   const verifyResult = document.getElementById('verify-result');
   const outputInput = document.getElementById('output-input');
-  if (EXPECTED_OUTPUTS[id] !== undefined) {
+  if (VERIFIABLE_LESSONS.has(id)) {
     verifyPanel.style.display = 'block';
   } else {
     verifyPanel.style.display = 'none';
@@ -2247,30 +2296,29 @@ function showSolution() {
 }
 
 // ─── VERIFICACIÓN DE SALIDA ──────────────────────────────────────────────────
-function normalizeOutput(s) {
-  return s.split('\n').map(l => l.trim()).filter(l => l.length > 0).join('\n');
-}
-
-function verifyOutput() {
-  const expected = EXPECTED_OUTPUTS[currentLesson];
-  if (expected === undefined) return;
-  const input = (document.getElementById('output-input').value || '').replace(/\r\n/g, '\n');
+async function verifyOutput() {
+  if (!VERIFIABLE_LESSONS.has(currentLesson)) return;
+  const output = (document.getElementById('output-input').value || '').replace(/\r\n/g, '\n');
   const result = document.getElementById('verify-result');
   result.classList.remove('hidden');
+  result.className = 'mt-2 text-sm rounded-lg px-3 py-2 bg-slate-800 text-slate-400';
+  result.textContent = 'Verificando…';
 
-  const normInput    = normalizeOutput(input);
-  const normExpected = normalizeOutput(expected);
-
-  if (normInput === normExpected) {
-    result.className = 'mt-2 text-sm rounded-lg px-3 py-2 bg-emerald-900/40 border border-emerald-700/50 text-emerald-300';
-    result.innerHTML = '✅ <strong>¡Correcto!</strong> La salida coincide exactamente con lo esperado.';
-    completedLessons.add(currentLesson);
-    saveProgress();
-    renderSidebar();
-  } else {
-    result.className = 'mt-2 text-sm rounded-lg px-3 py-2 bg-red-900/40 border border-red-700/50 text-red-300';
-    const escapedExp = normExpected.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/\t/g,'→ ');
-    result.innerHTML = `❌ <strong>No coincide.</strong> Salida esperada:<br><code class="text-yellow-300 whitespace-pre-wrap text-xs">${escapedExp}</code>`;
+  try {
+    const res = await apiPost('/api/verify', { lessonId: currentLesson, output }, studentToken);
+    const data = await res.json();
+    if (data.correct) {
+      result.className = 'mt-2 text-sm rounded-lg px-3 py-2 bg-emerald-900/40 border border-emerald-700/50 text-emerald-300';
+      result.innerHTML = '✅ <strong>¡Correcto!</strong> La salida coincide exactamente con lo esperado.';
+      completedLessons.add(currentLesson);
+      renderSidebar();
+    } else {
+      result.className = 'mt-2 text-sm rounded-lg px-3 py-2 bg-red-900/40 border border-red-700/50 text-red-300';
+      result.innerHTML = '❌ <strong>No coincide.</strong> Revisar la salida del programa e intentar nuevamente.';
+    }
+  } catch {
+    result.className = 'mt-2 text-sm rounded-lg px-3 py-2 bg-yellow-900/40 border border-yellow-700/50 text-yellow-300';
+    result.textContent = 'Error de conexión. Intentar nuevamente.';
   }
 }
 
@@ -2385,7 +2433,7 @@ function showScore() {
   document.getElementById('qz-score-sub').textContent = `${pct}% de respuestas correctas`;
   document.getElementById('qz-score').style.display = 'block';
   quizDone.add(currentQuiz.topicId);
-  saveProgress();
+  apiPost('/api/quiz/complete', { topicId: currentQuiz.topicId, score: pct }, studentToken).catch(() => {});
   renderSidebar();
 }
 

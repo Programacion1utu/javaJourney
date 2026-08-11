@@ -14,10 +14,11 @@
   <div class="p-4 border-b border-slate-800">
     <div class="flex items-center gap-3">
       <div id="logo-icon" class="w-9 h-9 rounded-xl bg-indigo-600/30 border border-indigo-500/40 flex items-center justify-center text-lg" title="Java Journey">☕</div>
-      <div>
+      <div class="flex-1 min-w-0">
         <div class="font-bold text-sm">Java Journey</div>
-        <div class="text-xs text-slate-500">Nivel Principiante</div>
+        <div id="student-badge" class="text-xs text-slate-500 truncate">Nivel Principiante</div>
       </div>
+      <button onclick="logoutStudent()" title="Cerrar sesión" style="background:none;border:none;color:#4a5568;cursor:pointer;font-size:15px;padding:2px;" title="Cerrar sesión">⏏</button>
     </div>
     <div class="text-xs text-slate-500 mt-3" id="lessons-label">0 / 12 lecciones</div>
   </div>
@@ -39,38 +40,19 @@
     <div class="flex items-center gap-2 px-4 py-2 border-b border-slate-800 bg-slate-900 flex-shrink-0">
       <div class="ml-auto flex gap-2">
         <button class="btn-hint" onclick="showHint()">💡 Pista</button>
-        <button class="btn-hint" onclick="showShare()">📤 Compartir</button>
       </div>
     </div>
 
-    <!-- OneCompiler ocupa la mayor parte del espacio -->
-    <div style="flex:1; overflow:hidden;">
+    <!-- OneCompiler Challenge embebido — recortamos el panel Problems -->
+    <div style="flex:1; overflow:hidden; position:relative;">
       <iframe id="oc-iframe"
-        src="https://onecompiler.com/java?hideTitle=true&hideNew=true&hideLanguages=true&theme=dark&hideStdin=false&disableLocalStorage=true"
-        style="width:100%;height:100%;border:none;"
-        onload="ocLoaded()">
+        src="https://onecompiler.com/challenges/44t724cyn/java-journey-prueba"
+        style="position:absolute;top:0;left:-200px;width:calc(100% + 200px);height:100%;border:none;">
       </iframe>
     </div>
 
-    <!-- Panel de verificación de salida -->
-    <div id="verify-panel" style="display:none;" class="flex-shrink-0 border-t border-slate-700 bg-slate-900 px-4 py-3">
-      <div class="flex items-center gap-2 mb-1">
-        <span class="text-xs text-slate-400 font-medium">Ejecutar el programa y pegar la salida aquí:</span>
-      </div>
-      <div class="flex gap-2 items-start">
-        <textarea id="output-input"
-          rows="2"
-          placeholder="Pegar salida del programa..."
-          class="flex-1 bg-slate-800 border border-slate-600 rounded text-sm text-white font-mono px-3 py-2 resize-none focus:outline-none focus:border-emerald-500"
-          style="min-width:0;"
-          onkeydown="if(event.ctrlKey&&event.key==='Enter')verifyOutput()"></textarea>
-        <button onclick="verifyOutput()"
-          class="bg-emerald-600 hover:bg-emerald-500 text-white text-sm font-semibold px-4 py-2 rounded transition-colors whitespace-nowrap">
-          ✔ Verificar
-        </button>
-      </div>
-      <div id="verify-result" class="mt-2 text-sm hidden"></div>
-    </div>
+    <!-- Panel de verificación (desactivado — se usa Submit del challenge) -->
+    <div id="verify-panel" style="display:none;"></div>
 
   </div>
 </main>
@@ -111,27 +93,6 @@
   </div>
 </div>
 
-<!-- ═══════════════════ SHARE MODAL ═══════════════════ -->
-<div id="share-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:50;align-items:center;justify-content:center;">
-  <div style="background:#161b27;border:1px solid #2d3748;border-radius:16px;padding:28px;max-width:500px;width:94%;animation:pop .2s ease;">
-    <div style="font-size:15px;font-weight:700;color:#e2e8f0;margin-bottom:4px;">📤 Compartir completo</div>
-    <div style="font-size:12px;color:#64748b;margin-bottom:16px;">Mensaje listo para enviar a la docente. Pegar el link de OneCompiler si guardaste el código.</div>
-
-    <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#818cf8;margin-bottom:6px;">Link de OneCompiler <span style="color:#4a5568;font-weight:400;text-transform:none;">(opcional)</span></div>
-    <input id="share-oc-input" type="text" placeholder="Pegar el link aquí (ej: onecompiler.com/java/...)" oninput="updateShareMessage()"
-      style="width:100%;box-sizing:border-box;background:#0f1117;border:1px solid #2d3748;border-radius:8px;padding:9px 12px;font-size:13px;color:#e2e8f0;outline:none;margin-bottom:16px;">
-
-    <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#818cf8;margin-bottom:6px;">Mensaje para enviar</div>
-    <textarea id="share-message" readonly rows="9"
-      style="width:100%;box-sizing:border-box;background:#0f1117;border:1px solid #2d3748;border-radius:8px;padding:10px 12px;font-size:12px;color:#94a3b8;line-height:1.6;resize:none;font-family:inherit;margin-bottom:20px;"></textarea>
-
-    <div style="display:flex;gap:8px;justify-content:flex-end;">
-      <button onclick="document.getElementById('share-modal').style.display='none'" style="padding:9px 20px;background:transparent;border:1px solid #2d3748;border-radius:8px;color:#64748b;cursor:pointer;font-size:13px;">Cerrar</button>
-      <button id="share-copy-btn" onclick="copyShareMessage()" style="padding:9px 24px;background:#4f6ef7;border:none;border-radius:8px;color:#fff;cursor:pointer;font-size:13px;font-weight:600;">Copiar mensaje</button>
-    </div>
-  </div>
-</div>
-
 <!-- ═══════════════════ HINT MODAL ═══════════════════ -->
 <div id="modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:50;align-items:center;justify-content:center;">
   <div style="background:#161b27;border:1px solid #2d3748;border-radius:16px;padding:28px;max-width:400px;width:90%;text-align:center;animation:pop .2s ease;">
@@ -139,6 +100,25 @@
     <div id="modal-title" class="text-lg font-bold mb-2"></div>
     <div id="modal-body" class="text-slate-400 text-sm mb-5 mono"></div>
     <button onclick="closeModal()" class="btn-run px-8">Cerrar</button>
+  </div>
+</div>
+
+<!-- ═══════════════════ STUDENT LOGIN ═══════════════════ -->
+<div id="student-login" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.92);z-index:100;align-items:center;justify-content:center;">
+  <div style="background:#161b27;border:1px solid #22c55e40;border-radius:16px;padding:32px;width:340px;animation:pop .2s ease;">
+    <div style="font-size:32px;text-align:center;margin-bottom:8px;">☕</div>
+    <div style="font-size:16px;font-weight:700;text-align:center;color:#e2e8f0;margin-bottom:4px;">Java Journey</div>
+    <div style="font-size:12px;color:#4a5568;text-align:center;margin-bottom:24px;">Ingresar con tu cuenta de estudiante</div>
+    <input id="sl-nombre" type="text" placeholder="Nombre"
+      style="width:100%;padding:10px 14px;background:#0f1117;border:1px solid #2d3748;border-radius:8px;color:#e2e8f0;font-size:13px;outline:none;box-sizing:border-box;margin-bottom:8px;">
+    <input id="sl-apellido" type="text" placeholder="Apellido"
+      style="width:100%;padding:10px 14px;background:#0f1117;border:1px solid #2d3748;border-radius:8px;color:#e2e8f0;font-size:13px;outline:none;box-sizing:border-box;margin-bottom:8px;">
+    <input id="sl-password" type="password" placeholder="Contraseña"
+      onkeydown="if(event.key==='Enter')submitStudentLogin()"
+      style="width:100%;padding:10px 14px;background:#0f1117;border:1px solid #2d3748;border-radius:8px;color:#e2e8f0;font-size:13px;outline:none;box-sizing:border-box;margin-bottom:8px;">
+    <div id="sl-error" style="display:none;color:#ef4444;font-size:12px;margin-bottom:8px;text-align:center;"></div>
+    <button onclick="submitStudentLogin()"
+      style="width:100%;padding:11px;background:#22c55e;border:none;border-radius:8px;color:#fff;cursor:pointer;font-size:13px;font-weight:600;">Ingresar</button>
   </div>
 </div>
 
@@ -193,6 +173,6 @@
   </div>
 </div>
 
-<script src="java-journey-oc.min.js"></script>
+<script src="java-journey-oc.js"></script>
 </body>
 </html>
