@@ -1670,7 +1670,8 @@ _resetStudentId}
   document.getElementById('tp-reset-modal').style.display = 'none';
   _resetStudentId = null;
 }
-// Triple clic en el logo ☕ abre el panel docentelet _logoClicks = 0, _logoTimer = null;
+// Triple clic en el logo ☕ abre el panel docente
+let _logoClicks = 0, _logoTimer = null;
 document.getElementById('logo-icon').addEventListener('click', () => {
   _logoClicks++;
   clearTimeout(_logoTimer);
