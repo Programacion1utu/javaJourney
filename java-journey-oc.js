@@ -528,14 +528,14 @@ suma += i;
 &nbsp;
  de bloque, puede abarcar</span><br><span class="text-slate-500">&nbsp;
 &nbsp;
- varias líneas */</span></div><div class="bg-amber-900/30 border border-amber-700/40 rounded-lg p-3 text-sm text-amber-200 mb-3">  💡 Los comentarios no se ejecutan ni afectan el programa. Son solo para los programadores.</div><div class="bg-indigo-900/30 border border-indigo-700/40 rounded-lg p-3 text-sm text-indigo-200">  <span class="font-bold">🎯 Tarea:</span> Agregar un comentario de una línea antes de cada una de las 4 instrucciones del código. Luego ejecutar. La salida debe ser exactamente:<br><code class="text-green-300 text-xs">Nombre: Lucas<br>Edad: 17</code></div>`,    starterCode: `public class Main {
+ varias líneas */</span></div><div class="bg-amber-900/30 border border-amber-700/40 rounded-lg p-3 text-sm text-amber-200 mb-3">  💡 Los comentarios no se ejecutan ni afectan el programa. Son solo para los programadores.</div><div class="bg-indigo-900/30 border border-indigo-700/40 rounded-lg p-3 text-sm text-indigo-200">  <span class="font-bold">🎯 Tarea:</span> El primer comentario ya está escrito como ejemplo. Agregar un comentario antes de <code class="text-indigo-300">int edad</code> y antes de cada <code class="text-indigo-300">System.out.println</code> (3 comentarios más). Ejecutar: la salida debe ser exactamente:<br><code class="text-green-300 text-xs">Nombre: Lucas<br>Edad: 17</code></div>`,    starterCode: `public class Main {
 \n    public static void main(String[] args) {
-\n        // Agrega un comentario antes de cada linea\n        String nombre = "Lucas";
+\n        // Guarda el nombre del estudiante\n        String nombre = "Lucas";
 \n        int edad = 17;
 \n        System.out.println("Nombre: " + nombre);
 \n        System.out.println("Edad: " + edad);
 \n    }
-\n}`,    hint: 'Los comentarios de una linea comienzan con //. Escribirlos antes de String nombre, antes de int edad, antes de cada System.out.println.',  }
+\n}`,    hint: 'Escribir // tu comentario antes de int edad, antes del primer println y antes del segundo println. El codigo no cambia, solo se agregan lineas de comentario.',  }
 ,  {
  id: 28, title: "Comentarios de bloque", subtitle: "/* ... */ y buenas prácticas",    explanation: `<h2 class="text-base font-bold mb-3">Comentarios de bloque</h2><p class="text-slate-300 text-sm mb-4">Para comentarios largos que abarcan varias líneas se usan <code class="text-indigo-400">/* ... */</code>. Son útiles para describir la lógica de un bloque completo.</p><div class="bg-slate-800/60 rounded-lg p-4 mb-4 mono text-sm text-slate-300 leading-7"><span class="text-slate-500">/*</span><br><span class="text-slate-500">&nbsp;
  Calcula el área de un rectángulo.</span><br><span class="text-slate-500">&nbsp;
