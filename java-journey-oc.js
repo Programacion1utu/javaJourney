@@ -1706,15 +1706,15 @@ function selectLesson(id) {
   currentLesson = id;
   document.getElementById('explanation-panel').innerHTML = lesson.explanation;
   renderSidebar();
-  // TEST: no cambiar iframe src — dejar el challenge embebido  // const iframe = document.getElementById('oc-iframe');
-  // ocReady = false;
-  // if (lesson.snippetId) {
-  //   pendingCode = null;
-  //   iframe.src = `https://onecompiler.com/java/${lesson.snippetId}?${OC_PARAMS}`;
-  // } else {
-  //   pendingCode = lesson.starterCode;
-  //   iframe.src = `https://onecompiler.com/java?${OC_PARAMS}&_=${Date.now()}`;
-  // }
+  const iframe = document.getElementById('oc-iframe');
+  ocReady = false;
+  if (lesson.snippetId) {
+    pendingCode = null;
+    iframe.src = `https://onecompiler.com/java/${lesson.snippetId}?${OC_PARAMS}`;
+  } else {
+    pendingCode = lesson.starterCode;
+    iframe.src = `https://onecompiler.com/java?${OC_PARAMS}&_=${Date.now()}`;
+  }
   // Mostrar u ocultar el panel de verificación
   const verifyPanel = document.getElementById('verify-panel');
   const verifyResult = document.getElementById('verify-result');
