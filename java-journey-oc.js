@@ -1339,7 +1339,7 @@ t}`);
     btn.style.color = t === tab ? '#818cf8' : '#4a5568';
   }
 );
-  if (tab === 'progreso') renderProgressTable();
+  if (tab === 'progreso' || tab === 'estudiantes') loadStudents();
 }
 function renderTeacherPanel() {
   const list = document.getElementById('tp-topic-list');
@@ -1414,10 +1414,13 @@ function closeTeacherPanel() {
 // ─── GESTIÓN DE ESTUDIANTES ───────────────────────────────────────────────────
 let _resetStudentId = null;
 async function loadStudents() {
-  const res = await apiGet('/api/teacher/students', teacherToken);
-  _allStudents = await res.json();
-  renderStudentList();
-  renderProgressTable();
+  try {
+    const res = await apiGet('/api/teacher/students', teacherToken);
+    if (!res.ok) { console.error('loadStudents error', res.status); return; }
+    _allStudents = await res.json();
+    renderStudentList();
+    renderProgressTable();
+  } catch (e) { console.error('loadStudents exception', e); }
 }
 function renderStudentList() {
   const list = document.getElementById('tp-student-list');
@@ -2080,8 +2083,8 @@ function downloadQuizPdf() {
 
   line('Java Journey — Resultados del Quiz', { size: 15, bold: true, color: [79, 110, 247] });
   line(currentQuiz.title, { size: 12, bold: true });
-  line(`Estudiante: ${currentStudent.nombre} ${currentStudent.apellido}`, { size: 10, color: [100, 116, 139] });
-  line(`Fecha: ${new Date().toLocaleDateString('es-UY')}`, { size: 10, color: [100, 116, 139] });
+  line(`Estudiante: ${currentStudent.nombre} ${currentStudent.apellido}`, { size: 10, color: [30, 30, 30] });
+  line(`Fecha: ${new Date().toLocaleDateString('es-UY')}`, { size: 10, color: [30, 30, 30] });
   y += 2;
   line(`Resultado: ${correctCount} / ${total} correctas (${pct}%)`, { size: 11, bold: true, color: pct >= 60 ? [34, 197, 94] : [239, 68, 68] });
   y += 3;
@@ -2092,16 +2095,16 @@ function downloadQuizPdf() {
   quizSessionAnswers.forEach((ans, i) => {
     line(`${i + 1}. ${ans.q}`, { size: 10, bold: true });
     if (ans.code) {
-      line(ans.code, { size: 8, color: [100, 116, 139] });
+      line(ans.code, { size: 8, color: [30, 30, 30] });
     }
     ans.opts.forEach((opt, oi) => {
       const isCorrect = oi === ans.correctIndex;
       const isWrong = !ans.correct && oi === ans.chosen;
       const prefix = isCorrect ? '[OK] ' : isWrong ? '[X]  ' : '      ';
-      const color = isCorrect ? [34, 197, 94] : isWrong ? [239, 68, 68] : [100, 116, 139];
+      const color = isCorrect ? [34, 197, 94] : isWrong ? [239, 68, 68] : [30, 30, 30];
       line(prefix + opt, { size: 9.5, color });
     });
-    line(`Explicacion: ${ans.opts[ans.correctIndex]} — seleccionaste: ${ans.opts[ans.chosen]}`, { size: 8.5, color: [71, 85, 105] });
+    line(`Explicacion: ${ans.opts[ans.correctIndex]} — seleccionaste: ${ans.opts[ans.chosen]}`, { size: 8.5, color: [30, 30, 30] });
     y += 2;
     doc.setDrawColor(30, 37, 53);
     if (y < 270) { doc.line(margin, y, 210 - margin, y); y += 4; }
