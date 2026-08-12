@@ -1706,14 +1706,12 @@ function selectLesson(id) {
   currentLesson = id;
   document.getElementById('explanation-panel').innerHTML = lesson.explanation;
   renderSidebar();
-  const iframe = document.getElementById('oc-iframe');
-  ocReady = false;
-  if (lesson.snippetId) {
-    pendingCode = null;
-    iframe.src = `https://onecompiler.com/java/${lesson.snippetId}?${OC_PARAMS}`;
-  } else {
-    pendingCode = lesson.starterCode;
-    iframe.src = `https://onecompiler.com/java?${OC_PARAMS}&_=${Date.now()}`;
+  if (lesson.starterCode) {
+    if (ocReady) {
+      postToOC(lesson.starterCode);
+    } else {
+      pendingCode = lesson.starterCode;
+    }
   }
   // Mostrar u ocultar el panel de verificación
   const verifyPanel = document.getElementById('verify-panel');
@@ -1736,25 +1734,18 @@ function selectLesson(id) {
 // ─── ONECOMPILER ──────────────────────────────────────────────────────────────
 function ocLoaded() {
   if (pendingCode !== null) {
-    // Lección con starterCode: enviamos en varios intentos para ganarle
-    // la carrera a la restauración propia del localStorage de OneCompiler.
+    // Enviamos en varios intentos para ganarle la carrera al localStorage de OC.
     [800, 1500, 2500].forEach((delay, i) => {
       setTimeout(() => {
         if (pendingCode !== null) postToOC(pendingCode);
-        if (i === 2) {
- ocReady = true;
- pendingCode = null;
- }
-      }
-, delay);
-    }
-);
-  }
- else {
-    // Lección con snippetId: el iframe ya cargó el código correcto.
+        if (i === 2) { ocReady = true; pendingCode = null; }
+      }, delay);
+    });
+  } else {
     setTimeout(() => { ocReady = true; }, 500);
   }
 }
+document.getElementById('oc-iframe').onload = ocLoaded;
 function postToOC(code) {
   document.getElementById('oc-iframe').contentWindow.postMessage({
     eventType: 'populateCode',    language: 'java',    files: [{
