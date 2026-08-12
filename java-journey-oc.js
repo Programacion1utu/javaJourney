@@ -303,11 +303,7 @@ const LESSONS = [
 \n        int temperatura = 35;
 \n        // Escribir el if / else\n\n    }
 \n}
-`,    hint: 'Escribir if (condición) {
- ... }
- else {
- ... }
-. Pensar qué operador de comparación corresponde para "mayor a 30".',  }
+`,    hint: 'Escribir if (condición) { ... } else { ... }. Pensar qué operador de comparación corresponde para "mayor a 30".',  }
 ,  {
  id: 12, title: "if / else anidado", subtitle: "Varias condiciones",    explanation: `<h2 class="text-base font-bold mb-3">if / else if / else</h2><p class="text-slate-300 text-sm mb-4">Para evaluar más de dos casos se encadenan condiciones con <code class="text-indigo-400">else if</code>.</p><div class="bg-slate-800/60 rounded-lg p-4 mb-4 mono text-sm text-slate-300 leading-7"><span class="text-purple-400">if</span> (nota >= <span class="text-orange-300">90</span>) {
 <br>&nbsp;
@@ -384,10 +380,7 @@ i++;
 \n        int i = 1;
 \n        // Completar el do-while\n\n    }
 \n}
-`,    hint: 'El do-while tiene la condición al final: do {
- ... }
- while (condicion);
- El cuerpo se ejecuta primero y luego se verifica si continuar.',  }
+`,    hint: 'El do-while tiene la condición al final: do { ... } while (condicion); El cuerpo se ejecuta primero y luego se verifica si continuar.',  }
 ,  {
  id: 20, title: "do-while con acumulador", subtitle: "Sumar con do-while",    explanation: `<h2 class="text-base font-bold mb-3">do-while con acumulador</h2><p class="text-slate-300 text-sm mb-4">El do-while es útil cuando se necesita ejecutar el cuerpo al menos una vez antes de decidir si continuar. Combinado con un acumulador permite calcular sumas.</p><div class="bg-slate-800/60 rounded-lg p-4 mb-4 mono text-sm text-slate-300 leading-7"><span class="text-purple-400">int</span> suma = <span class="text-orange-300">0</span>;
 <br><span class="text-purple-400">int</span> i = <span class="text-orange-300">1</span>;
@@ -430,8 +423,7 @@ i++;
 \n\n    public static void main(String[] args) {
 \n        // Llamar a mostrarLinea tres veces\n\n    }
 \n}
-`,    hint: 'Dentro del procedimiento usar println con el texto de guiones. En main, llamar al procedimiento por su nombre con paréntesis: mostrarLinea();
-',  }
+`,    hint: 'Dentro del procedimiento usar println con el texto de guiones. En main, llamar al procedimiento por su nombre con paréntesis: mostrarLinea();',  }
 ,  {
  id: 22, title: "Procedimientos con parámetros", subtitle: "Pasar datos a un método",    explanation: `<h2 class="text-base font-bold mb-3">Procedimientos con parámetros</h2><p class="text-slate-300 text-sm mb-4">Los parámetros permiten que un procedimiento reciba datos para trabajar con ellos. Se declaran entre los paréntesis con su tipo y nombre.</p><div class="bg-slate-800/60 rounded-lg p-4 mb-4 mono text-sm text-slate-300 leading-7"><span class="text-purple-400">static void</span> <span class="text-blue-300">saludar</span>(<span class="text-green-300">String</span> nombre) {
 <br>&nbsp;
@@ -469,8 +461,7 @@ i++;
 \n        System.out.println("Área: " + area);
 \n    }
 \n}
-`,    hint: 'La función debe usar return para devolver el cálculo: return base * altura / 2;
- El tipo de retorno declarado es double.',  }
+`,    hint: 'La función debe usar return para devolver el cálculo: return base * altura / 2; El tipo de retorno declarado es double.',  }
 ,  {
  id: 24, title: "Funciones con String", subtitle: "Retornar texto",    explanation: `<h2 class="text-base font-bold mb-3">Funciones que retornan String</h2><p class="text-slate-300 text-sm mb-4">Una función puede retornar cualquier tipo, incluyendo <code class="text-indigo-400">String</code>. Es útil para construir mensajes o transformar texto.</p><div class="bg-slate-800/60 rounded-lg p-4 mb-4 mono text-sm text-slate-300 leading-7"><span class="text-purple-400">static</span> <span class="text-green-300">String</span> <span class="text-blue-300">crearSaludo</span>(<span class="text-green-300">String</span> nombre, <span class="text-purple-400">int</span> edad) {
 <br>&nbsp;
@@ -680,10 +671,7 @@ suma += i;
 \n        // Sumar 50\n\n        // Restar 30\n\n        // Multiplicar por 2\n\n        System.out.println("Puntos: " + puntos);
 \n    }
 \n}
-`,    hint: 'Usar puntos += 50;
- luego puntos -= 30;
- luego puntos *= 2;
- Cada operación modifica el valor acumulado de puntos.',  }
+`,    hint: 'Usar puntos += 50; luego puntos -= 30; luego puntos *= 2; Cada operación modifica el valor acumulado de puntos.',  }
 ,  {
  id: 36, title: "Operador %=", subtitle: "Módulo con atajo",    explanation: `<h2 class="text-base font-bold mb-3">El atajo %=</h2><p class="text-slate-300 text-sm mb-4"><code class="text-indigo-400">%=</code> aplica el módulo y reasigna: <code class="text-indigo-400">x %= n</code> es lo mismo que <code class="text-indigo-400">x = x % n</code>.</p><div class="bg-slate-800/60 rounded-lg p-4 mb-4 mono text-sm text-slate-300 leading-7"><span class="text-purple-400">int</span> x = <span class="text-orange-300">17</span>;
 <br>x %= <span class="text-orange-300">5</span>;
@@ -750,11 +738,7 @@ suma += i;
 \n        boolean entrego = true;
 \n        // Combinar ambas condiciones con &&\n\n    }
 \n}
-`,    hint: 'Usar if (nota >= 60 && entrego) {
- ... }
- else {
- ... }
-. Ambas condiciones deben ser true para aprobar.',  }
+`,    hint: 'Usar if (nota >= 60 && entrego) { ... } else { ... }. Ambas condiciones deben ser true para aprobar.',  }
 ,  {
  id: 40, title: "NOT — el operador !", subtitle: "Invertir una condición",    explanation: `<h2 class="text-base font-bold mb-3">Operador lógico !</h2><p class="text-slate-300 text-sm mb-4"><code class="text-indigo-400">!</code> (NOT) invierte el valor de un booleano: convierte <code class="text-green-400">true</code> en <code class="text-green-400">false</code> y viceversa.</p><div class="bg-slate-800/60 rounded-lg p-4 mb-4 mono text-sm text-slate-300 leading-7"><span class="text-purple-400">boolean</span> conectado = <span class="text-purple-400">false</span>;
 <br><span class="text-purple-400">if</span> (!conectado) {
@@ -768,11 +752,7 @@ suma += i;
 \n        boolean pagado = false;
 \n        // Usar ! para verificar si NO está pagado\n\n    }
 \n}
-`,    hint: 'Escribir if (!pagado) {
- ... }
- else {
- ... }
-. !pagado es true cuando pagado es false.',  }
+`,    hint: 'Escribir if (!pagado) { ... } else { ... }. !pagado es true cuando pagado es false.',  }
 ,  // ══ TEMA 21: System.out.print ════════════════════════════════════════════════
   {
  id: 41, title: "print vs println", subtitle: "Salida sin salto de línea",    explanation: `<h2 class="text-base font-bold mb-3">print vs println</h2><p class="text-slate-300 text-sm mb-3"><code class="text-indigo-400">println</code> imprime y baja al renglón siguiente. <code class="text-indigo-400">print</code> imprime sin moverse al siguiente renglón.</p><div class="bg-slate-800/60 rounded-lg p-4 mb-4 mono text-sm text-slate-300 leading-7"><span class="text-green-300">System</span>.out.<span class="text-blue-300">print</span>(<span class="text-orange-300">"Hola "</span>);
@@ -819,8 +799,7 @@ $85.50</code></div>`,    starterCode: `public class Main {
 \n        int stock = 48;
 \n        // Usar printf con %s, %.2f y %d\n\n    }
 \n}
-`,    hint: 'Usar printf tres veces o combinar todo en uno: printf("Producto: %s\\nPrecio: $%.2f\\nStock: %d unidades\\n", nombre, precio, stock);
-',  }
+`,    hint: 'Usar printf tres veces o combinar todo en uno: printf("Producto: %s\\nPrecio: $%.2f\\nStock: %d unidades\\n", nombre, precio, stock);',  }
 ,  {
  id: 44, title: "String.format", subtitle: "Formato en variables",    explanation: `<h2 class="text-base font-bold mb-3">String.format</h2><p class="text-slate-300 text-sm mb-4"><code class="text-indigo-400">String.format()</code> crea un String formateado sin imprimirlo de inmediato. Es útil para construir mensajes antes de mostrarlos.</p><div class="bg-slate-800/60 rounded-lg p-4 mb-4 mono text-sm text-slate-300 leading-7"><span class="text-green-300">String</span> msg = <span class="text-green-300">String</span>.<span class="text-blue-300">format</span>(<span class="text-orange-300">"Hola, %s! Nota: %.1f"</span>, <span class="text-orange-300">"Luis"</span>, <span class="text-orange-300">8.75</span>);
 <br><span class="text-green-300">System</span>.out.<span class="text-blue-300">println</span>(msg);
@@ -859,9 +838,7 @@ $85.50</code></div>`,    starterCode: `public class Main {
 \n            // Agregar case 3 y default\n\n        }
 \n    }
 \n}
-`,    hint: 'Agregar case 3: System.out.println("Marzo");
- break;
- y un default que imprima "Mes no válido".',  }
+`,    hint: 'Agregar case 3: System.out.println("Marzo"); break; y un default que imprima "Mes no válido".',  }
 ,  {
  id: 46, title: "Switch con String", subtitle: "Evaluar texto",    explanation: `<h2 class="text-base font-bold mb-3">Switch con String</h2><p class="text-slate-300 text-sm mb-4">Desde Java 7, switch también puede evaluar <code class="text-indigo-400">String</code>. La comparación es sensible a mayúsculas.</p><div class="bg-slate-800/60 rounded-lg p-4 mb-4 mono text-sm text-slate-300 leading-7"><span class="text-green-300">String</span> color = <span class="text-orange-300">"rojo"</span>;
 <br><span class="text-purple-400">switch</span> (color) {
@@ -891,11 +868,7 @@ $85.50</code></div>`,    starterCode: `public class Main {
 \n        }
 \n    }
 \n}
-`,    hint: 'Agregar case "tarde": System.out.println("Buenas tardes");
- break;
- y case "noche": System.out.println("Buenas noches");
- break;
-',  }
+`,    hint: 'Agregar case "tarde": System.out.println("Buenas tardes"); break; y case "noche": System.out.println("Buenas noches"); break;',  }
 ,  // ══ TEMA 24: Operador ternario ════════════════════════════════════════════════
   {
  id: 47, title: "Operador ternario", subtitle: "condicion ? si : no",    explanation: `<h2 class="text-base font-bold mb-3">El operador ternario</h2><p class="text-slate-300 text-sm mb-4">El operador ternario es una forma compacta de escribir un <code class="text-indigo-400">if/else</code> que produce un valor. Su sintaxis es:<br><code class="text-yellow-300">condicion ? valorSiVerdadero : valorSiFalso</code></p><div class="bg-slate-800/60 rounded-lg p-4 mb-4 mono text-sm text-slate-300 leading-7"><span class="text-purple-400">int</span> edad = <span class="text-orange-300">20</span>;
@@ -1018,8 +991,7 @@ $85.50</code></div>`,    starterCode: `public class Main {
 \n        }
 \n    }
 \n}
-`,    hint: 'Agregar if (i % 3 == 0) continue;
- antes del println. Eso saltará la impresión cuando i sea 3, 6 o 9.',  }
+`,    hint: 'Agregar if (i % 3 == 0) continue; antes del println. Eso saltará la impresión cuando i sea 3, 6 o 9.',  }
 ,  // ══ TEMA 28: Bucles anidados ══════════════════════════════════════════════════
   {
  id: 55, title: "Bucles anidados", subtitle: "for dentro de for",    explanation: `<h2 class="text-base font-bold mb-3">Bucles anidados</h2><p class="text-slate-300 text-sm mb-4">Un bucle anidado es un bucle dentro de otro. El bucle <strong>interno</strong> se ejecuta completamente por cada iteración del bucle <strong>externo</strong>.</p><div class="bg-slate-800/60 rounded-lg p-4 mb-4 mono text-sm text-slate-300 leading-7"><span class="text-purple-400">for</span> (<span class="text-purple-400">int</span> fila = <span class="text-orange-300">1</span>;
@@ -1241,7 +1213,8 @@ let allowQuizPdf = false;
 const quizDone = new Set();
 const completedLessons = new Set();
 // accordion state (persisted locally);
- enabledTopics se carga desde APIconst expandedTopics = new Set(JSON.parse(localStorage.getItem('jj-expanded') || '[]'));
+// enabledTopics se carga desde API
+const expandedTopics = new Set(JSON.parse(localStorage.getItem('jj-expanded') || '[]'));
 const enabledTopics  = new Set();
 function saveAccordionState() {
   localStorage.setItem('jj-expanded', JSON.stringify([...expandedTopics]));
@@ -1439,12 +1412,7 @@ function renderTeacherPanel() {
   TOPICS.forEach((topic, topicIdx) => {
     const enabled = enabledTopics.has(topic.id);
     const row = document.createElement('div');
-    row.style.cssText = 'display:flex;
-align-items:center;
-justify-content:space-between;
-padding:9px 0;
-border-bottom:1px solid #1e2535;
-';
+    row.style.cssText = 'display:flex;align-items:center;justify-content:space-between;padding:9px 0;border-bottom:1px solid #1e2535;';
     row.innerHTML = `      <span style="font-size:13px;
 color:${
 enabled ? '#e2e8f0' : '#4a5568'}
@@ -1521,24 +1489,12 @@ function renderStudentList() {
   if (!list) return;
   list.innerHTML = '';
   if (!_allStudents.length) {
-    list.innerHTML = '<div style="font-size:12px;
-color:#4a5568;
-text-align:center;
-padding:12px;
-">Sin estudiantes registrados</div>';
+    list.innerHTML = '<div style="font-size:12px; color:#4a5568; text-align:center; padding:12px; ">Sin estudiantes registrados</div>';
     return;
   }
   _allStudents.forEach(s => {
     const row = document.createElement('div');
-    row.style.cssText = 'display:flex;
-align-items:center;
-justify-content:space-between;
-padding:9px 12px;
-background:#0f1117;
-border:1px solid #1e2535;
-border-radius:8px;
-gap:8px;
-';
+    row.style.cssText = 'display:flex; align-items:center; justify-content:space-between; padding:9px 12px; background:#0f1117; border:1px solid #1e2535; border-radius:8px; gap:8px; ';
     row.innerHTML = `      <div style="flex:1;
 min-width:0;
 ">        <div style="font-size:13px;
@@ -1558,11 +1514,7 @@ s.lessons_completed}
 s.quizzes_completed}
  QUIZZES_CLIENT</div>      </div>      <button onclick="openResetModal(${
 s.id}
-,'${
-s.nombre}
- ${
-s.apellido}
-')" title="Resetear contraseña"        style="background:none;
+,'${ s.nombre} ${ s.apellido} ')" title="Resetear contraseña"        style="background:none;
 border:1px solid #2d3748;
 border-radius:6px;
 color:#94a3b8;
@@ -1571,11 +1523,7 @@ font-size:12px;
 padding:5px 8px;
 ">🔑</button>      <button onclick="deleteStudent(${
 s.id}
-,'${
-s.nombre}
- ${
-s.apellido}
-')" title="Eliminar"        style="background:none;
+,'${ s.nombre} ${ s.apellido} ')" title="Eliminar"        style="background:none;
 border:1px solid #2d3748;
 border-radius:6px;
 color:#ef4444;
@@ -1616,8 +1564,7 @@ g}
 )      : '—';
     const lessPct = Math.round(s.lessons_completed / totalLessons * 100);
     const tr = document.createElement('tr');
-    tr.style.cssText = 'border-bottom:1px solid #1e2535;
-';
+    tr.style.cssText = 'border-bottom:1px solid #1e2535; ';
     tr.innerHTML = `      <td style="padding:9px 10px;
 color:#e2e8f0;
 ">${
@@ -1656,8 +1603,7 @@ s.quiz_avg_score>=80?'#22c55e':s.quiz_avg_score>=60?'#f59e0b':'#ef4444'}
 ;
 ">${
 s.quiz_avg_score}
-%</span>`          : '<span style="color:#4a5568;
-">—</span>'}
+%</span>`          : '<span style="color:#4a5568; ">—</span>'}
       </td>      <td style="padding:9px 10px;
 color:#64748b;
 ">${
@@ -1752,16 +1698,7 @@ function renderSidebar() {
     header.className = `topic-header${
 isAccessible ? '' : ' disabled'}
 `;
-    const lockIcon = !isEnabled      ? '<span style="font-size:11px;
-color:#4a5568;
-margin-left:auto;
-">🔒</span>'      : (!isAccessible        ? '<span style="font-size:11px;
-color:#4a5568;
-margin-left:auto;
-" title="Completar el tema anterior primero">🔒</span>'        : (isDone ? '<span style="font-size:11px;
-color:#22c55e;
-margin-left:auto;
-">✅</span>' : ''));
+    const lockIcon = !isEnabled      ? '<span style="font-size:11px; color:#4a5568; margin-left:auto; ">🔒</span>'      : (!isAccessible        ? '<span style="font-size:11px; color:#4a5568; margin-left:auto; " title="Completar el tema anterior primero">🔒</span>'        : (isDone ? '<span style="font-size:11px; color:#22c55e; margin-left:auto; ">✅</span>' : ''));
     header.innerHTML = `      <span class="topic-arrow${
 isOpen ? ' open' : ''}
 ">▶</span>      <span class="topic-label">${
@@ -1781,8 +1718,10 @@ lockIcon}
     content.className = `topic-content${
 isOpen ? '' : ' closed'}
 `;
-    // measure height after insert    if (isOpen) content.style.maxHeight = '9999px';
-    // Lessons    topic.lessons.forEach((lid, lessonIdx) => {
+    // measure height after insert
+    if (isOpen) content.style.maxHeight = '9999px';
+    // Lessons
+    topic.lessons.forEach((lid, lessonIdx) => {
       const l = LESSONS.find(x => x.id === lid);
       if (!l) return;
       const isActive = currentLesson === l.id;
@@ -1806,7 +1745,8 @@ l.subtitle}
       content.appendChild(div);
     }
 );
-    // Quiz    const quiz = QUIZZES_CLIENT.find(q => q.topicId === topic.id);
+    // Quiz
+    const quiz = QUIZZES_CLIENT.find(q => q.topicId === topic.id);
     if (quiz) {
       const done   = quizDone.has(topic.id);
       const locked = !isAccessible;
@@ -1846,19 +1786,10 @@ function selectLesson(id) {
   // ocReady = false;
   // if (lesson.snippetId) {
   //   pendingCode = null;
-  //   iframe.src = `https://onecompiler.com/java/${
-lesson.snippetId}
-?${
-OC_PARAMS}
-`;
-  // }
- else {
+  //   iframe.src = `https://onecompiler.com/java/${lesson.snippetId}?${OC_PARAMS}`;
+  // } else {
   //   pendingCode = lesson.starterCode;
-  //   iframe.src = `https://onecompiler.com/java?${
-OC_PARAMS}
-&_=${
-Date.now()}
-`;
+  //   iframe.src = `https://onecompiler.com/java?${OC_PARAMS}&_=${Date.now()}`;
   // }
   // Mostrar u ocultar el panel de verificación
   const verifyPanel = document.getElementById('verify-panel');
@@ -1881,7 +1812,9 @@ Date.now()}
 // ─── ONECOMPILER ──────────────────────────────────────────────────────────────
 function ocLoaded() {
   if (pendingCode !== null) {
-    // Lección con starterCode: enviamos en varios intentos para ganarle    // la carrera a la restauración propia del localStorage de OneCompiler.    [800, 1500, 2500].forEach((delay, i) => {
+    // Lección con starterCode: enviamos en varios intentos para ganarle
+    // la carrera a la restauración propia del localStorage de OneCompiler.
+    [800, 1500, 2500].forEach((delay, i) => {
       setTimeout(() => {
         if (pendingCode !== null) postToOC(pendingCode);
         if (i === 2) {
@@ -1894,10 +1827,8 @@ function ocLoaded() {
 );
   }
  else {
-    // Lección con snippetId: el iframe ya cargó el código correcto.    setTimeout(() => {
- ocReady = true;
- }
-, 500);
+    // Lección con snippetId: el iframe ya cargó el código correcto.
+    setTimeout(() => { ocReady = true; }, 500);
   }
 }
 function postToOC(code) {
@@ -1978,11 +1909,7 @@ function copyShareMessage() {
 function fallbackCopy(text, cb) {
   const ta = document.createElement('textarea');
   ta.value = text;
-  ta.style.cssText = 'position:fixed;
-top:-9999px;
-left:-9999px;
-opacity:0;
-';
+  ta.style.cssText = 'position:fixed; top:-9999px; left:-9999px; opacity:0; ';
   document.body.appendChild(ta);
   ta.focus();
   ta.select();
@@ -2089,16 +2016,7 @@ total}
   q.opts.forEach((opt, i) => {
     const btn = document.createElement('button');
     btn.textContent = opt;
-    btn.style.cssText = 'text-align:left;
-padding:10px 14px;
-border-radius:8px;
-border:1px solid #2d3748;
-background:#1a1f2e;
-color:#cbd5e1;
-font-size:13px;
-cursor:pointer;
-transition:all .15s;
-';
+    btn.style.cssText = 'text-align:left; padding:10px 14px; border-radius:8px; border:1px solid #2d3748; background:#1a1f2e; color:#cbd5e1; font-size:13px; cursor:pointer; transition:all .15s; ';
     btn.onmouseover = () => {
  if (!quizAnswered) btn.style.borderColor = '#4f6ef7';
  }
