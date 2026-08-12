@@ -152,53 +152,90 @@
 
 <!-- ═══════════════════ TEACHER PANEL ═══════════════════ -->
 <div id="teacher-panel" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:90;align-items:center;justify-content:center;">
-  <div style="background:#161b27;border:1px solid #4f6ef7;border-radius:16px;padding:28px;width:400px;max-height:88vh;overflow-y:auto;animation:pop .2s ease;">
-    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;">
+  <div style="background:#161b27;border:1px solid #4f6ef7;border-radius:16px;width:560px;max-height:90vh;display:flex;flex-direction:column;animation:pop .2s ease;">
+
+    <!-- Header -->
+    <div style="display:flex;align-items:center;justify-content:space-between;padding:20px 24px 0;">
       <div style="font-size:15px;font-weight:700;color:#e2e8f0;">⚙️ Panel docente</div>
       <button onclick="closeTeacherPanel()" style="background:none;border:none;color:#64748b;cursor:pointer;font-size:18px;line-height:1;">✕</button>
     </div>
 
-    <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#818cf8;margin-bottom:12px;">Temas habilitados para estudiantes</div>
-    <div id="tp-topic-list"></div>
-
-    <div style="display:flex;gap:8px;margin-top:14px;">
-      <button onclick="enableAllTopics()" style="flex:1;padding:8px;background:transparent;border:1px solid #4f6ef7;border-radius:8px;color:#818cf8;cursor:pointer;font-size:12px;">Habilitar todos</button>
-      <button onclick="disableAllTopics()" style="flex:1;padding:8px;background:transparent;border:1px solid #2d3748;border-radius:8px;color:#64748b;cursor:pointer;font-size:12px;">Deshabilitar todos</button>
+    <!-- Tabs -->
+    <div style="display:flex;gap:0;padding:16px 24px 0;border-bottom:1px solid #1e2535;">
+      <button onclick="switchTab('temas')" id="tab-temas"
+        style="padding:8px 16px;background:none;border:none;border-bottom:2px solid #4f6ef7;color:#818cf8;cursor:pointer;font-size:12px;font-weight:600;">Temas</button>
+      <button onclick="switchTab('estudiantes')" id="tab-estudiantes"
+        style="padding:8px 16px;background:none;border:none;border-bottom:2px solid transparent;color:#4a5568;cursor:pointer;font-size:12px;font-weight:600;">Estudiantes</button>
+      <button onclick="switchTab('progreso')" id="tab-progreso"
+        style="padding:8px 16px;background:none;border:none;border-bottom:2px solid transparent;color:#4a5568;cursor:pointer;font-size:12px;font-weight:600;">Progreso</button>
     </div>
 
-    <div style="border-top:1px solid #1e2535;margin:22px 0;"></div>
+    <!-- Tab content -->
+    <div style="flex:1;overflow-y:auto;padding:20px 24px;">
 
-    <!-- ESTUDIANTES -->
-    <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#818cf8;margin-bottom:12px;">Estudiantes</div>
-
-    <!-- Formulario nuevo estudiante -->
-    <div style="background:#0f1117;border:1px solid #2d3748;border-radius:10px;padding:14px;margin-bottom:14px;">
-      <div style="font-size:12px;color:#94a3b8;margin-bottom:10px;font-weight:600;">Agregar estudiante</div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:6px;">
-        <input id="tp-st-nombre"   type="text"     placeholder="Nombre"   style="padding:8px 10px;background:#161b27;border:1px solid #2d3748;border-radius:7px;color:#e2e8f0;font-size:12px;outline:none;">
-        <input id="tp-st-apellido" type="text"     placeholder="Apellido" style="padding:8px 10px;background:#161b27;border:1px solid #2d3748;border-radius:7px;color:#e2e8f0;font-size:12px;outline:none;">
-        <input id="tp-st-grupo"    type="text"     placeholder="Grupo"    style="padding:8px 10px;background:#161b27;border:1px solid #2d3748;border-radius:7px;color:#e2e8f0;font-size:12px;outline:none;">
-        <input id="tp-st-pw"       type="password" placeholder="Contraseña" style="padding:8px 10px;background:#161b27;border:1px solid #2d3748;border-radius:7px;color:#e2e8f0;font-size:12px;outline:none;">
+      <!-- ── TEMAS ── -->
+      <div id="tp-tab-temas">
+        <div id="tp-topic-list"></div>
+        <div style="display:flex;gap:8px;margin-top:14px;">
+          <button onclick="enableAllTopics()" style="flex:1;padding:8px;background:transparent;border:1px solid #4f6ef7;border-radius:8px;color:#818cf8;cursor:pointer;font-size:12px;">Habilitar todos</button>
+          <button onclick="disableAllTopics()" style="flex:1;padding:8px;background:transparent;border:1px solid #2d3748;border-radius:8px;color:#64748b;cursor:pointer;font-size:12px;">Deshabilitar todos</button>
+        </div>
       </div>
-      <div id="tp-st-error" style="display:none;font-size:11px;color:#ef4444;margin-bottom:6px;"></div>
-      <button onclick="createStudent()" style="width:100%;padding:8px;background:#4f6ef7;border:none;border-radius:7px;color:#fff;cursor:pointer;font-size:12px;font-weight:600;">+ Agregar</button>
-    </div>
 
-    <!-- Lista de estudiantes -->
-    <div id="tp-student-list" style="display:flex;flex-direction:column;gap:6px;"></div>
-
-    <!-- Modal resetear contraseña -->
-    <div id="tp-reset-modal" style="display:none;background:#0f1117;border:1px solid #f59e0b40;border-radius:10px;padding:14px;margin-top:10px;">
-      <div style="font-size:12px;color:#f59e0b;margin-bottom:8px;font-weight:600;">Resetear contraseña de <span id="tp-reset-name"></span></div>
-      <div style="display:flex;gap:6px;">
-        <input id="tp-reset-pw" type="password" placeholder="Nueva contraseña"
-          style="flex:1;padding:8px 10px;background:#161b27;border:1px solid #2d3748;border-radius:7px;color:#e2e8f0;font-size:12px;outline:none;">
-        <button onclick="confirmResetPassword()" style="padding:8px 12px;background:#f59e0b;border:none;border-radius:7px;color:#000;cursor:pointer;font-size:12px;font-weight:600;">Guardar</button>
-        <button onclick="document.getElementById('tp-reset-modal').style.display='none'" style="padding:8px 10px;background:transparent;border:1px solid #2d3748;border-radius:7px;color:#64748b;cursor:pointer;font-size:12px;">✕</button>
+      <!-- ── ESTUDIANTES ── -->
+      <div id="tp-tab-estudiantes" style="display:none;">
+        <div style="background:#0f1117;border:1px solid #2d3748;border-radius:10px;padding:14px;margin-bottom:14px;">
+          <div style="font-size:12px;color:#94a3b8;margin-bottom:10px;font-weight:600;">Agregar estudiante</div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:6px;">
+            <input id="tp-st-nombre"   type="text"     placeholder="Nombre"     style="padding:8px 10px;background:#161b27;border:1px solid #2d3748;border-radius:7px;color:#e2e8f0;font-size:12px;outline:none;">
+            <input id="tp-st-apellido" type="text"     placeholder="Apellido"   style="padding:8px 10px;background:#161b27;border:1px solid #2d3748;border-radius:7px;color:#e2e8f0;font-size:12px;outline:none;">
+            <input id="tp-st-grupo"    type="text"     placeholder="Grupo"      style="padding:8px 10px;background:#161b27;border:1px solid #2d3748;border-radius:7px;color:#e2e8f0;font-size:12px;outline:none;">
+            <input id="tp-st-pw"       type="password" placeholder="Contraseña" style="padding:8px 10px;background:#161b27;border:1px solid #2d3748;border-radius:7px;color:#e2e8f0;font-size:12px;outline:none;">
+          </div>
+          <div id="tp-st-error" style="display:none;font-size:11px;color:#ef4444;margin-bottom:6px;"></div>
+          <button onclick="createStudent()" style="width:100%;padding:8px;background:#4f6ef7;border:none;border-radius:7px;color:#fff;cursor:pointer;font-size:12px;font-weight:600;">+ Agregar</button>
+        </div>
+        <div id="tp-student-list" style="display:flex;flex-direction:column;gap:6px;"></div>
+        <div id="tp-reset-modal" style="display:none;background:#0f1117;border:1px solid #f59e0b40;border-radius:10px;padding:14px;margin-top:10px;">
+          <div style="font-size:12px;color:#f59e0b;margin-bottom:8px;font-weight:600;">Resetear contraseña de <span id="tp-reset-name"></span></div>
+          <div style="display:flex;gap:6px;">
+            <input id="tp-reset-pw" type="password" placeholder="Nueva contraseña"
+              style="flex:1;padding:8px 10px;background:#161b27;border:1px solid #2d3748;border-radius:7px;color:#e2e8f0;font-size:12px;outline:none;">
+            <button onclick="confirmResetPassword()" style="padding:8px 12px;background:#f59e0b;border:none;border-radius:7px;color:#000;cursor:pointer;font-size:12px;font-weight:600;">Guardar</button>
+            <button onclick="document.getElementById('tp-reset-modal').style.display='none'" style="padding:8px 10px;background:transparent;border:1px solid #2d3748;border-radius:7px;color:#64748b;cursor:pointer;font-size:12px;">✕</button>
+          </div>
+        </div>
       </div>
-    </div>
 
-    <div style="margin-top:24px;text-align:center;">
+      <!-- ── PROGRESO ── -->
+      <div id="tp-tab-progreso" style="display:none;">
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:14px;">
+          <label style="font-size:12px;color:#94a3b8;">Filtrar por grupo:</label>
+          <select id="tp-filter-grupo" onchange="renderProgressTable()"
+            style="padding:6px 10px;background:#0f1117;border:1px solid #2d3748;border-radius:7px;color:#e2e8f0;font-size:12px;outline:none;cursor:pointer;">
+            <option value="">Todos</option>
+          </select>
+        </div>
+        <div style="overflow-x:auto;">
+          <table style="width:100%;border-collapse:collapse;font-size:12px;">
+            <thead>
+              <tr style="border-bottom:1px solid #2d3748;color:#4a5568;text-align:left;">
+                <th style="padding:8px 10px;font-weight:600;">Estudiante</th>
+                <th style="padding:8px 10px;font-weight:600;">Grupo</th>
+                <th style="padding:8px 10px;font-weight:600;text-align:center;">Lecciones</th>
+                <th style="padding:8px 10px;font-weight:600;text-align:center;">Quizzes</th>
+                <th style="padding:8px 10px;font-weight:600;">Último acceso</th>
+              </tr>
+            </thead>
+            <tbody id="tp-progress-body"></tbody>
+          </table>
+          <div id="tp-progress-empty" style="display:none;text-align:center;padding:24px;color:#4a5568;font-size:12px;">Sin datos</div>
+        </div>
+      </div>
+
+    </div><!-- /tab content -->
+
+    <div style="padding:16px 24px;border-top:1px solid #1e2535;text-align:center;">
       <button onclick="closeTeacherPanel()" style="padding:9px 36px;background:#4f6ef7;border:none;border-radius:8px;color:#fff;cursor:pointer;font-size:13px;font-weight:600;">Cerrar panel</button>
     </div>
   </div>

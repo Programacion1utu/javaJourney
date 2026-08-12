@@ -2016,10 +2016,23 @@ async function submitTeacherLogin() {
   }
 }
 
+let _allStudents = [];
+
 function openTeacherPanel() {
   renderTeacherPanel();
+  switchTab('temas');
   loadStudents();
   document.getElementById('teacher-panel').style.display = 'flex';
+}
+
+function switchTab(tab) {
+  ['temas','estudiantes','progreso'].forEach(t => {
+    document.getElementById(`tp-tab-${t}`).style.display = t === tab ? 'block' : 'none';
+    const btn = document.getElementById(`tab-${t}`);
+    btn.style.borderBottomColor = t === tab ? '#4f6ef7' : 'transparent';
+    btn.style.color = t === tab ? '#818cf8' : '#4a5568';
+  });
+  if (tab === 'progreso') renderProgressTable();
 }
 
 function renderTeacherPanel() {
@@ -2076,14 +2089,20 @@ let _resetStudentId = null;
 
 async function loadStudents() {
   const res = await apiGet('/api/teacher/students', teacherToken);
-  const students = await res.json();
+  _allStudents = await res.json();
+  renderStudentList();
+  renderProgressTable();
+}
+
+function renderStudentList() {
   const list = document.getElementById('tp-student-list');
+  if (!list) return;
   list.innerHTML = '';
-  if (!students.length) {
+  if (!_allStudents.length) {
     list.innerHTML = '<div style="font-size:12px;color:#4a5568;text-align:center;padding:12px;">Sin estudiantes registrados</div>';
     return;
   }
-  students.forEach(s => {
+  _allStudents.forEach(s => {
     const row = document.createElement('div');
     row.style.cssText = 'display:flex;align-items:center;justify-content:space-between;padding:9px 12px;background:#0f1117;border:1px solid #1e2535;border-radius:8px;gap:8px;';
     row.innerHTML = `
@@ -2096,6 +2115,53 @@ async function loadStudents() {
       <button onclick="deleteStudent(${s.id},'${s.nombre} ${s.apellido}')" title="Eliminar"
         style="background:none;border:1px solid #2d3748;border-radius:6px;color:#ef4444;cursor:pointer;font-size:12px;padding:5px 8px;">✕</button>`;
     list.appendChild(row);
+  });
+}
+
+function renderProgressTable() {
+  const filterEl = document.getElementById('tp-filter-grupo');
+  const tbody    = document.getElementById('tp-progress-body');
+  const empty    = document.getElementById('tp-progress-empty');
+  if (!filterEl || !tbody) return;
+
+  // Actualizar opciones del filtro
+  const grupos = [...new Set(_allStudents.map(s => s.grupo))].sort();
+  const current = filterEl.value;
+  filterEl.innerHTML = '<option value="">Todos</option>' +
+    grupos.map(g => `<option value="${g}"${g === current ? ' selected' : ''}>${g}</option>`).join('');
+
+  const filtered = current ? _allStudents.filter(s => s.grupo === current) : _allStudents;
+
+  tbody.innerHTML = '';
+  if (!filtered.length) {
+    empty.style.display = 'block';
+    return;
+  }
+  empty.style.display = 'none';
+
+  const totalLessons = VERIFIABLE_LESSONS.size;
+  const totalQuizzes = QUIZZES.length;
+
+  filtered.forEach(s => {
+    const lastAccess = s.last_access
+      ? new Date(s.last_access).toLocaleDateString('es-UY', { day:'2-digit', month:'2-digit', year:'2-digit' })
+      : '—';
+    const lessPct = Math.round(s.lessons_completed / totalLessons * 100);
+    const tr = document.createElement('tr');
+    tr.style.cssText = 'border-bottom:1px solid #1e2535;';
+    tr.innerHTML = `
+      <td style="padding:9px 10px;color:#e2e8f0;">${s.nombre} ${s.apellido}</td>
+      <td style="padding:9px 10px;color:#64748b;">${s.grupo}</td>
+      <td style="padding:9px 10px;text-align:center;">
+        <span style="color:${lessPct >= 80 ? '#22c55e' : lessPct >= 40 ? '#f59e0b' : '#e2e8f0'};">${s.lessons_completed}</span>
+        <span style="color:#4a5568;font-size:11px;"> / ${totalLessons}</span>
+      </td>
+      <td style="padding:9px 10px;text-align:center;">
+        <span style="color:#e2e8f0;">${s.quizzes_completed}</span>
+        <span style="color:#4a5568;font-size:11px;"> / ${totalQuizzes}</span>
+      </td>
+      <td style="padding:9px 10px;color:#64748b;">${lastAccess}</td>`;
+    tbody.appendChild(tr);
   });
 }
 
