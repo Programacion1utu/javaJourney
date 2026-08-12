@@ -65,67 +65,67 @@ const TOPICS = [  {
 ,];
 // ─── QUIZZES_CLIENT (solo topicId y título — preguntas y respuestas están en el servidor) ──
 const QUIZZES_CLIENT = [  {
- topicId: 1,  title: "Hola Mundo" }
+ topicId: 1,  title: "Hola Mundo", questionCount: 5 }
 ,  {
- topicId: 2,  title: "Variables numéricas" }
+ topicId: 2,  title: "Variables numéricas", questionCount: 5 }
 ,  {
- topicId: 3,  title: "Scanner" }
+ topicId: 3,  title: "Scanner", questionCount: 5 }
 ,  {
- topicId: 4,  title: "Variables de texto" }
+ topicId: 4,  title: "Variables de texto", questionCount: 5 }
 ,  {
- topicId: 5,  title: "Operaciones aritméticas" }
+ topicId: 5,  title: "Operaciones aritméticas", questionCount: 5 }
 ,  {
- topicId: 6,  title: "Números Random" }
+ topicId: 6,  title: "Números Random", questionCount: 5 }
 ,  {
- topicId: 7,  title: "Condicional if / else" }
+ topicId: 7,  title: "Condicional if / else", questionCount: 5 }
 ,  {
- topicId: 8,  title: "Bucle while" }
+ topicId: 8,  title: "Bucle while", questionCount: 5 }
 ,  {
- topicId: 9,  title: "Bucle do-while" }
+ topicId: 9,  title: "Bucle do-while", questionCount: 5 }
 ,  {
- topicId: 10, title: "Bucle for" }
+ topicId: 10, title: "Bucle for", questionCount: 5 }
 ,  {
- topicId: 11, title: "Procedimientos" }
+ topicId: 11, title: "Procedimientos", questionCount: 5 }
 ,  {
- topicId: 12, title: "Funciones" }
+ topicId: 12, title: "Funciones", questionCount: 5 }
 ,  {
- topicId: 13, title: "Arrays" }
+ topicId: 13, title: "Arrays", questionCount: 5 }
 ,  {
- topicId: 14, title: "Comentarios" }
+ topicId: 14, title: "Comentarios", questionCount: 5 }
 ,  {
- topicId: 15, title: "Constantes" }
+ topicId: 15, title: "Constantes", questionCount: 5 }
 ,  {
- topicId: 16, title: "Conversión de tipos" }
+ topicId: 16, title: "Conversión de tipos", questionCount: 5 }
 ,  {
- topicId: 17, title: "Incremento y decremento" }
+ topicId: 17, title: "Incremento y decremento", questionCount: 5 }
 ,  {
- topicId: 18, title: "Atajos aritméticos" }
+ topicId: 18, title: "Atajos aritméticos", questionCount: 5 }
 ,  {
- topicId: 19, title: "Operadores de comparación" }
+ topicId: 19, title: "Operadores de comparación", questionCount: 5 }
 ,  {
- topicId: 20, title: "Operadores lógicos" }
+ topicId: 20, title: "Operadores lógicos", questionCount: 5 }
 ,  {
- topicId: 21, title: "System.out.print" }
+ topicId: 21, title: "System.out.print", questionCount: 5 }
 ,  {
- topicId: 22, title: "Formato de salida" }
+ topicId: 22, title: "Formato de salida", questionCount: 5 }
 ,  {
- topicId: 23, title: "Switch" }
+ topicId: 23, title: "Switch", questionCount: 5 }
 ,  {
- topicId: 24, title: "Operador ternario" }
+ topicId: 24, title: "Operador ternario", questionCount: 5 }
 ,  {
- topicId: 25, title: "Comparación de Strings" }
+ topicId: 25, title: "Comparación de Strings", questionCount: 5 }
 ,  {
- topicId: 26, title: "Métodos de String" }
+ topicId: 26, title: "Métodos de String", questionCount: 5 }
 ,  {
- topicId: 27, title: "Break y Continue" }
+ topicId: 27, title: "Break y Continue", questionCount: 5 }
 ,  {
- topicId: 28, title: "Bucles anidados" }
+ topicId: 28, title: "Bucles anidados", questionCount: 5 }
 ,  {
- topicId: 29, title: "Sobrecarga de métodos" }
+ topicId: 29, title: "Sobrecarga de métodos", questionCount: 5 }
 ,  {
- topicId: 30, title: "Proyecto Calculadora" }
+ topicId: 30, title: "Proyecto Calculadora", questionCount: 5 }
 ,  {
- topicId: 31, title: "Desafíos Finales" }
+ topicId: 31, title: "Desafíos Finales", questionCount: 5 }
 ,];
 // ─── LECCIONES ────────────────────────────────────────────────────────────────
 const LESSONS = [
@@ -1688,7 +1688,7 @@ locked ? ' locked' : ''}`;
       qDiv.innerHTML = `        <div class="quiz-icon">${
 done ? '✅' : '📝'}
 </div>        <div class="flex-1 min-w-0">          <div class="text-sm font-medium text-emerald-400 truncate">Quiz del tema</div>          <div class="text-xs text-slate-500 truncate">${
-quiz.questions.length}
+quiz.questionCount ?? '?'}
  preguntas</div>        </div>`;
       if (!locked) qDiv.onclick = () => openQuiz(topic.id);
       content.appendChild(qDiv);
