@@ -25,9 +25,12 @@ CREATE TABLE IF NOT EXISTS quiz_progress (
   student_id   INT REFERENCES students(id) ON DELETE CASCADE,
   topic_id     INT NOT NULL,
   score        INT,
+  answers      JSONB,        -- [{chosen, correct, correctIndex}] por pregunta
   completed_at TIMESTAMP DEFAULT NOW(),
   PRIMARY KEY (student_id, topic_id)
 );
+-- Si la tabla ya existe, agregar la columna answers:
+-- ALTER TABLE quiz_progress ADD COLUMN IF NOT EXISTS answers JSONB;
 
 -- Configuración global (temas habilitados, etc.)
 CREATE TABLE IF NOT EXISTS config (
@@ -38,4 +41,9 @@ CREATE TABLE IF NOT EXISTS config (
 -- Valor inicial: solo el tema 1 habilitado
 INSERT INTO config (key, value)
 VALUES ('enabled_topics', '[1]')
+ON CONFLICT (key) DO NOTHING;
+
+-- PDF de quiz: deshabilitado por defecto
+INSERT INTO config (key, value)
+VALUES ('allow_quiz_pdf', 'false')
 ON CONFLICT (key) DO NOTHING;

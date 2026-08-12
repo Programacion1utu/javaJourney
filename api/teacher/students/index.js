@@ -15,7 +15,8 @@ module.exports = async function handler(req, res) {
       const rows = await sql`
         SELECT s.id, s.nombre, s.apellido, s.grupo, s.created_at, s.last_access,
           COUNT(DISTINCT lp.lesson_id) AS lessons_completed,
-          COUNT(DISTINCT qp.topic_id) AS quizzes_completed
+          COUNT(DISTINCT qp.topic_id) AS quizzes_completed,
+          ROUND(AVG(qp.score))::int AS quiz_avg_score
         FROM students s
         LEFT JOIN lesson_progress lp ON lp.student_id = s.id
         LEFT JOIN quiz_progress qp ON qp.student_id = s.id
