@@ -127,7 +127,9 @@ const QUIZZES_CLIENT = [  {
  topicId: 31, title: "Desafíos Finales" }
 ,];
 // ─── LECCIONES ────────────────────────────────────────────────────────────────
-const LESSONS = [  // ══ TEMA 1: Hola Mundo ═══════════════════════════════════════════════════  {
+const LESSONS = [
+  // ══ TEMA 1: Hola Mundo ═══════════════════════════════════════════════════
+  {
  id: 1, title: "Hola Mundo", subtitle: "Tu primer programa",    explanation: `<h2 class="text-base font-bold mb-3">Tu primer programa en Java</h2><p class="text-slate-300 text-sm mb-4">Todo programa Java tiene una <strong>clase</strong> y un método <code class="text-indigo-400">main</code> — el punto de entrada. La JVM siempre empieza por ahí.</p><div class="bg-slate-800/60 rounded-lg p-4 mb-4 mono text-sm text-slate-300 leading-7"><span class="text-purple-400">public class</span> <span class="text-yellow-300">Main</span> {
 <br>&nbsp;
 &nbsp;
@@ -155,7 +157,8 @@ const LESSONS = [  // ══ TEMA 1: Hola Mundo ══════════�
 \n        // Imprimir las tres líneas\n\n    }
 \n}
 `,    hint: 'Usar println tres veces, una por cada dato. El texto va entre comillas dobles en cada llamada.',  }
-,  // ══ TEMA 2: Variables numéricas ══════════════════════════════════════════  {
+,  // ══ TEMA 2: Variables numéricas ══════════════════════════════════════════
+  {
  id: 3, title: "Variables enteras", subtitle: "El tipo int",    explanation: `<h2 class="text-base font-bold mb-3">Variables de tipo int</h2><p class="text-slate-300 text-sm mb-4">Una <strong>variable</strong> es un espacio con nombre donde se guarda un valor. Para números enteros se usa <code class="text-indigo-400">int</code>.</p><div class="bg-slate-800/60 rounded-lg p-4 mb-4 mono text-sm text-slate-300 leading-7"><span class="text-purple-400">int</span> edad = <span class="text-orange-300">25</span>;
 <br><span class="text-purple-400">int</span> temperatura = <span class="text-orange-300">-5</span>;
 <br><span class="text-green-300">System</span>.out.<span class="text-blue-300">println</span>(<span class="text-orange-300">"Edad: "</span> + edad);
@@ -175,7 +178,8 @@ const LESSONS = [  // ══ TEMA 1: Hola Mundo ══════════�
 \n        // Calcular el total e imprimirlo\n\n    }
 \n}
 `,    hint: 'Multiplicar precioUnitario por cantidad y guardar el resultado en una variable double. Luego imprimir con el texto "Total: " concatenado.',  }
-,  // ══ TEMA 3: Scanner ═══════════════════════════════════════════════════════  {
+,  // ══ TEMA 3: Scanner ═══════════════════════════════════════════════════════
+  {
  id: 5, title: "Scanner — leer texto", subtitle: "Entrada del usuario",    explanation: `<h2 class="text-base font-bold mb-3">Leer datos con Scanner</h2><p class="text-slate-300 text-sm mb-4"><code class="text-indigo-400">Scanner</code> permite leer lo que el usuario escribe. Se importa de <code class="text-green-400">java.util.Scanner</code> y se conecta a <code class="text-green-400">System.in</code> (el teclado).</p><div class="bg-slate-800/60 rounded-lg p-4 mb-4 mono text-sm text-slate-300 leading-7"><span class="text-purple-400">import</span> java.util.Scanner;
 <br><br><span class="text-yellow-300">Scanner</span> sc = <span class="text-purple-400">new</span> <span class="text-yellow-300">Scanner</span>(System.in);
 <br><span class="text-green-300">String</span> nombre = sc.<span class="text-blue-300">nextLine</span>();
@@ -200,7 +204,8 @@ const LESSONS = [  // ══ TEMA 1: Hola Mundo ══════════�
 \n        // Leer dos enteros, sumarlos e imprimir el resultado\n\n    }
 \n}
 `,    hint: 'Usar nextInt() dos veces para leer los dos números. Guardarlos en variables int y luego imprimir la suma.',  }
-,  // ══ TEMA 4: Variables de texto ════════════════════════════════════════════  {
+,  // ══ TEMA 4: Variables de texto ════════════════════════════════════════════
+  {
  id: 7, title: "Variables String", subtitle: "Texto en Java",    explanation: `<h2 class="text-base font-bold mb-3">Cadenas de texto — String</h2><p class="text-slate-300 text-sm mb-4">Un <code class="text-indigo-400">String</code> guarda texto. Siempre va entre <strong>comillas dobles</strong>. String se escribe con mayúscula.</p><div class="bg-slate-800/60 rounded-lg p-4 mb-4 mono text-sm text-slate-300 leading-7"><span class="text-green-300">String</span> nombre = <span class="text-orange-300">"Ana"</span>;
 <br><span class="text-green-300">String</span> saludo = <span class="text-orange-300">"Hola, "</span> + nombre + <span class="text-orange-300">"!"</span>;
 <br><span class="text-green-300">System</span>.out.<span class="text-blue-300">println</span>(saludo);
@@ -221,7 +226,8 @@ const LESSONS = [  // ══ TEMA 1: Hola Mundo ══════════�
 \n        // Declarar las variables e imprimirlas\n\n    }
 \n}
 `,    hint: 'boolean usa true/false sin comillas. char usa comillas simples para un solo carácter. Luego imprimir con println.',  }
-,  // ══ TEMA 5: Operaciones aritméticas ══════════════════════════════════════  {
+,  // ══ TEMA 5: Operaciones aritméticas ══════════════════════════════════════
+  {
  id: 9, title: "Suma, resta y producto", subtitle: "Operadores +  −  *",    explanation: `<h2 class="text-base font-bold mb-3">Operaciones aritméticas básicas</h2><div class="bg-slate-800/60 rounded-lg p-4 mb-4 mono text-sm text-slate-300 leading-7"><span class="text-purple-400">int</span> a = <span class="text-orange-300">10</span>, b = <span class="text-orange-300">3</span>;
 <br>a + b  <span class="text-slate-500">// 13  — suma</span><br>a - b  <span class="text-slate-500">// 7   — resta</span><br>a * b  <span class="text-slate-500">// 30  — multiplicación</span></div><p class="text-slate-400 text-sm mb-3">Al mezclar una operación con texto en println, poner la operación entre paréntesis: <code class="text-yellow-300">"Suma: " + (a + b)</code></p><div class="bg-indigo-900/30 border border-indigo-700/40 rounded-lg p-3 text-sm text-indigo-200">  <span class="font-bold">🎯 Tarea:</span> Con <code class="text-indigo-300">a = 8</code> y <code class="text-indigo-300">b = 5</code>, calcular la suma, la resta y el producto. Imprimir cada resultado en su propia línea con el formato <em>Operación: valor</em>.</div>`,    starterCode: `public class Main {
 \n    public static void main(String[] args) {
@@ -239,7 +245,8 @@ const LESSONS = [  // ══ TEMA 1: Hola Mundo ══════════�
 \n        // Calcular grupos completos y sobrantes\n\n    }
 \n}
 `,    hint: 'La división entera (/) da los grupos completos. El módulo (%) da el resto, es decir, los que sobran.',  }
-,  // ══ TEMA 6: Números Random ═══════════════════════════════════════════════  {
+,  // ══ TEMA 6: Números Random ═══════════════════════════════════════════════
+  {
  id: 25, title: "Clase Random", subtitle: "Generar números aleatorios",    explanation: `<h2 class="text-base font-bold mb-3">Números aleatorios con la clase Random</h2><p class="text-slate-300 text-sm mb-4">La clase <code class="text-indigo-400">Random</code> del paquete <code class="text-indigo-400">java.util</code> permite generar valores aleatorios de distintos tipos. Primero se importa y luego se crea un objeto.</p><div class="bg-slate-800/60 rounded-lg p-4 mb-4 mono text-sm text-slate-300 leading-7"><span class="text-purple-400">import</span> java.util.<span class="text-green-300">Random</span>;
 <br><br><span class="text-green-300">Random</span> rnd = <span class="text-purple-400">new</span> <span class="text-green-300">Random</span>();
 <br><br><span class="text-slate-500">// entero entre 0 y 9</span><br><span class="text-purple-400">int</span> n = rnd.<span class="text-blue-300">nextInt</span>(<span class="text-orange-300">10</span>);
@@ -271,7 +278,8 @@ const LESSONS = [  // ══ TEMA 1: Hola Mundo ══════════�
 \n    }
 \n}
 `,    hint: 'Para un rango [50, 100] usar nextInt(51) + 50: nextInt(51) da 0–50, sumando 50 da 50–100. nextBoolean() devuelve true o false al azar.',  }
-,  // ══ TEMA 7: Condicional if / else ═════════════════════════════════════════  {
+,  // ══ TEMA 7: Condicional if / else ═════════════════════════════════════════
+  {
  id: 11, title: "Condicional if / else", subtitle: "Tomar decisiones",    explanation: `<h2 class="text-base font-bold mb-3">if / else</h2><div class="bg-slate-800/60 rounded-lg p-4 mb-4 mono text-sm text-slate-300 leading-7"><span class="text-purple-400">if</span> (edad >= <span class="text-orange-300">18</span>) {
 <br>&nbsp;
 &nbsp;
@@ -321,7 +329,8 @@ const LESSONS = [  // ══ TEMA 1: Hola Mundo ══════════�
 \n        // Escribir if / else if / else\n\n    }
 \n}
 `,    hint: 'Usar if para la primera condición, else if para la segunda y else para el caso restante. Las condiciones se evalúan en orden: la primera que sea verdadera se ejecuta.',  }
-,  // ══ TEMA 7: Bucle while ═══════════════════════════════════════════════════  {
+,  // ══ TEMA 7: Bucle while ═══════════════════════════════════════════════════
+  {
  id: 13, title: "Bucle while", subtitle: "Repetir mientras...",    explanation: `<h2 class="text-base font-bold mb-3">El bucle while</h2><p class="text-slate-300 text-sm mb-4">Repite un bloque <strong>mientras</strong> la condición sea verdadera. Es importante modificar algo dentro del bucle para que la condición eventualmente sea falsa.</p><div class="bg-slate-800/60 rounded-lg p-4 mb-4 mono text-sm text-slate-300 leading-7"><span class="text-purple-400">int</span> i = <span class="text-orange-300">1</span>;
 <br><span class="text-purple-400">while</span> (i <= <span class="text-orange-300">3</span>) {
 <br>&nbsp;
@@ -357,7 +366,8 @@ i++;
 \n    }
 \n}
 `,    hint: 'Iniciar i en 2 y sumar de 2 en 2 (i += 2) hasta llegar a 10. En cada vuelta acumular i en suma.',  }
-,  // ══ TEMA 8: Bucle do-while ═══════════════════════════════════════════════  {
+,  // ══ TEMA 8: Bucle do-while ═══════════════════════════════════════════════
+  {
  id: 19, title: "Bucle do-while", subtitle: "Ejecutar al menos una vez",    explanation: `<h2 class="text-base font-bold mb-3">El bucle do-while</h2><p class="text-slate-300 text-sm mb-4">A diferencia del <code class="text-indigo-400">while</code>, el <code class="text-indigo-400">do-while</code> ejecuta el bloque <strong>al menos una vez</strong> antes de verificar la condición.</p><div class="bg-slate-800/60 rounded-lg p-4 mb-4 mono text-sm text-slate-300 leading-7"><span class="text-purple-400">int</span> i = <span class="text-orange-300">1</span>;
 <br><span class="text-purple-400">do</span> {
 <br>&nbsp;
@@ -398,7 +408,8 @@ i++;
 \n    }
 \n}
 `,    hint: 'Iniciar i en 1 e incrementar de 2 en 2 (i += 2) para recorrer solo los impares: 1, 3, 5, 7, 9. La condición al final verifica si i todavía es <= 9.',  }
-,  // ══ TEMA 10: Procedimientos ══════════════════════════════════════════════  {
+,  // ══ TEMA 10: Procedimientos ══════════════════════════════════════════════
+  {
  id: 21, title: "Procedimientos", subtitle: "Métodos sin retorno",    explanation: `<h2 class="text-base font-bold mb-3">Procedimientos — static void</h2><p class="text-slate-300 text-sm mb-4">Un <strong>procedimiento</strong> es un bloque de código con nombre que realiza una tarea pero <strong>no devuelve ningún valor</strong>. En Java se declara con <code class="text-indigo-400">static void</code>.</p><div class="bg-slate-800/60 rounded-lg p-4 mb-4 mono text-sm text-slate-300 leading-7"><span class="text-purple-400">static void</span> <span class="text-blue-300">saludar</span>() {
 <br>&nbsp;
 &nbsp;
@@ -438,7 +449,8 @@ i++;
 \n    }
 \n}
 `,    hint: 'Dentro del procedimiento usar println combinando el texto fijo con los parámetros nombre y precio usando el operador +.',  }
-,  // ══ TEMA 11: Funciones ════════════════════════════════════════════════════  {
+,  // ══ TEMA 11: Funciones ════════════════════════════════════════════════════
+  {
  id: 23, title: "Funciones", subtitle: "Métodos que devuelven un valor",    explanation: `<h2 class="text-base font-bold mb-3">Funciones — métodos con return</h2><p class="text-slate-300 text-sm mb-4">Una <strong>función</strong> es un método que <strong>devuelve un valor</strong> al código que la llamó. En lugar de <code class="text-indigo-400">void</code>, se escribe el tipo del valor que retorna.</p><div class="bg-slate-800/60 rounded-lg p-4 mb-4 mono text-sm text-slate-300 leading-7"><span class="text-purple-400">static int</span> <span class="text-blue-300">sumar</span>(<span class="text-purple-400">int</span> a, <span class="text-purple-400">int</span> b) {
 <br>&nbsp;
 &nbsp;
@@ -476,7 +488,8 @@ i++;
 \n    }
 \n}
 `,    hint: 'Usar if / else if / else dentro de la función y retornar el String correspondiente en cada caso. Recordar que todas las ramas deben tener return.',  }
-,  // ══ TEMA 9: Bucle for ═════════════════════════════════════════════════════  {
+,  // ══ TEMA 9: Bucle for ═════════════════════════════════════════════════════
+  {
  id: 15, title: "Bucle for", subtitle: "Repetir un número fijo de veces",    explanation: `<h2 class="text-base font-bold mb-3">El bucle for</h2><p class="text-slate-300 text-sm mb-4">El <code class="text-indigo-400">for</code> agrupa en una línea: valor inicial, condición e incremento. Es el más usado cuando se conoce cuántas veces repetir.</p><div class="bg-slate-800/60 rounded-lg p-4 mb-4 mono text-sm text-slate-300 leading-7"><span class="text-purple-400">for</span> (<span class="text-purple-400">int</span> i = <span class="text-orange-300">1</span>;
  i <= <span class="text-orange-300">3</span>;
  i++) {
@@ -506,7 +519,8 @@ suma += i;
 \n    }
 \n}
 `,    hint: 'En lugar de sumar, multiplicar en cada vuelta: factorial *= i (equivale a factorial = factorial * i). El for va del 1 al 5.',  }
-,  // ══ TEMA 9: Arrays ════════════════════════════════════════════════════════  {
+,  // ══ TEMA 9: Arrays ════════════════════════════════════════════════════════
+  {
  id: 17, title: "Arrays — declarar y acceder", subtitle: "Listas de valores",    explanation: `<h2 class="text-base font-bold mb-3">Arrays</h2><p class="text-slate-300 text-sm mb-4">Un array guarda múltiples valores del mismo tipo. Los índices empiezan en <strong>0</strong>.</p><div class="bg-slate-800/60 rounded-lg p-4 mb-4 mono text-sm text-slate-300 leading-7"><span class="text-purple-400">int</span>[] notas = {
 <span class="text-orange-300">85</span>, <span class="text-orange-300">90</span>, <span class="text-orange-300">78</span>}
 ;
@@ -541,7 +555,8 @@ suma += i;
 \n    }
 \n}
 `,    hint: 'Usar un for-each (for (int p : precios)) y en cada vuelta sumar p al acumulador total. El resultado se imprime después del bucle.',  }
-,  // ══ TEMA 14: Comentarios ═════════════════════════════════════════════════════  {
+,  // ══ TEMA 14: Comentarios ═════════════════════════════════════════════════════
+  {
  id: 27, title: "Comentarios de una línea", subtitle: "El símbolo //",    explanation: `<h2 class="text-base font-bold mb-3">Comentarios en Java</h2><p class="text-slate-300 text-sm mb-4">Un <strong>comentario</strong> es texto que el compilador ignora por completo. Sirve para documentar el código y explicar qué hace cada parte.</p><div class="bg-slate-800/60 rounded-lg p-4 mb-4 mono text-sm text-slate-300 leading-7"><span class="text-slate-500">// Esto es un comentario de una línea</span><br><span class="text-purple-400">int</span> edad = <span class="text-orange-300">17</span>;
  <span class="text-slate-500">// también al final de una línea</span><br><br><span class="text-slate-500">/* Esto es un comentario</span><br><span class="text-slate-500">&nbsp;
 &nbsp;
@@ -570,7 +585,8 @@ suma += i;
 \n    }
 \n}
 `,    hint: 'El comentario de bloque ya tiene la estructura /* ... */. Completar el texto descriptivo y ejecutar para ver la salida.',  }
-,  // ══ TEMA 15: Constantes ══════════════════════════════════════════════════════  {
+,  // ══ TEMA 15: Constantes ══════════════════════════════════════════════════════
+  {
  id: 29, title: "La palabra clave final", subtitle: "Valores que no cambian",    explanation: `<h2 class="text-base font-bold mb-3">Constantes con final</h2><p class="text-slate-300 text-sm mb-4">Una <strong>constante</strong> es una variable cuyo valor no puede cambiar después de asignarse. Se declara con la palabra clave <code class="text-indigo-400">final</code>. Por convención, el nombre va en <strong>MAYÚSCULAS</strong>.</p><div class="bg-slate-800/60 rounded-lg p-4 mb-4 mono text-sm text-slate-300 leading-7"><span class="text-purple-400">final double</span> TASA_IVA = <span class="text-orange-300">0.22</span>;
 <br><span class="text-purple-400">final int</span> MAX_INTENTOS = <span class="text-orange-300">3</span>;
 <br><br><span class="text-slate-500">// Error: no se puede reasignar una constante</span><br><span class="text-slate-500">// TASA_IVA = 0.10;
@@ -594,7 +610,8 @@ suma += i;
 \n        // Calcular e imprimir las horas en una semana\n\n    }
 \n}
 `,    hint: 'Multiplicar HORAS_DIA por DIAS_SEMANA y guardar el resultado en una variable int. Luego imprimir con el texto correspondiente.',  }
-,  // ══ TEMA 16: Conversión de tipos ═════════════════════════════════════════════  {
+,  // ══ TEMA 16: Conversión de tipos ═════════════════════════════════════════════
+  {
  id: 31, title: "Widening — conversión implícita", subtitle: "De menor a mayor tipo",    explanation: `<h2 class="text-base font-bold mb-3">Conversión implícita (widening)</h2><p class="text-slate-300 text-sm mb-4">Java convierte automáticamente un tipo de dato <strong>más pequeño</strong> a uno <strong>más grande</strong> sin necesidad de indicarlo. No hay pérdida de información.</p><div class="bg-slate-800/60 rounded-lg p-4 mb-4 mono text-sm text-slate-300 leading-7"><span class="text-purple-400">int</span> entero = <span class="text-orange-300">42</span>;
 <br><span class="text-purple-400">double</span> decimal = entero;
  <span class="text-slate-500">// 42 → 42.0 automáticamente</span><br><span class="text-green-300">System</span>.out.<span class="text-blue-300">println</span>(decimal);
@@ -620,7 +637,8 @@ suma += i;
 \n    }
 \n}
 `,    hint: 'El código ya está completo. Ejecutar y observar cómo ambas formas producen el mismo entero 3, pero por caminos distintos.',  }
-,  // ══ TEMA 17: Incremento y decremento ═════════════════════════════════════════  {
+,  // ══ TEMA 17: Incremento y decremento ═════════════════════════════════════════
+  {
  id: 33, title: "Operadores ++ y --", subtitle: "Incrementar y decrementar",    explanation: `<h2 class="text-base font-bold mb-3">Incremento y decremento</h2><p class="text-slate-300 text-sm mb-4"><code class="text-indigo-400">++</code> aumenta una variable en 1 y <code class="text-indigo-400">--</code> la disminuye en 1. Son atajos muy usados en bucles y contadores.</p><div class="bg-slate-800/60 rounded-lg p-4 mb-4 mono text-sm text-slate-300 leading-7"><span class="text-purple-400">int</span> contador = <span class="text-orange-300">5</span>;
 <br>contador++;
  <span class="text-slate-500">// ahora vale 6 (igual que contador = contador + 1)</span><br>contador--;
@@ -648,7 +666,8 @@ suma += i;
 \n    }
 \n}
 `,    hint: 'El código ya está completo. Ejecutar y observar la diferencia entre post-incremento (i++) y pre-incremento (++j).',  }
-,  // ══ TEMA 18: Atajos aritméticos ══════════════════════════════════════════════  {
+,  // ══ TEMA 18: Atajos aritméticos ══════════════════════════════════════════════
+  {
  id: 35, title: "Operadores de asignación compuesta", subtitle: "+=  -=  *=  /=",    explanation: `<h2 class="text-base font-bold mb-3">Atajos aritméticos</h2><p class="text-slate-300 text-sm mb-4">Los operadores de asignación compuesta combinan una operación aritmética con la asignación. Son atajos que hacen el código más conciso.</p><div class="bg-slate-800/60 rounded-lg p-4 mb-4 mono text-sm text-slate-300 leading-7"><span class="text-purple-400">int</span> x = <span class="text-orange-300">10</span>;
 <br>x += <span class="text-orange-300">5</span>;
   <span class="text-slate-500">// x = x + 5 → 15</span><br>x -= <span class="text-orange-300">3</span>;
@@ -676,7 +695,8 @@ suma += i;
 \n    }
 \n}
 `,    hint: 'El código ya está escrito. 23 % 4 = 3 porque 4×5=20 y sobran 3. Ejecutar para verificar.',  }
-,  // ══ TEMA 19: Operadores de comparación ════════════════════════════════════════  {
+,  // ══ TEMA 19: Operadores de comparación ════════════════════════════════════════
+  {
  id: 37, title: "Operadores de comparación", subtitle: "== != > < >= <=",    explanation: `<h2 class="text-base font-bold mb-3">Operadores de comparación</h2><p class="text-slate-300 text-sm mb-4">Los operadores de comparación evalúan una condición y devuelven un valor <code class="text-indigo-400">boolean</code> (<code class="text-green-400">true</code> o <code class="text-green-400">false</code>).</p><div class="bg-slate-800/60 rounded-lg p-4 mb-4 mono text-sm text-slate-300 leading-7"><span class="text-purple-400">int</span> a = <span class="text-orange-300">10</span>, b = <span class="text-orange-300">7</span>;
 <br>a == b  <span class="text-slate-500">// false  — ¿son iguales?</span><br>a != b  <span class="text-slate-500">// true   — ¿son distintos?</span><br>a &gt;
   b  <span class="text-slate-500">// true   — ¿a mayor que b?</span><br>a &lt;
@@ -709,7 +729,8 @@ suma += i;
 \n        // Escribir el if / else if / else usando operadores de comparación\n\n    }
 \n}
 `,    hint: 'Usar if (temperatura > 37) para fiebre, else if (temperatura == 37) para normal, y else para el último caso.',  }
-,  // ══ TEMA 20: Operadores lógicos ══════════════════════════════════════════════  {
+,  // ══ TEMA 20: Operadores lógicos ══════════════════════════════════════════════
+  {
  id: 39, title: "AND y OR — && y ||", subtitle: "Combinar condiciones",    explanation: `<h2 class="text-base font-bold mb-3">Operadores lógicos && y ||</h2><p class="text-slate-300 text-sm mb-4">Los operadores lógicos permiten combinar varias condiciones en una sola expresión.</p><div class="bg-slate-800/60 rounded-lg p-4 mb-4 mono text-sm text-slate-300 leading-7"><span class="text-slate-500">// && (AND): verdadero solo si AMBAS condiciones son true</span><br><span class="text-purple-400">if</span> (edad >= <span class="text-orange-300">18</span> && edad &lt;
 = <span class="text-orange-300">65</span>) {
 <br>&nbsp;
@@ -751,7 +772,8 @@ suma += i;
  else {
  ... }
 . !pagado es true cuando pagado es false.',  }
-,  // ══ TEMA 21: System.out.print ════════════════════════════════════════════════  {
+,  // ══ TEMA 21: System.out.print ════════════════════════════════════════════════
+  {
  id: 41, title: "print vs println", subtitle: "Salida sin salto de línea",    explanation: `<h2 class="text-base font-bold mb-3">print vs println</h2><p class="text-slate-300 text-sm mb-3"><code class="text-indigo-400">println</code> imprime y baja al renglón siguiente. <code class="text-indigo-400">print</code> imprime sin moverse al siguiente renglón.</p><div class="bg-slate-800/60 rounded-lg p-4 mb-4 mono text-sm text-slate-300 leading-7"><span class="text-green-300">System</span>.out.<span class="text-blue-300">print</span>(<span class="text-orange-300">"Hola "</span>);
 <br><span class="text-green-300">System</span>.out.<span class="text-blue-300">print</span>(<span class="text-orange-300">"mundo"</span>);
 <br><span class="text-slate-500">// Salida: Hola mundo (en una sola línea)</span><br><br><span class="text-green-300">System</span>.out.<span class="text-blue-300">println</span>(<span class="text-orange-300">"Línea 1"</span>);
@@ -779,7 +801,8 @@ $85.50</code></div>`,    starterCode: `public class Main {
 \n    }
 \n}
 `,    hint: 'El código ya está escrito. Ejecutar y observar cómo \\t crea una tabulación y \\n salta de línea, todo dentro de un solo String.',  }
-,  // ══ TEMA 22: Formato de salida ═══════════════════════════════════════════════  {
+,  // ══ TEMA 22: Formato de salida ═══════════════════════════════════════════════
+  {
  id: 43, title: "printf y especificadores", subtitle: "%d  %s  %f",    explanation: `<h2 class="text-base font-bold mb-3">Salida formateada con printf</h2><p class="text-slate-300 text-sm mb-4"><code class="text-indigo-400">System.out.printf()</code> permite controlar exactamente cómo se muestra cada valor usando <strong>especificadores de formato</strong>.</p><div class="bg-slate-800/60 rounded-lg p-4 mb-4 mono text-sm text-slate-300 leading-7"><span class="text-green-300">System</span>.out.<span class="text-blue-300">printf</span>(<span class="text-orange-300">"%s tiene %d años\\n"</span>, <span class="text-orange-300">"Ana"</span>, <span class="text-orange-300">17</span>);
 <br><span class="text-slate-500">// Ana tiene 17 años</span><br><br><span class="text-green-300">System</span>.out.<span class="text-blue-300">printf</span>(<span class="text-orange-300">"Precio: $%.2f\\n"</span>, <span class="text-orange-300">89.5</span>);
 <br><span class="text-slate-500">// Precio: $89.50</span></div><div class="bg-slate-700/40 rounded-lg p-3 text-sm text-slate-300 mb-3">  📌 <strong>%d</strong> = entero &nbsp;
@@ -809,7 +832,8 @@ $85.50</code></div>`,    starterCode: `public class Main {
 \n    }
 \n}
 `,    hint: 'El código ya está completo. Ejecutar y observar que %.2f muestra el promedio con exactamente 2 decimales.',  }
-,  // ══ TEMA 23: Switch ════════════════════════════════════════════════════════════  {
+,  // ══ TEMA 23: Switch ════════════════════════════════════════════════════════════
+  {
  id: 45, title: "Sentencia switch", subtitle: "Múltiples casos",    explanation: `<h2 class="text-base font-bold mb-3">La sentencia switch</h2><p class="text-slate-300 text-sm mb-4"><code class="text-indigo-400">switch</code> evalúa una variable y ejecuta el bloque del <code class="text-indigo-400">case</code> que coincida con su valor. Es una alternativa más clara al encadenamiento de <code class="text-indigo-400">else if</code> cuando se comparan valores fijos.</p><div class="bg-slate-800/60 rounded-lg p-4 mb-4 mono text-sm text-slate-300 leading-7"><span class="text-purple-400">switch</span> (dia) {
 <br>&nbsp;
 &nbsp;
@@ -871,7 +895,8 @@ $85.50</code></div>`,    starterCode: `public class Main {
  y case "noche": System.out.println("Buenas noches");
  break;
 ',  }
-,  // ══ TEMA 24: Operador ternario ════════════════════════════════════════════════  {
+,  // ══ TEMA 24: Operador ternario ════════════════════════════════════════════════
+  {
  id: 47, title: "Operador ternario", subtitle: "condicion ? si : no",    explanation: `<h2 class="text-base font-bold mb-3">El operador ternario</h2><p class="text-slate-300 text-sm mb-4">El operador ternario es una forma compacta de escribir un <code class="text-indigo-400">if/else</code> que produce un valor. Su sintaxis es:<br><code class="text-yellow-300">condicion ? valorSiVerdadero : valorSiFalso</code></p><div class="bg-slate-800/60 rounded-lg p-4 mb-4 mono text-sm text-slate-300 leading-7"><span class="text-purple-400">int</span> edad = <span class="text-orange-300">20</span>;
 <br><span class="text-green-300">String</span> estado = (edad >= <span class="text-orange-300">18</span>) ? <span class="text-orange-300">"Mayor"</span> : <span class="text-orange-300">"Menor"</span>;
 <br><span class="text-green-300">System</span>.out.<span class="text-blue-300">println</span>(estado);
@@ -897,7 +922,8 @@ $85.50</code></div>`,    starterCode: `public class Main {
 \n    }
 \n}
 `,    hint: 'El código ya está completo. El ternario (a > b) ? a : b devuelve a si es mayor, o b si no lo es.',  }
-,  // ══ TEMA 25: Comparación de Strings ══════════════════════════════════════════  {
+,  // ══ TEMA 25: Comparación de Strings ══════════════════════════════════════════
+  {
  id: 49, title: "equals() vs ==", subtitle: "Comparar contenido de texto",    explanation: `<h2 class="text-base font-bold mb-3">Comparar Strings correctamente</h2><p class="text-slate-300 text-sm mb-4">Para comparar el <strong>contenido</strong> de dos Strings se usa <code class="text-indigo-400">.equals()</code>. El operador <code class="text-indigo-400">==</code> compara las <strong>referencias</strong> en memoria, no el texto.</p><div class="bg-slate-800/60 rounded-lg p-4 mb-4 mono text-sm text-slate-300 leading-7"><span class="text-green-300">String</span> a = <span class="text-orange-300">"hola"</span>;
 <br><span class="text-green-300">String</span> b = <span class="text-orange-300">"hola"</span>;
 <br><br><span class="text-green-300">System</span>.out.<span class="text-blue-300">println</span>(a.equals(b));
@@ -924,7 +950,8 @@ $85.50</code></div>`,    starterCode: `public class Main {
 \n    }
 \n}
 `,    hint: 'El código ya está completo. equalsIgnoreCase ignora si "uruguay" o "Uruguay" están en distintas capitalización.',  }
-,  // ══ TEMA 26: Métodos de String ════════════════════════════════════════════════  {
+,  // ══ TEMA 26: Métodos de String ════════════════════════════════════════════════
+  {
  id: 51, title: "length, charAt, substring", subtitle: "Manipular texto",    explanation: `<h2 class="text-base font-bold mb-3">Métodos básicos de String</h2><div class="bg-slate-800/60 rounded-lg p-4 mb-4 mono text-sm text-slate-300 leading-7"><span class="text-green-300">String</span> s = <span class="text-orange-300">"Montevideo"</span>;
 <br><br>s.<span class="text-blue-300">length</span>()        <span class="text-slate-500">// 10 — cantidad de caracteres</span><br>s.<span class="text-blue-300">charAt</span>(<span class="text-orange-300">0</span>)       <span class="text-slate-500">// 'M' — carácter en posición 0</span><br>s.<span class="text-blue-300">substring</span>(<span class="text-orange-300">0</span>, <span class="text-orange-300">5</span>) <span class="text-slate-500">// "Monte" — posiciones 0 a 4</span><br>s.<span class="text-blue-300">indexOf</span>(<span class="text-orange-300">"video"</span>) <span class="text-slate-500">// 5 — posición donde empieza</span></div><div class="bg-indigo-900/30 border border-indigo-700/40 rounded-lg p-3 text-sm text-indigo-200">  <span class="font-bold">🎯 Tarea:</span> Con <code class="text-yellow-300">String ciudad = "Montevideo"</code>, imprimir:<br>  <code class="text-yellow-300">Largo: 10<br>Primera letra: M<br>Primeras 5 letras: Monte</code></div>`,    starterCode: `public class Main {
 \n    public static void main(String[] args) {
@@ -945,7 +972,8 @@ $85.50</code></div>`,    starterCode: `public class Main {
 \n    }
 \n}
 `,    hint: 'El código ya está completo. Observar que frase.toUpperCase() y frase.replace() devuelven nuevos Strings sin modificar la variable frase.',  }
-,  // ══ TEMA 27: Break y Continue ═════════════════════════════════════════════════  {
+,  // ══ TEMA 27: Break y Continue ═════════════════════════════════════════════════
+  {
  id: 53, title: "Sentencia break", subtitle: "Salir de un bucle",    explanation: `<h2 class="text-base font-bold mb-3">La sentencia break</h2><p class="text-slate-300 text-sm mb-4"><code class="text-indigo-400">break</code> termina inmediatamente el bucle en el que se encuentra. La ejecución continúa con el código que está después del cierre del bucle.</p><div class="bg-slate-800/60 rounded-lg p-4 mb-4 mono text-sm text-slate-300 leading-7"><span class="text-purple-400">for</span> (<span class="text-purple-400">int</span> i = <span class="text-orange-300">1</span>;
  i <= <span class="text-orange-300">10</span>;
  i++) {
@@ -991,7 +1019,8 @@ $85.50</code></div>`,    starterCode: `public class Main {
 \n}
 `,    hint: 'Agregar if (i % 3 == 0) continue;
  antes del println. Eso saltará la impresión cuando i sea 3, 6 o 9.',  }
-,  // ══ TEMA 28: Bucles anidados ══════════════════════════════════════════════════  {
+,  // ══ TEMA 28: Bucles anidados ══════════════════════════════════════════════════
+  {
  id: 55, title: "Bucles anidados", subtitle: "for dentro de for",    explanation: `<h2 class="text-base font-bold mb-3">Bucles anidados</h2><p class="text-slate-300 text-sm mb-4">Un bucle anidado es un bucle dentro de otro. El bucle <strong>interno</strong> se ejecuta completamente por cada iteración del bucle <strong>externo</strong>.</p><div class="bg-slate-800/60 rounded-lg p-4 mb-4 mono text-sm text-slate-300 leading-7"><span class="text-purple-400">for</span> (<span class="text-purple-400">int</span> fila = <span class="text-orange-300">1</span>;
  fila <= <span class="text-orange-300">3</span>;
  fila++) {
@@ -1057,7 +1086,8 @@ $85.50</code></div>`,    starterCode: `public class Main {
 \n    }
 \n}
 `,    hint: 'El bucle interno va de j=1 hasta j<=i: en la fila 1 imprime 1 *, en la fila 2 imprime 2 *, etc. Usar print("* ") dentro del bucle interno.',  }
-,  // ══ TEMA 29: Sobrecarga de métodos ═══════════════════════════════════════════  {
+,  // ══ TEMA 29: Sobrecarga de métodos ═══════════════════════════════════════════
+  {
  id: 57, title: "Sobrecarga de métodos", subtitle: "Mismo nombre, distintos parámetros",    explanation: `<h2 class="text-base font-bold mb-3">Sobrecarga de métodos</h2><p class="text-slate-300 text-sm mb-4">La <strong>sobrecarga</strong> permite tener varios métodos con el <strong>mismo nombre</strong> siempre que difieran en el número o tipo de sus parámetros. Java decide cuál usar según los argumentos de la llamada.</p><div class="bg-slate-800/60 rounded-lg p-4 mb-4 mono text-sm text-slate-300 leading-7"><span class="text-purple-400">static int</span> <span class="text-blue-300">sumar</span>(<span class="text-purple-400">int</span> a, <span class="text-purple-400">int</span> b) {
 <br>&nbsp;
 &nbsp;
@@ -1105,7 +1135,8 @@ $85.50</code></div>`,    starterCode: `public class Main {
 \n    }
 \n}
 `,    hint: 'El código ya está completo. Ejecutar y observar cómo se llama al mismo nombre promedio con 2 o 3 argumentos y Java elige la versión correcta.',  }
-,  // ══ TEMA 30: Proyecto Calculadora ════════════════════════════════════════════  {
+,  // ══ TEMA 30: Proyecto Calculadora ════════════════════════════════════════════
+  {
  id: 59, title: "Calculadora básica", subtitle: "Scanner + operaciones",    explanation: `<h2 class="text-base font-bold mb-3">Proyecto: Calculadora básica</h2><p class="text-slate-300 text-sm mb-4">Integrar Scanner, variables, operaciones aritméticas y salida formateada para construir una calculadora simple de dos números.</p><div class="bg-slate-800/60 rounded-lg p-4 mb-4 mono text-sm text-slate-300 leading-7"><span class="text-slate-500">// Flujo del programa:</span><br><span class="text-slate-500">// 1. Leer dos números</span><br><span class="text-slate-500">// 2. Calcular suma, resta, producto, cociente</span><br><span class="text-slate-500">// 3. Imprimir resultados formateados</span></div><div class="bg-slate-700/40 rounded-lg p-3 text-sm text-slate-300 mb-3">  💡 En la pestaña <strong>I/O</strong> de OneCompiler ingresar dos números, uno por línea: <code>10</code> y <code>4</code>.</div><div class="bg-indigo-900/30 border border-indigo-700/40 rounded-lg p-3 text-sm text-indigo-200">  <span class="font-bold">🎯 Tarea:</span> Completar el programa para que imprima con los datos 10 y 4:<br>  <code class="text-yellow-300">Suma: 14<br>Resta: 6<br>Producto: 40<br>Cociente: 2.50</code></div>`,    starterCode: `import java.util.Scanner;
 \n\npublic class Main {
 \n    public static void main(String[] args) {
@@ -1148,7 +1179,8 @@ $85.50</code></div>`,    starterCode: `public class Main {
 \n    }
 \n}
 `,    hint: 'El código ya está completo. Probar con distintas combinaciones: 10 4 + / 15 3 * / 7 0 / (para ver el error de división por cero).',  }
-,  // ══ TEMA 31: Desafíos Finales ═════════════════════════════════════════════════  {
+,  // ══ TEMA 31: Desafíos Finales ═════════════════════════════════════════════════
+  {
  id: 61, title: "Patrón de números", subtitle: "Triángulo numérico",    explanation: `<h2 class="text-base font-bold mb-3">Desafío: Patrón de números</h2><p class="text-slate-300 text-sm mb-4">Usar bucles anidados para imprimir un triángulo donde cada fila muestra los números del 1 hasta el número de la fila.</p><div class="bg-slate-800/60 rounded-lg p-4 mb-4 mono text-sm text-slate-300 leading-7"><span class="text-slate-500">// Salida esperada:</span><br><span class="text-orange-300">1</span><br><span class="text-orange-300">1 2</span><br><span class="text-orange-300">1 2 3</span><br><span class="text-orange-300">1 2 3 4</span><br><span class="text-orange-300">1 2 3 4 5</span></div><div class="bg-indigo-900/30 border border-indigo-700/40 rounded-lg p-3 text-sm text-indigo-200">  <span class="font-bold">🎯 Tarea:</span> Imprimir el triángulo numérico de 5 filas. En cada fila los números van de 1 hasta el número de fila.</div>`,    starterCode: `public class Main {
 \n    public static void main(String[] args) {
 \n        // Bucle externo: filas del 1 al 5\n        for (int fila = 1;
@@ -1188,7 +1220,8 @@ $85.50</code></div>`,    starterCode: `public class Main {
 \n}
 `,    hint: 'El código ya está completo. El cast (double) antes de suma fuerza la división decimal. Probar cambiando las notas para ver cómo cambia la clasificación.',  }
 ,];
-// ─── LESSONS CON VERIFICACIÓN (IDs que tienen output esperado en el servidor) ─const VERIFIABLE_LESSONS = new Set([  1,2,3,4,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,  27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,  47,48,49,50,51,52,53,54,55,56,57,58,61,62]);
+// ─── LESSONS CON VERIFICACIÓN (IDs que tienen output esperado en el servidor) ─
+const VERIFIABLE_LESSONS = new Set([  1,2,3,4,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,  27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,  47,48,49,50,51,52,53,54,55,56,57,58,61,62]);
 // ─── AUTH ─────────────────────────────────────────────────────────────────────
 let studentToken = localStorage.getItem('jj-student-token');
 let currentStudent = JSON.parse(localStorage.getItem('jj-student-info') || 'null');
@@ -1197,7 +1230,8 @@ let teacherToken = null;
 let currentLesson = null;
 let ocReady = false;
 let pendingCode = null;
-// quiz statelet currentQuiz = null;
+// quiz state
+let currentQuiz = null;
 let currentQIndex = 0;
 let quizScore = 0;
 let quizAnswered = false;
@@ -1712,7 +1746,8 @@ function renderSidebar() {
     if (!isAccessible) expandedTopics.delete(topic.id);
     const isOpen       = expandedTopics.has(topic.id);
     const isDone       = isTopicCompleted(topic.id);
-    // ── Topic header ──────────────────────────────────────────    const header = document.createElement('div');
+    // ── Topic header ──────────────────────────────────────────
+    const header = document.createElement('div');
     header.className = `topic-header${
 isAccessible ? '' : ' disabled'}
 `;
@@ -1740,7 +1775,8 @@ lockIcon}
  }
 ;
     nav.appendChild(header);
-    // ── Collapsible content ───────────────────────────────────    const content = document.createElement('div');
+    // ── Collapsible content ───────────────────────────────────
+    const content = document.createElement('div');
     content.className = `topic-content${
 isOpen ? '' : ' closed'}
 `;
@@ -1823,7 +1859,8 @@ OC_PARAMS}
 Date.now()}
 `;
   // }
-  // Mostrar u ocultar el panel de verificación  const verifyPanel = document.getElementById('verify-panel');
+  // Mostrar u ocultar el panel de verificación
+  const verifyPanel = document.getElementById('verify-panel');
   const verifyResult = document.getElementById('verify-result');
   const outputInput = document.getElementById('output-input');
   if (VERIFIABLE_LESSONS.has(id)) {
@@ -1869,9 +1906,12 @@ function postToOC(code) {
 ]  }
 , '*');
 }
-// ─── DIAGNÓSTICO: capturar eventos de OneCompiler ────────────────────────────// Escuchar TODOS los mensajes del iframe para ver qué emite OneCompilerwindow.addEventListener('message', (e) => {
+// ─── DIAGNÓSTICO: capturar eventos de OneCompiler ────────────────────────────
+// Escuchar TODOS los mensajes del iframe para ver qué emite OneCompiler
+window.addEventListener('message', (e) => {
   const iframe = document.getElementById('oc-iframe');
-  // Solo mensajes que vienen del iframe de OneCompiler  if (iframe && e.origin === 'https://onecompiler.com' && e.source === iframe.contentWindow) {
+  // Solo mensajes que vienen del iframe de OneCompiler
+  if (iframe && e.origin === 'https://onecompiler.com' && e.source === iframe.contentWindow) {
     console.log('[OC EVENT]', JSON.stringify(e.data));
   }
 }
@@ -2042,7 +2082,8 @@ total}
   document.getElementById('qz-feedback').style.display = 'none';
   document.getElementById('qz-next').style.display = 'none';
   quizAnswered = false;
-  // render options  const container = document.getElementById('qz-options');
+  // render options
+  const container = document.getElementById('qz-options');
   container.innerHTML = '';
   q.opts.forEach((opt, i) => {
     const btn = document.createElement('button');
