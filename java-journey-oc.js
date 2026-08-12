@@ -57,7 +57,8 @@ const TOPICS = [  {
  id: 30, label: "Proyecto Calculadora",       lessons: [59, 60] }
 ,  {
  id: 31, label: "Desafíos Finales",           lessons: [61, 62] }
-,  // ── Extras / Opcionales ──  {
+,  // ── Extras / Opcionales ──
+  {
  id: 24, label: "⭐ Operador ternario",       lessons: [47, 48] }
 ,  {
  id: 27, label: "⭐ Break y Continue",        lessons: [53, 54] }
