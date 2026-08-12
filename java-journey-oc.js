@@ -1,4 +1,5 @@
-﻿// ─── TEMAS ────────────────────────────────────────────────────────────────────const TOPICS = [  {
+﻿// ─── TEMAS ────────────────────────────────────────────────────────────────────
+const TOPICS = [  {
  id: 1,  label: "Hola Mundo",                 lessons: [1, 2] }
 ,  {
  id: 14, label: "Comentarios",                lessons: [27, 28] }
@@ -61,7 +62,8 @@
 ,  {
  id: 27, label: "⭐ Break y Continue",        lessons: [53, 54] }
 ,];
-// ─── QUIZZES_CLIENT (solo topicId y título — preguntas y respuestas están en el servidor) ──const QUIZZES_CLIENT = [  {
+// ─── QUIZZES_CLIENT (solo topicId y título — preguntas y respuestas están en el servidor) ──
+const QUIZZES_CLIENT = [  {
  topicId: 1,  title: "Hola Mundo" }
 ,  {
  topicId: 2,  title: "Variables numéricas" }
@@ -124,7 +126,8 @@
 ,  {
  topicId: 31, title: "Desafíos Finales" }
 ,];
-// ─── LECCIONES ────────────────────────────────────────────────────────────────const LESSONS = [  // ══ TEMA 1: Hola Mundo ═══════════════════════════════════════════════════  {
+// ─── LECCIONES ────────────────────────────────────────────────────────────────
+const LESSONS = [  // ══ TEMA 1: Hola Mundo ═══════════════════════════════════════════════════  {
  id: 1, title: "Hola Mundo", subtitle: "Tu primer programa",    explanation: `<h2 class="text-base font-bold mb-3">Tu primer programa en Java</h2><p class="text-slate-300 text-sm mb-4">Todo programa Java tiene una <strong>clase</strong> y un método <code class="text-indigo-400">main</code> — el punto de entrada. La JVM siempre empieza por ahí.</p><div class="bg-slate-800/60 rounded-lg p-4 mb-4 mono text-sm text-slate-300 leading-7"><span class="text-purple-400">public class</span> <span class="text-yellow-300">Main</span> {
 <br>&nbsp;
 &nbsp;
@@ -1186,10 +1189,12 @@ $85.50</code></div>`,    starterCode: `public class Main {
 `,    hint: 'El código ya está completo. El cast (double) antes de suma fuerza la división decimal. Probar cambiando las notas para ver cómo cambia la clasificación.',  }
 ,];
 // ─── LESSONS CON VERIFICACIÓN (IDs que tienen output esperado en el servidor) ─const VERIFIABLE_LESSONS = new Set([  1,2,3,4,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,  27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,  47,48,49,50,51,52,53,54,55,56,57,58,61,62]);
-// ─── AUTH ─────────────────────────────────────────────────────────────────────let studentToken = localStorage.getItem('jj-student-token');
+// ─── AUTH ─────────────────────────────────────────────────────────────────────
+let studentToken = localStorage.getItem('jj-student-token');
 let currentStudent = JSON.parse(localStorage.getItem('jj-student-info') || 'null');
 let teacherToken = null;
-// ─── STATE ────────────────────────────────────────────────────────────────────let currentLesson = null;
+// ─── STATE ────────────────────────────────────────────────────────────────────
+let currentLesson = null;
 let ocReady = false;
 let pendingCode = null;
 // quiz statelet currentQuiz = null;
@@ -1252,7 +1257,8 @@ function isTopicAccessible(topicId) {
   }
   return true;
 }
-// ─── INIT ─────────────────────────────────────────────────────────────────────async function init() {
+// ─── INIT ─────────────────────────────────────────────────────────────────────
+async function init() {
   if (!studentToken) {
     showStudentLogin();
     return;
@@ -1289,13 +1295,15 @@ currentStudent.nombre}
 currentStudent.apellido}
 `;
 }
-// ─── SIDEBAR ──────────────────────────────────────────────────────────────────function toggleExpand(topicId) {
+// ─── SIDEBAR ──────────────────────────────────────────────────────────────────
+function toggleExpand(topicId) {
   if (expandedTopics.has(topicId)) expandedTopics.delete(topicId);
   else expandedTopics.add(topicId);
   saveAccordionState();
   renderSidebar();
 }
-// ─── STUDENT LOGIN ────────────────────────────────────────────────────────────function showStudentLogin() {
+// ─── STUDENT LOGIN ────────────────────────────────────────────────────────────
+function showStudentLogin() {
   document.getElementById('student-login').style.display = 'flex';
   setTimeout(() => document.getElementById('sl-nombre').focus(), 50);
 }
@@ -1342,7 +1350,8 @@ function logoutStudent() {
   enabledTopics.clear();
   showStudentLogin();
 }
-// ─── TEACHER PANEL ────────────────────────────────────────────────────────────function openTeacherLogin() {
+// ─── TEACHER PANEL ────────────────────────────────────────────────────────────
+function openTeacherLogin() {
   document.getElementById('teacher-login').style.display = 'flex';
   document.getElementById('teacher-pw-error').style.display = 'none';
   document.getElementById('teacher-pw-input').value = '';
@@ -1464,7 +1473,8 @@ async function disableAllTopics() {
 function closeTeacherPanel() {
   document.getElementById('teacher-panel').style.display = 'none';
 }
-// ─── GESTIÓN DE ESTUDIANTES ───────────────────────────────────────────────────let _resetStudentId = null;
+// ─── GESTIÓN DE ESTUDIANTES ───────────────────────────────────────────────────
+let _resetStudentId = null;
 async function loadStudents() {
   const res = await apiGet('/api/teacher/students', teacherToken);
   _allStudents = await res.json();
@@ -1787,7 +1797,8 @@ enabled}
 TOPICS.length}
  temas habilitados`;
 }
-// ─── SELECT LESSON ────────────────────────────────────────────────────────────const OC_PARAMS = 'hideTitle=true&hideNew=true&hideLanguages=true&theme=dark';
+// ─── SELECT LESSON ────────────────────────────────────────────────────────────
+const OC_PARAMS = 'hideTitle=true&hideNew=true&hideLanguages=true&theme=dark';
 function selectLesson(id) {
   const lesson = LESSONS.find(l => l.id === id);
   if (!lesson) return;
@@ -1829,7 +1840,8 @@ Date.now()}
   const shareInput = document.getElementById('share-oc-input');
   if (shareInput) shareInput.value = '';
 }
-// ─── ONECOMPILER ──────────────────────────────────────────────────────────────function ocLoaded() {
+// ─── ONECOMPILER ──────────────────────────────────────────────────────────────
+function ocLoaded() {
   if (pendingCode !== null) {
     // Lección con starterCode: enviamos en varios intentos para ganarle    // la carrera a la restauración propia del localStorage de OneCompiler.    [800, 1500, 2500].forEach((delay, i) => {
       setTimeout(() => {
@@ -1864,7 +1876,8 @@ function postToOC(code) {
   }
 }
 );
-// ─── SHARE ────────────────────────────────────────────────────────────────────function showShare() {
+// ─── SHARE ────────────────────────────────────────────────────────────────────
+function showShare() {
   const lesson = LESSONS.find(l => l.id === currentLesson);
   if (!lesson) return;
   document.getElementById('share-oc-input').value = '';
@@ -1936,7 +1949,8 @@ opacity:0;
   document.body.removeChild(ta);
   if (cb) cb();
 }
-// ─── HINT / SOLUTION ──────────────────────────────────────────────────────────function showHint() {
+// ─── HINT / SOLUTION ──────────────────────────────────────────────────────────
+function showHint() {
   const lesson = LESSONS.find(l => l.id === currentLesson);
   if (!lesson) return;
   openModal('💡', 'Pista', lesson.hint);
@@ -1946,7 +1960,8 @@ function showSolution() {
   if (!lesson) return;
   postToOC(lesson.solution);
 }
-// ─── VERIFICACIÓN DE SALIDA ──────────────────────────────────────────────────async function verifyOutput() {
+// ─── VERIFICACIÓN DE SALIDA ──────────────────────────────────────────────────
+async function verifyOutput() {
   if (!VERIFIABLE_LESSONS.has(currentLesson)) return;
   const output = (document.getElementById('output-input').value || '').replace(/\r\n/g, '\n');
   const result = document.getElementById('verify-result');
@@ -1983,7 +1998,8 @@ function openModal(icon, title, body) {
 function closeModal() {
   document.getElementById('modal').style.display = 'none';
 }
-// ─── QUIZ ────────────────────────────────────────────────────────────────────async function openQuiz(topicId) {
+// ─── QUIZ ────────────────────────────────────────────────────────────────────
+async function openQuiz(topicId) {
   try {
     const res = await apiGet(`/api/quiz/questions?topicId=${
 topicId}
@@ -2246,7 +2262,8 @@ async function toggleAllowQuizPdf() {
     renderPdfToggle();
   }
 }
-// ─── KEYBOARD ─────────────────────────────────────────────────────────────────document.addEventListener('keydown', e => {
+// ─── KEYBOARD ─────────────────────────────────────────────────────────────────
+document.addEventListener('keydown', e => {
   if (e.key === 'Escape') {
     closeModal();
  closeQuiz();
@@ -2255,4 +2272,5 @@ async function toggleAllowQuizPdf() {
   }
 }
 );
-// ─── START ────────────────────────────────────────────────────────────────────init();
+// ─── START ────────────────────────────────────────────────────────────────────
+init();
