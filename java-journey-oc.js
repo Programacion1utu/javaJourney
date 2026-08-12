@@ -1478,13 +1478,7 @@ function renderProgressTable() {
   // Actualizar opciones del filtro
   const grupos = [...new Set(_allStudents.map(s => s.grupo))].sort();
   const current = filterEl.value;
-  filterEl.innerHTML = '<option value="">Todos</option>' +    grupos.map(g => `<option value="${
-g}
-"${
-g === current ? ' selected' : ''}
->${
-g}
-</option>`).join('');
+  filterEl.innerHTML = '<option value="">Todos</option>' + grupos.map(g => `<option value="${g}"${g === current ? ' selected' : ''}>${g}</option>`).join('');
   const filtered = current ? _allStudents.filter(s => s.grupo === current) : _allStudents;
   tbody.innerHTML = '';
   if (!filtered.length) {
