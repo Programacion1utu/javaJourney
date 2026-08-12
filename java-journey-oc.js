@@ -1519,16 +1519,10 @@ s.lessons_completed}
 font-size:11px;
 "> / ${
 totalLessons}
-</span>      </td>      <td style="padding:9px 10px;
-text-align:center;
-">        <span style="color:#e2e8f0;
-">${
-s.quizzes_completed}
-</span>        <span style="color:#4a5568;
-font-size:11px;
-"> / ${
-totalQuizzes}
-</span>      </td>      <td style="padding:9px 10px;
+</span>      </td>      <td style="padding:9px 10px;text-align:center;">
+        <span onclick='showQuizDetail(${JSON.stringify(s)})' style="color:#818cf8;cursor:pointer;text-decoration:underline;text-underline-offset:2px;">${s.quizzes_completed}</span>
+        <span style="color:#4a5568;font-size:11px;"> / ${totalQuizzes}</span>
+      </td>      <td style="padding:9px 10px;
 text-align:center;
 ">        ${
 s.quiz_avg_score != null          ? `<span style="color:${
@@ -1545,6 +1539,26 @@ lastAccess}
     tbody.appendChild(tr);
   }
 );
+}
+function showQuizDetail(s) {
+  const details = s.quiz_details || [];
+  const modal = document.getElementById('quiz-detail-modal');
+  document.getElementById('qd-title').textContent = `${s.nombre} ${s.apellido} — Quizzes`;
+  const list = document.getElementById('qd-list');
+  if (!details.length) {
+    list.innerHTML = '<p style="color:#64748b;font-size:13px;">Sin quizzes completados.</p>';
+  } else {
+    list.innerHTML = details.map(d => {
+      const topic = QUIZZES_CLIENT.find(q => q.topicId === d.topicId);
+      const title = topic ? topic.title : `Tema ${d.topicId}`;
+      const color = d.score >= 80 ? '#22c55e' : d.score >= 60 ? '#f59e0b' : '#ef4444';
+      return `<div style="display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid #1e2535;">
+        <span style="font-size:13px;color:#e2e8f0;">${title}</span>
+        <span style="font-size:13px;font-weight:bold;color:${color};">${d.score}%</span>
+      </div>`;
+    }).join('');
+  }
+  modal.style.display = 'flex';
 }
 async function createStudent() {
   const nombre   = document.getElementById('tp-st-nombre').value.trim();
