@@ -14,16 +14,12 @@ module.exports = async function handler(req, res) {
     try {
       const rows = await sql`
         SELECT s.id, s.nombre, s.apellido, s.grupo, s.created_at, s.last_access,
-          COUNT(DISTINCT lp.lesson_id) AS lessons_completed,
-          COUNT(DISTINCT qp.topic_id) AS quizzes_completed,
-          ROUND(AVG(qp.score))::int AS quiz_avg_score,
-          json_agg(json_build_object('topicId', qp.topic_id, 'score', qp.score)
-            ORDER BY qp.completed_at)
-            FILTER (WHERE qp.topic_id IS NOT NULL) AS quiz_details
+          (SELECT COUNT(*) FROM lesson_progress WHERE student_id = s.id) AS lessons_completed,
+          (SELECT COUNT(*) FROM quiz_progress WHERE student_id = s.id) AS quizzes_completed,
+          (SELECT ROUND(AVG(score))::int FROM quiz_progress WHERE student_id = s.id) AS quiz_avg_score,
+          (SELECT json_agg(json_build_object('topicId', topic_id, 'score', score) ORDER BY completed_at)
+           FROM quiz_progress WHERE student_id = s.id) AS quiz_details
         FROM students s
-        LEFT JOIN lesson_progress lp ON lp.student_id = s.id
-        LEFT JOIN quiz_progress qp ON qp.student_id = s.id
-        GROUP BY s.id
         ORDER BY s.apellido, s.nombre
       `;
       res.status(200).json(rows);

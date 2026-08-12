@@ -1726,10 +1726,11 @@ function selectLesson(id) {
   document.getElementById('explanation-panel').innerHTML = lesson.explanation;
   renderSidebar();
   if (lesson.starterCode) {
-    ocReady = false;
-    pendingCode = lesson.starterCode;
-    const iframe = document.getElementById('oc-iframe');
-    iframe.src = iframe.src; // recarga el iframe para inyectar el nuevo código
+    if (ocReady) {
+      [0, 600, 1400].forEach(d => setTimeout(() => postToOC(lesson.starterCode), d));
+    } else {
+      pendingCode = lesson.starterCode;
+    }
   }
   // Mostrar u ocultar el panel de verificación
   const verifyPanel = document.getElementById('verify-panel');
