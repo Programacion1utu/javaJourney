@@ -2160,6 +2160,11 @@ function renderProgressTable() {
         <span style="color:#e2e8f0;">${s.quizzes_completed}</span>
         <span style="color:#4a5568;font-size:11px;"> / ${totalQuizzes}</span>
       </td>
+      <td style="padding:9px 10px;text-align:center;">
+        ${s.quiz_avg_score != null
+          ? `<span style="color:${s.quiz_avg_score>=80?'#22c55e':s.quiz_avg_score>=60?'#f59e0b':'#ef4444'};">${s.quiz_avg_score}%</span>`
+          : '<span style="color:#4a5568;">—</span>'}
+      </td>
       <td style="padding:9px 10px;color:#64748b;">${lastAccess}</td>`;
     tbody.appendChild(tr);
   });
