@@ -1710,11 +1710,10 @@ function selectLesson(id) {
   document.getElementById('explanation-panel').innerHTML = lesson.explanation;
   renderSidebar();
   if (lesson.starterCode) {
-    if (ocReady) {
-      postToOC(lesson.starterCode);
-    } else {
-      pendingCode = lesson.starterCode;
-    }
+    ocReady = false;
+    pendingCode = lesson.starterCode;
+    const iframe = document.getElementById('oc-iframe');
+    iframe.src = iframe.src; // recarga el iframe para inyectar el nuevo código
   }
   // Mostrar u ocultar el panel de verificación
   const verifyPanel = document.getElementById('verify-panel');
@@ -2043,10 +2042,8 @@ pct}
     chosen: a.chosen, correct: a.correct, correctIndex: a.correctIndex
   }));
   apiPost('/api/quiz/complete', {
- topicId: currentQuiz.topicId, score: pct, answers: minimalAnswers }
-, studentToken).catch(() => {
-}
-);
+    topicId: currentQuiz.topicId, score: pct, answers: minimalAnswers
+  }, studentToken).catch(e => console.error('quiz/complete failed:', e));
   renderSidebar();
 }
 function restartQuiz() {
@@ -2067,7 +2064,7 @@ function downloadQuizPdf() {
   const contentW = 210 - margin * 2;
   let y = 22;
 
-  const line = (text, { size = 10, bold = false, color = [203, 213, 225] } = {}) => {
+  const line = (text, { size = 10, bold = false, color = [20, 20, 20] } = {}) => {
     doc.setFontSize(size);
     doc.setFont('helvetica', bold ? 'bold' : 'normal');
     doc.setTextColor(...color);
