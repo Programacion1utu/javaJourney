@@ -1591,13 +1591,15 @@ async function deleteStudent(id, nombre) {
   if (!confirm(`¿Eliminar a ${
 nombre}
 ? Se borrará todo su progreso.`)) return;
-  await fetch(`/api/teacher/students/${
-id}`, {
-    method: 'DELETE',    headers: {
- 'Authorization': 'Bearer ' + teacherToken }
+  await fetch(`/api/teacher/students/${id}`, {
+    method: 'DELETE', headers: { 'Authorization': 'Bearer ' + teacherToken }
+  });
+  if (currentStudent && currentStudent.id === id) {
+    logoutStudent();
+    location.reload();
+  } else {
+    loadStudents();
   }
-);
-  loadStudents();
 }
 function openResetModal(id, nombre) {
   _resetStudentId = id;
