@@ -1,6 +1,6 @@
 # Java Journey ☕
 
-Plataforma educativa interactiva para aprender Java paso a paso. Diseñada para estudiantes de 2do BT Tecnologías de la Información – UTU.
+Plataforma educativa interactiva para aprender Java paso a paso. Diseñada para estudiantes de 1ero y 2do BT Tecnologías de la Información – UTU.
 
 **URL:** https://java-journey-beta.vercel.app
 
