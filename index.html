@@ -159,13 +159,35 @@
 
     <div style="border-top:1px solid #1e2535;margin:22px 0;"></div>
 
-    <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#818cf8;margin-bottom:12px;">Cambiar contraseña</div>
-    <div style="display:flex;gap:8px;align-items:center;">
-      <input id="tp-new-pw" type="password" placeholder="Nueva contraseña"
-        style="flex:1;padding:8px 12px;background:#0f1117;border:1px solid #2d3748;border-radius:8px;color:#e2e8f0;font-size:13px;outline:none;">
-      <button onclick="changeTeacherPassword()" style="padding:8px 14px;background:#1e2535;border:1px solid #2d3748;border-radius:8px;color:#94a3b8;cursor:pointer;font-size:12px;white-space:nowrap;">Guardar</button>
+    <!-- ESTUDIANTES -->
+    <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#818cf8;margin-bottom:12px;">Estudiantes</div>
+
+    <!-- Formulario nuevo estudiante -->
+    <div style="background:#0f1117;border:1px solid #2d3748;border-radius:10px;padding:14px;margin-bottom:14px;">
+      <div style="font-size:12px;color:#94a3b8;margin-bottom:10px;font-weight:600;">Agregar estudiante</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:6px;">
+        <input id="tp-st-nombre"   type="text"     placeholder="Nombre"   style="padding:8px 10px;background:#161b27;border:1px solid #2d3748;border-radius:7px;color:#e2e8f0;font-size:12px;outline:none;">
+        <input id="tp-st-apellido" type="text"     placeholder="Apellido" style="padding:8px 10px;background:#161b27;border:1px solid #2d3748;border-radius:7px;color:#e2e8f0;font-size:12px;outline:none;">
+        <input id="tp-st-grupo"    type="text"     placeholder="Grupo"    style="padding:8px 10px;background:#161b27;border:1px solid #2d3748;border-radius:7px;color:#e2e8f0;font-size:12px;outline:none;">
+        <input id="tp-st-pw"       type="password" placeholder="Contraseña" style="padding:8px 10px;background:#161b27;border:1px solid #2d3748;border-radius:7px;color:#e2e8f0;font-size:12px;outline:none;">
+      </div>
+      <div id="tp-st-error" style="display:none;font-size:11px;color:#ef4444;margin-bottom:6px;"></div>
+      <button onclick="createStudent()" style="width:100%;padding:8px;background:#4f6ef7;border:none;border-radius:7px;color:#fff;cursor:pointer;font-size:12px;font-weight:600;">+ Agregar</button>
     </div>
-    <div id="tp-pw-saved" style="display:none;font-size:12px;color:#22c55e;margin-top:6px;">✓ Contraseña guardada</div>
+
+    <!-- Lista de estudiantes -->
+    <div id="tp-student-list" style="display:flex;flex-direction:column;gap:6px;"></div>
+
+    <!-- Modal resetear contraseña -->
+    <div id="tp-reset-modal" style="display:none;background:#0f1117;border:1px solid #f59e0b40;border-radius:10px;padding:14px;margin-top:10px;">
+      <div style="font-size:12px;color:#f59e0b;margin-bottom:8px;font-weight:600;">Resetear contraseña de <span id="tp-reset-name"></span></div>
+      <div style="display:flex;gap:6px;">
+        <input id="tp-reset-pw" type="password" placeholder="Nueva contraseña"
+          style="flex:1;padding:8px 10px;background:#161b27;border:1px solid #2d3748;border-radius:7px;color:#e2e8f0;font-size:12px;outline:none;">
+        <button onclick="confirmResetPassword()" style="padding:8px 12px;background:#f59e0b;border:none;border-radius:7px;color:#000;cursor:pointer;font-size:12px;font-weight:600;">Guardar</button>
+        <button onclick="document.getElementById('tp-reset-modal').style.display='none'" style="padding:8px 10px;background:transparent;border:1px solid #2d3748;border-radius:7px;color:#64748b;cursor:pointer;font-size:12px;">✕</button>
+      </div>
+    </div>
 
     <div style="margin-top:24px;text-align:center;">
       <button onclick="closeTeacherPanel()" style="padding:9px 36px;background:#4f6ef7;border:none;border-radius:8px;color:#fff;cursor:pointer;font-size:13px;font-weight:600;">Cerrar panel</button>

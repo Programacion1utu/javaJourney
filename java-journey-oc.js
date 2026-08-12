@@ -2018,6 +2018,7 @@ async function submitTeacherLogin() {
 
 function openTeacherPanel() {
   renderTeacherPanel();
+  loadStudents();
   document.getElementById('teacher-panel').style.display = 'flex';
 }
 
@@ -2068,6 +2069,81 @@ async function disableAllTopics() {
 
 function closeTeacherPanel() {
   document.getElementById('teacher-panel').style.display = 'none';
+}
+
+// ─── GESTIÓN DE ESTUDIANTES ───────────────────────────────────────────────────
+let _resetStudentId = null;
+
+async function loadStudents() {
+  const res = await apiGet('/api/teacher/students', teacherToken);
+  const students = await res.json();
+  const list = document.getElementById('tp-student-list');
+  list.innerHTML = '';
+  if (!students.length) {
+    list.innerHTML = '<div style="font-size:12px;color:#4a5568;text-align:center;padding:12px;">Sin estudiantes registrados</div>';
+    return;
+  }
+  students.forEach(s => {
+    const row = document.createElement('div');
+    row.style.cssText = 'display:flex;align-items:center;justify-content:space-between;padding:9px 12px;background:#0f1117;border:1px solid #1e2535;border-radius:8px;gap:8px;';
+    row.innerHTML = `
+      <div style="flex:1;min-width:0;">
+        <div style="font-size:13px;color:#e2e8f0;font-weight:500;">${s.nombre} ${s.apellido}</div>
+        <div style="font-size:11px;color:#4a5568;">${s.grupo} · ${s.lessons_completed} lecciones · ${s.quizzes_completed} quizzes</div>
+      </div>
+      <button onclick="openResetModal(${s.id},'${s.nombre} ${s.apellido}')" title="Resetear contraseña"
+        style="background:none;border:1px solid #2d3748;border-radius:6px;color:#94a3b8;cursor:pointer;font-size:12px;padding:5px 8px;">🔑</button>
+      <button onclick="deleteStudent(${s.id},'${s.nombre} ${s.apellido}')" title="Eliminar"
+        style="background:none;border:1px solid #2d3748;border-radius:6px;color:#ef4444;cursor:pointer;font-size:12px;padding:5px 8px;">✕</button>`;
+    list.appendChild(row);
+  });
+}
+
+async function createStudent() {
+  const nombre   = document.getElementById('tp-st-nombre').value.trim();
+  const apellido = document.getElementById('tp-st-apellido').value.trim();
+  const grupo    = document.getElementById('tp-st-grupo').value.trim();
+  const password = document.getElementById('tp-st-pw').value;
+  const errEl    = document.getElementById('tp-st-error');
+  errEl.style.display = 'none';
+
+  if (!nombre || !apellido || !grupo || !password) {
+    errEl.textContent = 'Completar todos los campos.'; errEl.style.display = 'block'; return;
+  }
+  const res = await apiPost('/api/teacher/students', { nombre, apellido, grupo, password }, teacherToken);
+  const data = await res.json();
+  if (!res.ok) {
+    errEl.textContent = data.error || 'Error al crear estudiante.'; errEl.style.display = 'block'; return;
+  }
+  document.getElementById('tp-st-nombre').value = '';
+  document.getElementById('tp-st-apellido').value = '';
+  document.getElementById('tp-st-grupo').value = '';
+  document.getElementById('tp-st-pw').value = '';
+  loadStudents();
+}
+
+async function deleteStudent(id, nombre) {
+  if (!confirm(`¿Eliminar a ${nombre}? Se borrará todo su progreso.`)) return;
+  await fetch(`/api/teacher/students/${id}`, {
+    method: 'DELETE',
+    headers: { 'Authorization': 'Bearer ' + teacherToken }
+  });
+  loadStudents();
+}
+
+function openResetModal(id, nombre) {
+  _resetStudentId = id;
+  document.getElementById('tp-reset-name').textContent = nombre;
+  document.getElementById('tp-reset-pw').value = '';
+  document.getElementById('tp-reset-modal').style.display = 'block';
+}
+
+async function confirmResetPassword() {
+  const pw = document.getElementById('tp-reset-pw').value;
+  if (!pw) return;
+  await apiPut(`/api/teacher/students/${_resetStudentId}`, { password: pw }, teacherToken);
+  document.getElementById('tp-reset-modal').style.display = 'none';
+  _resetStudentId = null;
 }
 
 // Triple clic en el logo ☕ abre el panel docente
