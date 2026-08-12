@@ -1447,7 +1447,7 @@ s.grupo}
 s.lessons_completed}
  lecciones · ${
 s.quizzes_completed}
- QUIZZES_CLIENT</div>      </div>      <button onclick="openResetModal(${
+ quizzes</div>      </div>      <button onclick="openResetModal(${
 s.id}
 ,'${ s.nombre} ${ s.apellido} ')" title="Resetear contraseña"        style="background:none;
 border:1px solid #2d3748;
@@ -1475,7 +1475,8 @@ function renderProgressTable() {
   const tbody    = document.getElementById('tp-progress-body');
   const empty    = document.getElementById('tp-progress-empty');
   if (!filterEl || !tbody) return;
-  // Actualizar opciones del filtro  const grupos = [...new Set(_allStudents.map(s => s.grupo))].sort();
+  // Actualizar opciones del filtro
+  const grupos = [...new Set(_allStudents.map(s => s.grupo))].sort();
   const current = filterEl.value;
   filterEl.innerHTML = '<option value="">Todos</option>' +    grupos.map(g => `<option value="${
 g}
