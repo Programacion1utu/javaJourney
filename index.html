@@ -51,8 +51,17 @@
       </iframe>
     </div>
 
-    <!-- Panel de verificación (desactivado — se usa Submit del challenge) -->
-    <div id="verify-panel" style="display:none;"></div>
+    <!-- Panel de verificación -->
+    <div id="verify-panel" style="display:none;padding:12px 16px;border-top:1px solid #1e2535;background:#0d1117;flex-shrink:0;">
+      <div style="font-size:11px;color:#64748b;margin-bottom:6px;font-weight:600;text-transform:uppercase;letter-spacing:.05em;">Verificar salida</div>
+      <div style="display:flex;gap:8px;align-items:flex-start;">
+        <textarea id="output-input" rows="3" placeholder="Pegar aquí la salida del programa (Ctrl+A, Ctrl+C en la consola de OneCompiler)…"
+          style="flex:1;padding:8px 10px;background:#161b27;border:1px solid #2d3748;border-radius:8px;color:#e2e8f0;font-size:12px;font-family:monospace;outline:none;resize:none;line-height:1.5;"></textarea>
+        <button onclick="verifyOutput()"
+          style="padding:9px 16px;background:#22c55e;border:none;border-radius:8px;color:#fff;cursor:pointer;font-size:12px;font-weight:600;white-space:nowrap;flex-shrink:0;">✓ Verificar</button>
+      </div>
+      <div id="verify-result" class="hidden" style="margin-top:8px;font-size:13px;border-radius:8px;padding:8px 12px;"></div>
+    </div>
 
   </div>
 </main>
