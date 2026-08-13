@@ -1140,6 +1140,7 @@ let teacherToken = null;
 // ─── STATE ────────────────────────────────────────────────────────────────────
 let currentLesson = null;
 let lastOutput = '';
+let codeEditor = null;
 // quiz state
 let currentQuiz = null;
 let currentQIndex = 0;
@@ -1204,6 +1205,20 @@ function isTopicAccessible(topicId) {
 }
 // ─── INIT ─────────────────────────────────────────────────────────────────────
 async function init() {
+  codeEditor = CodeMirror(document.getElementById('editor-wrapper'), {
+    mode: 'text/x-java',
+    theme: 'dracula',
+    lineNumbers: true,
+    indentUnit: 4,
+    tabSize: 4,
+    indentWithTabs: false,
+    autoCloseBrackets: true,
+    matchBrackets: true,
+    lineWrapping: false,
+    extraKeys: { Tab: cm => cm.execCommand('insertSoftTab') }
+  });
+  codeEditor.on('change', saveCurrentCode);
+
   if (!studentToken) {
     showStudentLogin();
     return;
@@ -1726,8 +1741,7 @@ function selectLesson(id) {
 
   // Cargar código: desde localStorage si existe, o el starter
   const saved = localStorage.getItem('jj_code_' + id);
-  const editor = document.getElementById('code-editor');
-  editor.value = saved !== null ? saved : (lesson.starterCode || '');
+  if (codeEditor) codeEditor.setValue(saved !== null ? saved : (lesson.starterCode || ''));
 
   // Limpiar output
   const outputDisplay = document.getElementById('output-display');
@@ -1740,26 +1754,15 @@ function selectLesson(id) {
 }
 // ─── EDITOR HELPERS ───────────────────────────────────────────────────────────
 function saveCurrentCode() {
-  if (currentLesson === null) return;
-  localStorage.setItem('jj_code_' + currentLesson, document.getElementById('code-editor').value);
+  if (currentLesson === null || !codeEditor) return;
+  localStorage.setItem('jj_code_' + currentLesson, codeEditor.getValue());
 }
 
 function resetCode() {
   const lesson = LESSONS.find(l => l.id === currentLesson);
-  if (!lesson) return;
-  document.getElementById('code-editor').value = lesson.starterCode || '';
+  if (!lesson || !codeEditor) return;
+  codeEditor.setValue(lesson.starterCode || '');
   localStorage.removeItem('jj_code_' + currentLesson);
-}
-
-function handleEditorKey(e) {
-  if (e.key === 'Tab') {
-    e.preventDefault();
-    const ta = e.target;
-    const start = ta.selectionStart;
-    ta.value = ta.value.slice(0, start) + '    ' + ta.value.slice(ta.selectionEnd);
-    ta.selectionStart = ta.selectionEnd = start + 4;
-    saveCurrentCode();
-  }
 }
 
 // ─── PROGRESO: EXPORTAR / IMPORTAR ───────────────────────────────────────────
@@ -1801,8 +1804,8 @@ function importProgress(event) {
         count++;
       }
       // Recargar lección actual si tiene código importado
-      if (currentLesson && data.code[currentLesson]) {
-        document.getElementById('code-editor').value = data.code[currentLesson];
+      if (currentLesson && data.code[currentLesson] && codeEditor) {
+        codeEditor.setValue(data.code[currentLesson]);
       }
       result.style.display = 'block';
       result.style.cssText = 'display:block;margin-top:10px;font-size:12px;border-radius:6px;padding:6px 10px;background:rgba(34,197,94,.15);border:1px solid rgba(34,197,94,.4);color:#86efac;';
@@ -1819,7 +1822,7 @@ function importProgress(event) {
 
 // ─── EJECUTAR CON PISTON API ──────────────────────────────────────────────────
 async function runCode() {
-  const code = document.getElementById('code-editor').value;
+  const code = codeEditor ? codeEditor.getValue() : '';
   if (!code.trim()) return;
   const btn = document.getElementById('run-btn');
   const spinner = document.getElementById('run-spinner');
@@ -1843,10 +1846,15 @@ async function runCode() {
       })
     });
     const data = await res.json();
-    const stdout = (data.run?.stdout || '').trim();
-    const stderr = (data.run?.stderr || data.compile?.stderr || '').trim();
+    const compileErr = (data.compile?.stderr || '').trim();
+    const stdout = (data.run?.stdout || data.run?.output || '').trim();
+    const stderr = (data.run?.stderr || '').trim();
 
-    if (stderr && !stdout) {
+    if (compileErr) {
+      outputDisplay.style.color = '#f87171';
+      outputDisplay.textContent = compileErr;
+      lastOutput = '';
+    } else if (stderr && !stdout) {
       outputDisplay.style.color = '#f87171';
       outputDisplay.textContent = stderr;
       lastOutput = '';
@@ -1941,7 +1949,7 @@ function showHint() {
 function showSolution() {
   const lesson = LESSONS.find(l => l.id === currentLesson);
   if (!lesson || !lesson.solution) return;
-  document.getElementById('code-editor').value = lesson.solution;
+  if (codeEditor) codeEditor.setValue(lesson.solution);
   saveCurrentCode();
 }
 // ─── VERIFICACIÓN DE SALIDA ──────────────────────────────────────────────────
