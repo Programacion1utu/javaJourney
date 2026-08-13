@@ -4,6 +4,36 @@ const { EXPECTED_OUTPUTS } = require('../lib/expected-outputs');
 
 module.exports = async function handler(req, res) {
   if (req.method !== 'POST') return res.status(405).end();
+
+  // ── EJECUTAR CÓDIGO ──────────────────────────────────────────────────────────
+  if (req.body && req.body.code !== undefined) {
+    const { code, stdin } = req.body;
+    try {
+      const response = await fetch('https://wandbox.org/api/compile.json', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          compiler: 'openjdk-jdk-22+36',
+          code: code.replace(/public\s+class\s+Main/, 'class Main'),
+          stdin: stdin || ''
+        })
+      });
+      if (!response.ok) {
+        const txt = await response.text();
+        return res.status(502).json({ error: 'Wandbox error ' + response.status, detail: txt });
+      }
+      const data = await response.json();
+      return res.status(200).json({
+        stdout: (data.program_output || '').trim(),
+        stderr: (data.program_error || '').trim(),
+        compileErr: (data.compiler_error || '').trim()
+      });
+    } catch (e) {
+      return res.status(500).json({ error: e.message });
+    }
+  }
+
+  // ── VERIFICAR SALIDA ─────────────────────────────────────────────────────────
   try {
     const student = requireStudent(req);
     const { lessonId, output } = req.body;
