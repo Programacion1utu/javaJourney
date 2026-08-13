@@ -6,6 +6,17 @@
 <title>Java Journey — OneCompiler</title>
 <script src="https://cdn.tailwindcss.com"></script>
 <link rel="stylesheet" href="java-journey-oc.css">
+<!-- CodeMirror CSS -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/codemirror.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/theme/dracula.min.css">
+<style>
+  .CodeMirror { height: 100%; font-family: 'Fira Code', Consolas, monospace; font-size: 14px; line-height: 1.6; background: #0d1117 !important; }
+  .CodeMirror-scroll { height: 100%; }
+  .CodeMirror-gutters { background: #0d1117 !important; border-right: 1px solid #1e2535 !important; }
+  .CodeMirror-linenumber { color: #3d4a5c; }
+  #editor-wrapper { flex: 1; overflow: hidden; position: relative; }
+  #editor-wrapper .CodeMirror { position: absolute; inset: 0; }
+</style>
 </head>
 <body class="flex h-screen overflow-hidden">
 
@@ -52,16 +63,17 @@
     </div>
 
     <!-- Editor -->
-    <div style="flex:1;overflow:hidden;display:flex;flex-direction:column;">
-      <textarea id="code-editor"
-        spellcheck="false"
-        style="flex:1;width:100%;background:#0d1117;color:#e2e8f0;font-family:'Fira Code',Consolas,monospace;font-size:14px;line-height:1.6;padding:16px;border:none;outline:none;resize:none;tab-size:4;box-sizing:border-box;"
-        onkeydown="handleEditorKey(event)"
-        oninput="saveCurrentCode()"></textarea>
+    <div id="editor-wrapper" style="flex:1;overflow:hidden;position:relative;"></div>
+
+    <!-- Stdin panel (aparece solo cuando el código usa Scanner) -->
+    <div id="stdin-panel" style="display:none;border-top:1px solid #1e2535;background:#0a0f1a;flex-shrink:0;padding:6px 14px 8px;">
+      <div style="font-size:11px;color:#64748b;font-weight:600;text-transform:uppercase;letter-spacing:.05em;margin-bottom:4px;">Entrada del programa (stdin)</div>
+      <textarea id="stdin-input" rows="2" placeholder="Escribir los valores que leería el Scanner, uno por línea…"
+        style="width:100%;padding:7px 10px;background:#161b27;border:1px solid #2d3748;border-radius:7px;color:#e2e8f0;font-size:12px;font-family:monospace;outline:none;resize:none;line-height:1.5;box-sizing:border-box;"></textarea>
     </div>
 
     <!-- Output panel -->
-    <div style="height:180px;border-top:1px solid #1e2535;background:#0d1117;display:flex;flex-direction:column;flex-shrink:0;">
+    <div style="height:160px;border-top:1px solid #1e2535;background:#0d1117;display:flex;flex-direction:column;flex-shrink:0;">
       <div style="display:flex;align-items:center;justify-content:space-between;padding:6px 14px;border-bottom:1px solid #1e2535;">
         <span style="font-size:11px;color:#64748b;font-weight:600;text-transform:uppercase;letter-spacing:.05em;">Salida</span>
         <div id="verify-result" style="display:none;font-size:12px;border-radius:6px;padding:3px 10px;"></div>
@@ -315,6 +327,8 @@
 </div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/codemirror.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/clike/clike.min.js"></script>
 <script src="java-journey-oc.js"></script>
 </body>
 </html>
