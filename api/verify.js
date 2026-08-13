@@ -8,29 +8,46 @@ module.exports = async function handler(req, res) {
   // ── EJECUTAR CÓDIGO ──────────────────────────────────────────────────────────
   if (req.body && req.body.code !== undefined) {
     const { code, stdin } = req.body;
-    try {
-      const response = await fetch('https://wandbox.org/api/compile.json', {
+    const wandboxBody = JSON.stringify({
+      compiler: 'openjdk-jdk-22+36',
+      code: code.replace(/public\s+class\s+Main/, 'class Main'),
+      stdin: stdin || '',
+      'runtime-option-raw': '-Dfile.encoding=UTF-8 -Dstdout.encoding=UTF-8'
+    });
+
+    const callWandbox = async () => {
+      const r = await fetch('https://wandbox.org/api/compile.json', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          compiler: 'openjdk-jdk-22+36',
-          code: code.replace(/public\s+class\s+Main/, 'class Main'),
-          stdin: stdin || '',
-          'runtime-option-raw': '-Dfile.encoding=UTF-8 -Dstdout.encoding=UTF-8'
-        })
+        body: wandboxBody
       });
-      if (!response.ok) {
-        const txt = await response.text();
-        return res.status(502).json({ error: 'Wandbox error ' + response.status, detail: txt });
+      if (!r.ok) throw new Error('HTTP ' + r.status);
+      return r.json();
+    };
+
+    try {
+      let data;
+      try {
+        data = await callWandbox();
+      } catch {
+        // Reintento único tras 1.5s si falla
+        await new Promise(r => setTimeout(r, 1500));
+        data = await callWandbox();
       }
-      const data = await response.json();
-      return res.status(200).json({
-        stdout: (data.program_output || '').trim(),
-        stderr: (data.program_error || '').trim(),
-        compileErr: (data.compiler_error || '').trim()
-      });
+
+      const stdout = (data.program_output || '').trim();
+      const stderr = (data.program_error || '').trim();
+      const compileErr = (data.compiler_error || '').trim();
+
+      // Error de recursos de Wandbox → mensaje amigable
+      const isResourceErr = stderr.includes('OCI') || stderr.includes('crun') || stdout.includes('OCI');
+      if (isResourceErr) {
+        return res.status(503).json({ error: 'Servidor ocupado. Intentar de nuevo en unos segundos.' });
+      }
+
+      return res.status(200).json({ stdout, stderr, compileErr });
     } catch (e) {
-      return res.status(500).json({ error: e.message });
+      return res.status(503).json({ error: 'El servidor de ejecución no está disponible. Intentar de nuevo.' });
     }
   }
 
