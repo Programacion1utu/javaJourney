@@ -1853,7 +1853,7 @@ async function runCode() {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         compiler: 'openjdk-jdk-22+36',
-        codes: [{ file: 'Main.java', code }],
+        code: code.replace(/public\s+class\s+Main/, 'class Main'),
         stdin: stdin || ''
       })
     });
