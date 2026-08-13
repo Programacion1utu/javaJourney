@@ -1139,8 +1139,7 @@ let currentStudent = JSON.parse(localStorage.getItem('jj-student-info') || 'null
 let teacherToken = null;
 // ─── STATE ────────────────────────────────────────────────────────────────────
 let currentLesson = null;
-let ocReady = false;
-let pendingCode = null;
+let lastOutput = '';
 // quiz state
 let currentQuiz = null;
 let currentQIndex = 0;
@@ -1718,27 +1717,26 @@ TOPICS.length}
  temas habilitados`;
 }
 // ─── SELECT LESSON ────────────────────────────────────────────────────────────
-const OC_PARAMS = 'hideTitle=true&hideNew=true&hideLanguages=true&theme=dark';
 function selectLesson(id) {
   const lesson = LESSONS.find(l => l.id === id);
   if (!lesson) return;
   currentLesson = id;
   document.getElementById('explanation-panel').innerHTML = lesson.explanation;
   renderSidebar();
-  if (lesson.starterCode) {
-    if (ocReady) {
-      [0, 600, 1400].forEach(d => setTimeout(() => postToOC(lesson.starterCode), d));
-    } else {
-      pendingCode = lesson.starterCode;
-    }
-  }
-  // Mostrar u ocultar el panel de verificación
-  const verifyPanel = document.getElementById('verify-panel');
+
+  // Cargar código: desde localStorage si existe, o el starter
+  const saved = localStorage.getItem('jj_code_' + id);
+  const editor = document.getElementById('code-editor');
+  editor.value = saved !== null ? saved : (lesson.starterCode || '');
+
+  // Limpiar output
+  const outputDisplay = document.getElementById('output-display');
+  outputDisplay.textContent = 'Presionar ▶ Ejecutar para ver la salida…';
+  outputDisplay.style.color = '#94a3b8';
+  lastOutput = '';
   const verifyResult = document.getElementById('verify-result');
-  const outputInput = document.getElementById('output-input');
-  if (VERIFIABLE_LESSONS.has(id)) {
-    verifyPanel.style.display = 'block';
-  }
+  verifyResult.style.display = 'none';
+  document.getElementById('verify-bar').style.display = 'none';
  else {
     verifyPanel.style.display = 'none';
   }
@@ -1750,38 +1748,135 @@ function selectLesson(id) {
   const shareInput = document.getElementById('share-oc-input');
   if (shareInput) shareInput.value = '';
 }
-// ─── ONECOMPILER ──────────────────────────────────────────────────────────────
-function ocLoaded() {
-  if (pendingCode !== null) {
-    // Enviamos en varios intentos para ganarle la carrera al localStorage de OC.
-    [800, 1500, 2500].forEach((delay, i) => {
-      setTimeout(() => {
-        if (pendingCode !== null) postToOC(pendingCode);
-        if (i === 2) { ocReady = true; pendingCode = null; }
-      }, delay);
+// ─── EDITOR HELPERS ───────────────────────────────────────────────────────────
+function saveCurrentCode() {
+  if (currentLesson === null) return;
+  localStorage.setItem('jj_code_' + currentLesson, document.getElementById('code-editor').value);
+}
+
+function resetCode() {
+  const lesson = LESSONS.find(l => l.id === currentLesson);
+  if (!lesson) return;
+  document.getElementById('code-editor').value = lesson.starterCode || '';
+  localStorage.removeItem('jj_code_' + currentLesson);
+}
+
+function handleEditorKey(e) {
+  if (e.key === 'Tab') {
+    e.preventDefault();
+    const ta = e.target;
+    const start = ta.selectionStart;
+    ta.value = ta.value.slice(0, start) + '    ' + ta.value.slice(ta.selectionEnd);
+    ta.selectionStart = ta.selectionEnd = start + 4;
+    saveCurrentCode();
+  }
+}
+
+// ─── PROGRESO: EXPORTAR / IMPORTAR ───────────────────────────────────────────
+function showProgressModal() {
+  document.getElementById('import-result').style.display = 'none';
+  document.getElementById('progress-modal').style.display = 'flex';
+}
+
+function exportProgress() {
+  const data = { version: 1, student: currentStudent ? `${currentStudent.nombre} ${currentStudent.apellido}` : 'desconocido', exportedAt: new Date().toISOString(), code: {} };
+  for (let i = 0; i < localStorage.length; i++) {
+    const key = localStorage.key(i);
+    if (key.startsWith('jj_code_')) {
+      const lessonId = key.replace('jj_code_', '');
+      data.code[lessonId] = localStorage.getItem(key);
+    }
+  }
+  const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `java-journey-progreso-${(currentStudent?.apellido || 'alumno').toLowerCase()}.json`;
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
+function importProgress(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+  const result = document.getElementById('import-result');
+  const reader = new FileReader();
+  reader.onload = (e) => {
+    try {
+      const data = JSON.parse(e.target.result);
+      if (!data.code || typeof data.code !== 'object') throw new Error('Formato inválido');
+      let count = 0;
+      for (const [lessonId, code] of Object.entries(data.code)) {
+        localStorage.setItem('jj_code_' + lessonId, code);
+        count++;
+      }
+      // Recargar lección actual si tiene código importado
+      if (currentLesson && data.code[currentLesson]) {
+        document.getElementById('code-editor').value = data.code[currentLesson];
+      }
+      result.style.display = 'block';
+      result.style.cssText = 'display:block;margin-top:10px;font-size:12px;border-radius:6px;padding:6px 10px;background:rgba(34,197,94,.15);border:1px solid rgba(34,197,94,.4);color:#86efac;';
+      result.textContent = `✅ Importado correctamente — ${count} lección${count !== 1 ? 'es' : ''} restaurada${count !== 1 ? 's' : ''}.`;
+    } catch {
+      result.style.display = 'block';
+      result.style.cssText = 'display:block;margin-top:10px;font-size:12px;border-radius:6px;padding:6px 10px;background:rgba(239,68,68,.15);border:1px solid rgba(239,68,68,.4);color:#fca5a5;';
+      result.textContent = '❌ Archivo inválido. Verificar que sea un archivo de progreso de Java Journey.';
+    }
+    event.target.value = '';
+  };
+  reader.readAsText(file);
+}
+
+// ─── EJECUTAR CON PISTON API ──────────────────────────────────────────────────
+async function runCode() {
+  const code = document.getElementById('code-editor').value;
+  if (!code.trim()) return;
+  const btn = document.getElementById('run-btn');
+  const spinner = document.getElementById('run-spinner');
+  const outputDisplay = document.getElementById('output-display');
+
+  btn.disabled = true;
+  spinner.style.display = 'inline';
+  outputDisplay.textContent = 'Compilando…';
+  outputDisplay.style.color = '#64748b';
+  document.getElementById('verify-result').style.display = 'none';
+  document.getElementById('verify-bar').style.display = 'none';
+
+  try {
+    const res = await fetch('https://emkc.org/api/v2/piston/execute', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        language: 'java',
+        version: '*',
+        files: [{ name: 'Main.java', content: code }]
+      })
     });
-  } else {
-    setTimeout(() => { ocReady = true; }, 500);
+    const data = await res.json();
+    const stdout = (data.run?.stdout || '').trim();
+    const stderr = (data.run?.stderr || data.compile?.stderr || '').trim();
+
+    if (stderr && !stdout) {
+      outputDisplay.style.color = '#f87171';
+      outputDisplay.textContent = stderr;
+      lastOutput = '';
+    } else {
+      outputDisplay.style.color = '#e2e8f0';
+      outputDisplay.textContent = stdout || '(sin salida)';
+      lastOutput = stdout;
+      if (VERIFIABLE_LESSONS.has(currentLesson)) {
+        document.getElementById('verify-bar').style.display = 'flex';
+      }
+    }
+  } catch {
+    outputDisplay.style.color = '#f87171';
+    outputDisplay.textContent = 'Error de conexión con el servidor de ejecución.';
+    lastOutput = '';
+  } finally {
+    btn.disabled = false;
+    spinner.style.display = 'none';
   }
 }
-document.getElementById('oc-iframe').onload = ocLoaded;
-function postToOC(code) {
-  document.getElementById('oc-iframe').contentWindow.postMessage({
-    eventType: 'populateCode',    language: 'java',    files: [{
- name: 'Main.java', content: code }
-]  }
-, '*');
-}
-// ─── DIAGNÓSTICO: capturar eventos de OneCompiler ────────────────────────────
-// Escuchar TODOS los mensajes del iframe para ver qué emite OneCompiler
-window.addEventListener('message', (e) => {
-  const iframe = document.getElementById('oc-iframe');
-  // Solo mensajes que vienen del iframe de OneCompiler
-  if (iframe && e.origin === 'https://onecompiler.com' && e.source === iframe.contentWindow) {
-    console.log('[OC EVENT]', JSON.stringify(e.data));
-  }
-}
-);
 // ─── SHARE ────────────────────────────────────────────────────────────────────
 function showShare() {
   const lesson = LESSONS.find(l => l.id === currentLesson);
@@ -1804,7 +1899,7 @@ lesson.id}
  — ${
 lesson.title}`;
   const tarea = extractTaskText(lesson.explanation).replace(/^🎯\s*Tarea:\s*/i, '');
-  const salida = (document.getElementById('output-input')?.value || '').trim();
+  const salida = lastOutput.trim();
   const link = (document.getElementById('share-oc-input')?.value || '').trim();
   let msg = `📚 ${
 titulo}
@@ -1855,36 +1950,34 @@ function showHint() {
 }
 function showSolution() {
   const lesson = LESSONS.find(l => l.id === currentLesson);
-  if (!lesson) return;
-  postToOC(lesson.solution);
+  if (!lesson || !lesson.solution) return;
+  document.getElementById('code-editor').value = lesson.solution;
+  saveCurrentCode();
 }
 // ─── VERIFICACIÓN DE SALIDA ──────────────────────────────────────────────────
 async function verifyOutput() {
   if (!VERIFIABLE_LESSONS.has(currentLesson)) return;
-  const output = (document.getElementById('output-input').value || '').replace(/\r\n/g, '\n');
+  const output = lastOutput.replace(/\r\n/g, '\n');
   const result = document.getElementById('verify-result');
-  result.classList.remove('hidden');
-  result.className = 'mt-2 text-sm rounded-lg px-3 py-2 bg-slate-800 text-slate-400';
+  result.style.display = 'block';
+  result.style.cssText = 'display:block;font-size:12px;border-radius:6px;padding:3px 10px;background:#1e2535;color:#94a3b8;';
   result.textContent = 'Verificando…';
   try {
-    const res = await apiPost('/api/verify', {
- lessonId: currentLesson, output }
-, studentToken);
+    const res = await apiPost('/api/verify', { lessonId: currentLesson, output }, studentToken);
     const data = await res.json();
     if (data.correct) {
-      result.className = 'mt-2 text-sm rounded-lg px-3 py-2 bg-emerald-900/40 border border-emerald-700/50 text-emerald-300';
-      result.innerHTML = '✅ <strong>¡Correcto!</strong> La salida coincide exactamente con lo esperado.';
+      result.style.cssText = 'display:block;font-size:12px;border-radius:6px;padding:3px 10px;background:rgba(34,197,94,.15);border:1px solid rgba(34,197,94,.4);color:#86efac;';
+      result.innerHTML = '✅ <strong>¡Correcto!</strong>';
       completedLessons.add(currentLesson);
       renderSidebar();
+      apiPost('/api/lesson/complete', { lessonId: currentLesson }, studentToken).catch(() => {});
+    } else {
+      result.style.cssText = 'display:block;font-size:12px;border-radius:6px;padding:3px 10px;background:rgba(239,68,68,.15);border:1px solid rgba(239,68,68,.4);color:#fca5a5;';
+      result.innerHTML = '❌ <strong>No coincide.</strong> Revisar la salida.';
     }
- else {
-      result.className = 'mt-2 text-sm rounded-lg px-3 py-2 bg-red-900/40 border border-red-700/50 text-red-300';
-      result.innerHTML = '❌ <strong>No coincide.</strong> Revisar la salida del programa e intentar nuevamente.';
-    }
-  }
- catch {
-    result.className = 'mt-2 text-sm rounded-lg px-3 py-2 bg-yellow-900/40 border border-yellow-700/50 text-yellow-300';
-    result.textContent = 'Error de conexión. Intentar nuevamente.';
+  } catch {
+    result.style.cssText = 'display:block;font-size:12px;border-radius:6px;padding:3px 10px;background:rgba(234,179,8,.15);color:#fde047;';
+    result.textContent = 'Error de conexión.';
   }
 }
 function openModal(icon, title, body) {
