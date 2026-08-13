@@ -56,6 +56,8 @@
       <button onclick="resetCode()"
         style="padding:7px 12px;background:#1e2535;border:1px solid #2d3748;border-radius:8px;color:#94a3b8;cursor:pointer;font-size:12px;">↺ Resetear</button>
       <div class="ml-auto flex gap-2">
+        <button onclick="downloadLessonPdf()"
+          style="padding:7px 12px;background:#1e2535;border:1px solid #2d3748;border-radius:8px;color:#94a3b8;cursor:pointer;font-size:12px;">📄 PDF</button>
         <button onclick="showProgressModal()"
           style="padding:7px 12px;background:#1e2535;border:1px solid #2d3748;border-radius:8px;color:#94a3b8;cursor:pointer;font-size:12px;">📦 Mi Progreso</button>
         <button class="btn-hint" onclick="showHint()">💡 Pista</button>
@@ -260,6 +262,12 @@
             <button id="tp-pdf-toggle" onclick="toggleAllowQuizPdf()"
               style="width:44px;height:24px;border-radius:12px;border:none;cursor:pointer;transition:background .2s;background:#2d3748;position:relative;flex-shrink:0;">
               <span id="tp-pdf-knob" style="position:absolute;top:3px;left:3px;width:18px;height:18px;border-radius:50%;background:#64748b;transition:all .2s;"></span>
+            </button>
+          </div>
+          <div style="margin-top:10px;">
+            <button onclick="downloadAllLessonsPdf()"
+              style="width:100%;padding:9px;background:#0f1117;border:1px solid #2d3748;border-radius:8px;color:#94a3b8;cursor:pointer;font-size:12px;font-weight:600;">
+              📄 Descargar PDF con todos los ejercicios y soluciones
             </button>
           </div>
         </div>

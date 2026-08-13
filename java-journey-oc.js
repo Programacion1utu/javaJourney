@@ -2236,6 +2236,88 @@ function downloadQuizPdf() {
   const fname = `quiz-${currentQuiz.title.replace(/\s+/g, '-')}-${currentStudent.apellido}.pdf`;
   doc.save(fname);
 }
+// ─── PDF DE EJERCICIOS ────────────────────────────────────────────────────────
+function _buildExercisePdf(lessons) {
+  if (!window.jspdf) { alert('jsPDF no cargó. Revisar conexión.'); return null; }
+  const { jsPDF } = window.jspdf;
+  const doc = new jsPDF({ unit: 'mm', format: 'a4' });
+  const margin = 18;
+  const contentW = 210 - margin * 2;
+  let y = 22;
+  let firstPage = true;
+
+  const addPage = () => { doc.addPage(); y = 22; };
+
+  const checkY = (need = 6) => { if (y + need > 276) addPage(); };
+
+  const line = (text, { size = 10, bold = false, color = [20, 20, 20], mono = false } = {}) => {
+    doc.setFontSize(size);
+    doc.setFont(mono ? 'courier' : 'helvetica', bold ? 'bold' : 'normal');
+    doc.setTextColor(...color);
+    const lines = doc.splitTextToSize(String(text), contentW);
+    checkY(lines.length * size * 0.42 + 1.5);
+    doc.text(lines, margin, y);
+    y += lines.length * size * 0.42 + 1.5;
+  };
+
+  const stripHtml = html => {
+    const tmp = document.createElement('div');
+    tmp.innerHTML = html;
+    return tmp.innerText || tmp.textContent || '';
+  };
+
+  // Encabezado global
+  line('Java Journey — Ejercicios de Programación Java', { size: 15, bold: true, color: [79, 110, 247] });
+  line(`Fecha: ${new Date().toLocaleDateString('es-UY')}`, { size: 9, color: [80, 80, 80] });
+  y += 4;
+
+  lessons.forEach((lesson, idx) => {
+    if (!firstPage) { y += 4; checkY(20); }
+    firstPage = false;
+
+    // Título de lección
+    doc.setDrawColor(79, 110, 247);
+    doc.setFillColor(15, 23, 42);
+    doc.rect(margin, y - 5, contentW, 9, 'F');
+    line(`Ejercicio ${lesson.id}: ${lesson.title} — ${lesson.subtitle}`, { size: 11, bold: true, color: [200, 210, 255] });
+    y += 1;
+
+    // Texto de la tarea (extraído del HTML)
+    const taskText = stripHtml(lesson.explanation);
+    line(taskText, { size: 9.5, color: [30, 30, 30] });
+    y += 3;
+
+    // Código solución
+    if (lesson.solution) {
+      line('Solución:', { size: 9, bold: true, color: [34, 197, 94] });
+      const codeLines = lesson.solution.split('\n');
+      codeLines.forEach(cl => line(cl, { size: 8.5, mono: true, color: [30, 50, 30] }));
+    }
+
+    y += 2;
+    doc.setDrawColor(45, 55, 72);
+    checkY(3);
+    doc.line(margin, y, 210 - margin, y);
+    y += 4;
+  });
+
+  return doc;
+}
+
+function downloadLessonPdf() {
+  const lesson = LESSONS.find(l => l.id === currentLesson);
+  if (!lesson) return;
+  const doc = _buildExercisePdf([lesson]);
+  if (!doc) return;
+  doc.save(`ejercicio-${lesson.id}-${lesson.title.replace(/\s+/g, '-')}.pdf`);
+}
+
+function downloadAllLessonsPdf() {
+  const doc = _buildExercisePdf(LESSONS);
+  if (!doc) return;
+  doc.save('java-journey-todos-los-ejercicios.pdf');
+}
+
 // ─── TEACHER CONFIG ───────────────────────────────────────────────────────────
 function renderPdfToggle() {
   const toggle = document.getElementById('tp-pdf-toggle');
