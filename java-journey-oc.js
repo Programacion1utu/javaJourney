@@ -181,7 +181,7 @@ const LESSONS = [
 <br><br><span class="text-yellow-300">Scanner</span> sc = <span class="text-purple-400">new</span> <span class="text-yellow-300">Scanner</span>(System.in);
 <br><span class="text-green-300">String</span> nombre = sc.<span class="text-blue-300">nextLine</span>();
 <br><span class="text-green-300">System</span>.out.<span class="text-blue-300">println</span>(<span class="text-orange-300">"Hola, "</span> + nombre + <span class="text-orange-300">"!"</span>);
-</div><div class="bg-slate-700/40 rounded-lg p-3 text-sm text-slate-300 mb-3">  💡 En OneCompiler: hacer clic en la pestaña <strong>I/O</strong> para escribir el dato de entrada antes de presionar Run.</div><div class="bg-indigo-900/30 border border-indigo-700/40 rounded-lg p-3 text-sm text-indigo-200">  <span class="font-bold">🎯 Tarea:</span> Leer un nombre con <code class="text-yellow-300">nextLine()</code> e imprimir:<br>  <code class="text-yellow-300">Bienvenido, [nombre]!</code></div>`,    starterCode: `import java.util.Scanner;
+</div><div class="bg-slate-700/40 rounded-lg p-3 text-sm text-slate-300 mb-3">  💡 Escribir el dato de entrada en el campo <strong>Entrada del programa</strong> antes de presionar Ejecutar.</div><div class="bg-indigo-900/30 border border-indigo-700/40 rounded-lg p-3 text-sm text-indigo-200">  <span class="font-bold">🎯 Tarea:</span> Leer un nombre con <code class="text-yellow-300">nextLine()</code> e imprimir:<br>  <code class="text-yellow-300">Bienvenido, [nombre]!</code></div>`,    starterCode: `import java.util.Scanner;
 \n\npublic class Main {
 \n    public static void main(String[] args) {
 \n        Scanner sc = new Scanner(System.in);
@@ -1986,8 +1986,10 @@ async function verifyOutput() {
       renderSidebar();
       apiPost('/api/lesson/complete', { lessonId: currentLesson }, studentToken).catch(() => {});
     } else {
-      result.style.cssText = 'display:block;font-size:12px;border-radius:6px;padding:3px 10px;background:rgba(239,68,68,.15);border:1px solid rgba(239,68,68,.4);color:#fca5a5;';
-      result.innerHTML = '❌ <strong>No coincide.</strong> Revisar la salida.';
+      result.style.cssText = 'display:block;font-size:12px;border-radius:6px;padding:4px 10px;background:rgba(239,68,68,.15);border:1px solid rgba(239,68,68,.4);color:#fca5a5;';
+      const esperado = (data.expected || '').replace(/\n/g, '↵\n');
+      const obtenido = lastOutput.replace(/\n/g, '↵\n');
+      result.innerHTML = `❌ <strong>No coincide.</strong><br><span style="color:#94a3b8;font-family:monospace;font-size:11px;">Esperado:&nbsp; <span style="color:#86efac;">${esperado.replace(/</g,'&lt;')}</span><br>Obtenido: <span style="color:#fca5a5;">${obtenido.replace(/</g,'&lt;')}</span></span>`;
     }
   } catch {
     result.style.cssText = 'display:block;font-size:12px;border-radius:6px;padding:3px 10px;background:rgba(234,179,8,.15);color:#fde047;';
