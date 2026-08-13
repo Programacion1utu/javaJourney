@@ -9,7 +9,7 @@ module.exports = async function handler(req, res) {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        compiler: 'openjdk-head',
+        compiler: 'openjdk-jdk-22+36',
         code,
         stdin: stdin || '',
         'compiler-option-raw': '-encoding UTF-8'
@@ -19,9 +19,6 @@ module.exports = async function handler(req, res) {
     if (!response.ok) throw new Error('Wandbox error ' + response.status);
 
     const data = await response.json();
-    // Wandbox: program_output = stdout del programa
-    //          compiler_error = errores de compilación
-    //          program_error  = stderr en runtime
     const stdout = (data.program_output || '').trim();
     const compileErr = (data.compiler_error || '').trim();
     const stderr = (data.program_error || '').trim();
@@ -29,6 +26,6 @@ module.exports = async function handler(req, res) {
     res.status(200).json({ stdout, stderr, compileErr });
   } catch (e) {
     console.error('run error:', e);
-    res.status(500).json({ error: 'Error al ejecutar el código: ' + e.message });
+    res.status(500).json({ error: e.message });
   }
 };
