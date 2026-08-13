@@ -1848,20 +1848,15 @@ async function runCode() {
   document.getElementById('verify-bar').style.display = 'none';
 
   try {
-    const res = await fetch('https://emkc.org/api/v2/piston/execute', {
+    const res = await fetch('/api/run', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        language: 'java',
-        version: '*',
-        files: [{ name: 'Main.java', content: code }],
-        stdin: stdin
-      })
+      body: JSON.stringify({ code, stdin: stdin || '' })
     });
     const data = await res.json();
-    const compileErr = (data.compile?.stderr || '').trim();
-    const stdout = (data.run?.stdout || data.run?.output || '').trim();
-    const stderr = (data.run?.stderr || '').trim();
+    const compileErr = (data.compileErr || '').trim();
+    const stdout = (data.stdout || '').trim();
+    const stderr = (data.stderr || '').trim();
 
     if (compileErr) {
       outputDisplay.style.color = '#f87171';
