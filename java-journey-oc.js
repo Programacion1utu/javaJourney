@@ -2328,7 +2328,7 @@ function _buildExercisePdf(lessons) {
         }
         return toks;
       };
-      const tokColors = { kw:[120,40,180], string:[180,70,0], comment:[40,120,40], num:[180,70,0], id:[20,20,20], op:[60,60,60] };
+      const tokColors = { kw:[0,0,160], string:[160,0,0], comment:[100,100,100], num:[160,0,0], id:[0,0,0], op:[60,60,60] };
       const codeFS = 8;
       const codeLineH = codeFS * 0.42 + 1.2;
       studentCode.split('\n').forEach(rawLine => {
