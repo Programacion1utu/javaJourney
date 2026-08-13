@@ -1741,7 +1741,11 @@ function selectLesson(id) {
 
   // Cargar código: desde localStorage si existe, o el starter
   const saved = localStorage.getItem('jj_code_' + id);
-  if (codeEditor) codeEditor.setValue(saved !== null ? saved : (lesson.starterCode || ''));
+  if (codeEditor) {
+    codeEditor.setValue(saved !== null ? saved : (lesson.starterCode || ''));
+    updateStdinPanel();
+  }
+  document.getElementById('stdin-input').value = '';
 
   // Limpiar output
   const outputDisplay = document.getElementById('output-display');
@@ -1756,6 +1760,13 @@ function selectLesson(id) {
 function saveCurrentCode() {
   if (currentLesson === null || !codeEditor) return;
   localStorage.setItem('jj_code_' + currentLesson, codeEditor.getValue());
+  updateStdinPanel();
+}
+
+function updateStdinPanel() {
+  const code = codeEditor ? codeEditor.getValue() : '';
+  const panel = document.getElementById('stdin-panel');
+  panel.style.display = code.includes('Scanner') ? 'block' : 'none';
 }
 
 function resetCode() {
@@ -1824,6 +1835,7 @@ function importProgress(event) {
 async function runCode() {
   const code = codeEditor ? codeEditor.getValue() : '';
   if (!code.trim()) return;
+  const stdin = document.getElementById('stdin-input').value;
   const btn = document.getElementById('run-btn');
   const spinner = document.getElementById('run-spinner');
   const outputDisplay = document.getElementById('output-display');
@@ -1842,7 +1854,8 @@ async function runCode() {
       body: JSON.stringify({
         language: 'java',
         version: '*',
-        files: [{ name: 'Main.java', content: code }]
+        files: [{ name: 'Main.java', content: code }],
+        stdin: stdin
       })
     });
     const data = await res.json();
@@ -2248,4 +2261,4 @@ document.addEventListener('keydown', e => {
 }
 );
 // ─── START ────────────────────────────────────────────────────────────────────
-init();
+window.addEventListener('load', init);
