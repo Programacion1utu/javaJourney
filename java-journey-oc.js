@@ -2260,18 +2260,31 @@ function _buildExercisePdf(lessons) {
     y += lines.length * size * 0.42 + 1.5;
   };
 
-  const stripHtml = html => {
+  const getTextFrom = (el) => (el ? (el.innerText || el.textContent || '').trim() : '');
+
+  const extractLesson = (html) => {
     const tmp = document.createElement('div');
     tmp.innerHTML = html;
-    return tmp.innerText || tmp.textContent || '';
+    // Párrafos de explicación (excluir bloques de código bg-slate-800)
+    const parts = [];
+    tmp.querySelectorAll('p').forEach(p => {
+      const t = getTextFrom(p).replace(/\s+/g, ' ');
+      if (t) parts.push(t);
+    });
+    // Bloque de tarea
+    const tareaDiv = tmp.querySelector('.bg-indigo-900\\/30, [class*="indigo-900"]');
+    const tarea = tareaDiv ? getTextFrom(tareaDiv).replace(/\s+/g, ' ').replace(/[\u{1F300}-\u{1FFFF}]/gu, '') : '';
+    return { desc: parts.join(' '), tarea: tarea.replace(/^\s*Tarea:\s*/, 'Tarea: ') };
   };
 
+  const clean = s => s.replace(/[\u{1F300}-\u{1FFFF}]/gu, '').replace(/[☀-➿]/g, '').trim();
+
   // Encabezado global
-  line('Java Journey — Ejercicios de Programación Java', { size: 15, bold: true, color: [79, 110, 247] });
+  line('Java Journey - Ejercicios de Programacion Java', { size: 15, bold: true, color: [79, 110, 247] });
   line(`Fecha: ${new Date().toLocaleDateString('es-UY')}`, { size: 9, color: [80, 80, 80] });
   y += 4;
 
-  lessons.forEach((lesson, idx) => {
+  lessons.forEach((lesson) => {
     if (!firstPage) { y += 4; checkY(20); }
     firstPage = false;
 
@@ -2279,19 +2292,63 @@ function _buildExercisePdf(lessons) {
     doc.setDrawColor(79, 110, 247);
     doc.setFillColor(15, 23, 42);
     doc.rect(margin, y - 5, contentW, 9, 'F');
-    line(`Ejercicio ${lesson.id}: ${lesson.title} — ${lesson.subtitle}`, { size: 11, bold: true, color: [200, 210, 255] });
+    line(`Ejercicio ${lesson.id}: ${lesson.title} - ${lesson.subtitle}`, { size: 11, bold: true, color: [200, 210, 255] });
     y += 1;
 
-    // Texto de la tarea (extraído del HTML)
-    const taskText = stripHtml(lesson.explanation);
-    line(taskText, { size: 9.5, color: [30, 30, 30] });
+    // Texto de la lección (sin bloques de código)
+    const { desc, tarea } = extractLesson(lesson.explanation);
+    if (desc) line(clean(desc), { size: 9.5, color: [30, 30, 30] });
+    if (tarea) { y += 1; line(clean(tarea), { size: 9.5, bold: true, color: [30, 30, 30] }); }
     y += 3;
 
-    // Código solución
+    // Código solución con coloreo de sintaxis
     if (lesson.solution) {
-      line('Solución:', { size: 9, bold: true, color: [34, 197, 94] });
-      const codeLines = lesson.solution.split('\n');
-      codeLines.forEach(cl => line(cl, { size: 8.5, mono: true, color: [30, 50, 30] }));
+      line('Solucion:', { size: 9, bold: true, color: [34, 197, 94] });
+      const KEYWORDS = new Set(['public','private','protected','class','static','void','int','double','float','long','char','boolean','String','new','return','if','else','for','while','do','break','continue','import','package','this','super','null','true','false','final','abstract','interface','extends','implements','throws','throw','try','catch','finally','Scanner','System']);
+      const tokenize = src => {
+        const toks = []; let i = 0;
+        while (i < src.length) {
+          if (src[i] === '/' && src[i+1] === '/') { toks.push({ t:'comment', v: src.slice(i) }); break; }
+          if (src[i] === '"') {
+            let j = i+1; while (j < src.length && src[j] !== '"') { if (src[j]==='\\') j++; j++; }
+            toks.push({ t:'string', v: src.slice(i, j+1) }); i = j+1; continue;
+          }
+          if (/[a-zA-Z_]/.test(src[i])) {
+            let j = i; while (j < src.length && /\w/.test(src[j])) j++;
+            const w = src.slice(i, j); toks.push({ t: KEYWORDS.has(w) ? 'kw' : 'id', v: w }); i = j; continue;
+          }
+          if (/[0-9]/.test(src[i])) {
+            let j = i; while (j < src.length && /[0-9.]/.test(src[j])) j++;
+            toks.push({ t:'num', v: src.slice(i, j) }); i = j; continue;
+          }
+          const last = toks[toks.length-1];
+          if (last && last.t === 'op') last.v += src[i]; else toks.push({ t:'op', v: src[i] });
+          i++;
+        }
+        return toks;
+      };
+      const tokColors = { kw:[180,130,250], string:[250,175,80], comment:[100,140,100], num:[250,175,80], id:[200,230,200], op:[160,180,210] };
+      const codeFS = 8;
+      const codeLineH = codeFS * 0.42 + 1.2;
+      const solution = lesson.solution.replace(/\\n/g, '\n');
+      solution.split('\n').forEach(rawLine => {
+        checkY(codeLineH + 0.5);
+        doc.setFontSize(codeFS);
+        const indent = rawLine.match(/^(\s*)/)[1].replace(/\t/g, '    ');
+        let x = margin + doc.getStringUnitWidth(indent) * codeFS * 0.352;
+        const trimmed = rawLine.trimStart();
+        if (!trimmed) { y += codeLineH; return; }
+        tokenize(trimmed).forEach(tok => {
+          const [r,g,b] = tokColors[tok.t] || [200,200,200];
+          doc.setTextColor(r,g,b);
+          doc.setFont('courier', tok.t === 'kw' ? 'bold' : 'normal');
+          const w = doc.getStringUnitWidth(tok.v) * codeFS * 0.352;
+          if (x + w > 210 - margin) { y += codeLineH; x = margin + 8; }
+          doc.text(tok.v, x, y);
+          x += w;
+        });
+        y += codeLineH;
+      });
     }
 
     y += 2;
