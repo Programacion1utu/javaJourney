@@ -15,7 +15,8 @@ module.exports = async function handler(req, res) {
         body: JSON.stringify({
           compiler: 'openjdk-jdk-22+36',
           code: code.replace(/public\s+class\s+Main/, 'class Main'),
-          stdin: stdin || ''
+          stdin: stdin || '',
+          'runtime-option-raw': '-Dfile.encoding=UTF-8 -Dstdout.encoding=UTF-8'
         })
       });
       if (!response.ok) {
