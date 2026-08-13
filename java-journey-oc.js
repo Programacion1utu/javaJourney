@@ -1855,7 +1855,7 @@ async function runCode() {
         compiler: 'openjdk-jdk-22+36',
         code,
         stdin: stdin || '',
-        'compiler-option-raw': '-encoding UTF-8'
+        'compiler-option-raw': ''
       })
     });
     const data = await res.json();
