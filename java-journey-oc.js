@@ -1854,6 +1854,14 @@ async function runCode() {
       body: JSON.stringify({ code, stdin: stdin || '' })
     });
     const data = await res.json();
+
+    if (!res.ok) {
+      outputDisplay.style.color = '#f87171';
+      outputDisplay.textContent = data.error || 'Error del servidor. Intentar de nuevo.';
+      lastOutput = '';
+      return;
+    }
+
     const compileErr = (data.compileErr || '').trim();
     const stdout = (data.stdout || '').trim();
     const stderr = (data.stderr || '').trim();
@@ -1874,9 +1882,9 @@ async function runCode() {
         document.getElementById('verify-bar').style.display = 'flex';
       }
     }
-  } catch {
+  } catch (e) {
     outputDisplay.style.color = '#f87171';
-    outputDisplay.textContent = 'Error de conexión con el servidor de ejecución.';
+    outputDisplay.textContent = data?.error || 'Error de conexión. Intentar de nuevo.';
     lastOutput = '';
   } finally {
     btn.disabled = false;
