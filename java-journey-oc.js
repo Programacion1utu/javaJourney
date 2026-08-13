@@ -1737,16 +1737,6 @@ function selectLesson(id) {
   const verifyResult = document.getElementById('verify-result');
   verifyResult.style.display = 'none';
   document.getElementById('verify-bar').style.display = 'none';
- else {
-    verifyPanel.style.display = 'none';
-  }
-  if (verifyResult) {
- verifyResult.className = 'mt-2 text-sm hidden';
- verifyResult.textContent = '';
- }
-  if (outputInput) outputInput.value = '';
-  const shareInput = document.getElementById('share-oc-input');
-  if (shareInput) shareInput.value = '';
 }
 // ─── EDITOR HELPERS ───────────────────────────────────────────────────────────
 function saveCurrentCode() {
