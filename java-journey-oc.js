@@ -1848,19 +1848,15 @@ async function runCode() {
   document.getElementById('verify-bar').style.display = 'none';
 
   try {
-    const res = await fetch('https://wandbox.org/api/compile.json', {
+    const res = await fetch('/api/verify', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        compiler: 'openjdk-jdk-22+36',
-        code: code.replace(/public\s+class\s+Main/, 'class Main'),
-        stdin: stdin || ''
-      })
+      body: JSON.stringify({ code, stdin: stdin || '' })
     });
     const data = await res.json();
-    const compileErr = (data.compiler_error || '').trim();
-    const stdout = (data.program_output || '').trim();
-    const stderr = (data.program_error || '').trim();
+    const compileErr = (data.compileErr || '').trim();
+    const stdout = (data.stdout || '').trim();
+    const stderr = (data.stderr || '').trim();
 
     if (compileErr) {
       outputDisplay.style.color = '#f87171';
