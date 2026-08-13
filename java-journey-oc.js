@@ -2301,9 +2301,10 @@ function _buildExercisePdf(lessons) {
     if (tarea) { y += 1; line(clean(tarea), { size: 9.5, bold: true, color: [30, 30, 30] }); }
     y += 3;
 
-    // Código solución con coloreo de sintaxis
-    if (lesson.solution) {
-      line('Solucion:', { size: 9, bold: true, color: [34, 197, 94] });
+    // Código del estudiante con coloreo de sintaxis
+    const studentCode = lessons.length === 1 && codeEditor ? codeEditor.getValue() : (localStorage.getItem('jj_code_' + lesson.id) || lesson.starterCode || '');
+    if (studentCode && studentCode.trim()) {
+      line('Codigo del estudiante:', { size: 9, bold: true, color: [34, 197, 94] });
       const KEYWORDS = new Set(['public','private','protected','class','static','void','int','double','float','long','char','boolean','String','new','return','if','else','for','while','do','break','continue','import','package','this','super','null','true','false','final','abstract','interface','extends','implements','throws','throw','try','catch','finally','Scanner','System']);
       const tokenize = src => {
         const toks = []; let i = 0;
@@ -2330,8 +2331,7 @@ function _buildExercisePdf(lessons) {
       const tokColors = { kw:[180,130,250], string:[250,175,80], comment:[100,140,100], num:[250,175,80], id:[200,230,200], op:[160,180,210] };
       const codeFS = 8;
       const codeLineH = codeFS * 0.42 + 1.2;
-      const solution = lesson.solution.replace(/\\n/g, '\n');
-      solution.split('\n').forEach(rawLine => {
+      studentCode.split('\n').forEach(rawLine => {
         checkY(codeLineH + 0.5);
         doc.setFontSize(codeFS);
         const indent = rawLine.match(/^(\s*)/)[1].replace(/\t/g, '    ');
