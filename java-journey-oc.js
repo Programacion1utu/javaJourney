@@ -1853,9 +1853,8 @@ async function runCode() {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         compiler: 'openjdk-jdk-22+36',
-        code,
-        stdin: stdin || '',
-        'compiler-option-raw': ''
+        codes: [{ file: 'Main.java', code }],
+        stdin: stdin || ''
       })
     });
     const data = await res.json();
