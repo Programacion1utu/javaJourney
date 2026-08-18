@@ -1314,14 +1314,16 @@ function openTeacherLogin() {
   document.getElementById('teacher-login').style.display = 'flex';
   document.getElementById('teacher-pw-error').style.display = 'none';
   document.getElementById('teacher-pw-input').value = '';
-  setTimeout(() => document.getElementById('teacher-pw-input').focus(), 50);
+  document.getElementById('teacher-nombre-input').value = '';
+  document.getElementById('teacher-apellido-input').value = '';
+  setTimeout(() => document.getElementById('teacher-nombre-input').focus(), 50);
 }
 async function submitTeacherLogin() {
+  const nombre = document.getElementById('teacher-nombre-input').value.trim();
+  const apellido = document.getElementById('teacher-apellido-input').value.trim();
   const pw = document.getElementById('teacher-pw-input').value;
   try {
-    const res = await apiPost('/api/auth/teacher', {
- password: pw }
-);
+    const res = await apiPost('/api/auth/teacher', { nombre, apellido, password: pw });
     const data = await res.json();
     if (!res.ok) {
       document.getElementById('teacher-pw-error').style.display = 'block';
@@ -2392,6 +2394,27 @@ async function toggleAllowQuizPdf() {
   } catch {
     allowQuizPdf = !allowQuizPdf;
     renderPdfToggle();
+  }
+}
+async function saveTeacherAccount() {
+  const nombre = document.getElementById('tp-teacher-nombre').value.trim();
+  const apellido = document.getElementById('tp-teacher-apellido').value.trim();
+  const pw = document.getElementById('tp-teacher-pw').value;
+  const msg = document.getElementById('tp-teacher-msg');
+  if (!nombre || !apellido || !pw) {
+    msg.style.display = 'block'; msg.style.color = '#ef4444'; msg.textContent = 'Completar todos los campos.'; return;
+  }
+  try {
+    const res = await fetch('/api/auth/teacher', {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + teacherToken },
+      body: JSON.stringify({ nombre, apellido, newPassword: pw })
+    });
+    if (!res.ok) throw new Error();
+    msg.style.display = 'block'; msg.style.color = '#22c55e'; msg.textContent = 'Cuenta guardada. Usar estos datos la próxima vez.';
+    document.getElementById('tp-teacher-pw').value = '';
+  } catch {
+    msg.style.display = 'block'; msg.style.color = '#ef4444'; msg.textContent = 'Error al guardar.';
   }
 }
 // ─── KEYBOARD ─────────────────────────────────────────────────────────────────
