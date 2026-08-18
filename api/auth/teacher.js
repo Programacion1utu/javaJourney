@@ -51,21 +51,15 @@ module.exports = async function handler(req, res) {
       const sql = getDb();
       const hash = hashPassword(newPassword);
 
-      await sql`
-        CREATE TABLE IF NOT EXISTS teachers (
-          id SERIAL PRIMARY KEY,
-          nombre TEXT NOT NULL,
-          apellido TEXT NOT NULL,
-          password_hash TEXT NOT NULL,
-          UNIQUE (LOWER(nombre), LOWER(apellido))
-        )
+      const existing = await sql`
+        SELECT id FROM teachers
+        WHERE LOWER(nombre) = LOWER(${nombre.trim()}) AND LOWER(apellido) = LOWER(${apellido.trim()})
       `;
-
-      await sql`
-        INSERT INTO teachers (nombre, apellido, password_hash)
-        VALUES (${nombre.trim()}, ${apellido.trim()}, ${hash})
-        ON CONFLICT (LOWER(nombre), LOWER(apellido)) DO UPDATE SET password_hash = EXCLUDED.password_hash
-      `;
+      if (existing.length > 0) {
+        await sql`UPDATE teachers SET password_hash = ${hash} WHERE id = ${existing[0].id}`;
+      } else {
+        await sql`INSERT INTO teachers (nombre, apellido, password_hash) VALUES (${nombre.trim()}, ${apellido.trim()}, ${hash})`;
+      }
 
       res.status(200).json({ ok: true });
     } catch (err) {
