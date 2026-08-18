@@ -1633,21 +1633,16 @@ _resetStudentId}`, {
   document.getElementById('tp-reset-modal').style.display = 'none';
   _resetStudentId = null;
 }
-// Triple clic en el logo ☕ abre el panel docente
+// Triple clic en cualquier ☕ abre el panel docente
 let _logoClicks = 0, _logoTimer = null;
-document.getElementById('logo-icon').addEventListener('click', () => {
+function _handleLogoClic() {
   _logoClicks++;
   clearTimeout(_logoTimer);
-  _logoTimer = setTimeout(() => {
- _logoClicks = 0;
- }
-, 600);
-  if (_logoClicks >= 3) {
- _logoClicks = 0;
- openTeacherLogin();
- }
+  _logoTimer = setTimeout(() => { _logoClicks = 0; }, 600);
+  if (_logoClicks >= 3) { _logoClicks = 0; openTeacherLogin(); }
 }
-);
+document.getElementById('logo-icon').addEventListener('click', _handleLogoClic);
+document.getElementById('login-logo').addEventListener('click', _handleLogoClic);
 function renderSidebar() {
   const nav = document.getElementById('lesson-list');
   nav.innerHTML = '';
