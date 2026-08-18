@@ -2402,7 +2402,7 @@ document.addEventListener('keydown', e => {
     document.getElementById('teacher-login').style.display = 'none';
     document.getElementById('teacher-panel').style.display = 'none';
   }
-  if (e.ctrlKey && e.shiftKey && e.key === 'T') {
+  if (e.ctrlKey && e.shiftKey && e.key === 'D') {
     e.preventDefault();
     openTeacherLogin();
   }
