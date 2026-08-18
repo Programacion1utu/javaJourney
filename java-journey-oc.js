@@ -2398,9 +2398,13 @@ async function toggleAllowQuizPdf() {
 document.addEventListener('keydown', e => {
   if (e.key === 'Escape') {
     closeModal();
- closeQuiz();
+    closeQuiz();
     document.getElementById('teacher-login').style.display = 'none';
     document.getElementById('teacher-panel').style.display = 'none';
+  }
+  if (e.ctrlKey && e.shiftKey && e.key === 'T') {
+    e.preventDefault();
+    openTeacherLogin();
   }
 }
 );
