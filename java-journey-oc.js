@@ -1339,6 +1339,8 @@ async function submitTeacherLogin() {
 }
 let _allStudents = [];
 function openTeacherPanel() {
+  document.getElementById('student-login').style.display = 'none';
+  document.getElementById('teacher-login').style.display = 'none';
   renderTeacherPanel();
   switchTab('temas');
   renderPdfToggle();
