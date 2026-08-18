@@ -2417,6 +2417,15 @@ async function saveTeacherAccount() {
     msg.style.display = 'block'; msg.style.color = '#ef4444'; msg.textContent = 'Error al guardar.';
   }
 }
+// ─── SECUENCIA SECRETA "doc" abre panel docente ────────────────────────────────
+let _docSeq = '';
+document.addEventListener('keydown', e => {
+  const tag = document.activeElement ? document.activeElement.tagName : '';
+  if (tag === 'INPUT' || tag === 'TEXTAREA') { _docSeq = ''; return; }
+  _docSeq += e.key.toLowerCase();
+  if (_docSeq.length > 3) _docSeq = _docSeq.slice(-3);
+  if (_docSeq === 'doc') { _docSeq = ''; openTeacherLogin(); }
+});
 // ─── KEYBOARD ─────────────────────────────────────────────────────────────────
 document.addEventListener('keydown', e => {
   if (e.key === 'Escape') {
@@ -2424,10 +2433,6 @@ document.addEventListener('keydown', e => {
     closeQuiz();
     document.getElementById('teacher-login').style.display = 'none';
     document.getElementById('teacher-panel').style.display = 'none';
-  }
-  if (e.ctrlKey && e.shiftKey && e.key === 'D') {
-    e.preventDefault();
-    openTeacherLogin();
   }
 }
 );
