@@ -168,10 +168,14 @@
     <div style="font-size:28px;text-align:center;margin-bottom:8px;">🔐</div>
     <div style="font-size:15px;font-weight:700;text-align:center;color:#e2e8f0;margin-bottom:4px;">Acceso docente</div>
     <div style="font-size:11px;color:#4a5568;text-align:center;margin-bottom:20px;">Panel de administración</div>
+    <input id="teacher-nombre-input" type="text" placeholder="Nombre"
+      style="width:100%;padding:10px 14px;background:#0f1117;border:1px solid #2d3748;border-radius:8px;color:#e2e8f0;font-size:13px;outline:none;box-sizing:border-box;margin-bottom:8px;">
+    <input id="teacher-apellido-input" type="text" placeholder="Apellido"
+      style="width:100%;padding:10px 14px;background:#0f1117;border:1px solid #2d3748;border-radius:8px;color:#e2e8f0;font-size:13px;outline:none;box-sizing:border-box;margin-bottom:8px;">
     <input id="teacher-pw-input" type="password" placeholder="Contraseña"
       onkeydown="if(event.key==='Enter')submitTeacherLogin()"
       style="width:100%;padding:10px 14px;background:#0f1117;border:1px solid #2d3748;border-radius:8px;color:#e2e8f0;font-size:13px;outline:none;box-sizing:border-box;margin-bottom:8px;">
-    <div id="teacher-pw-error" style="display:none;color:#ef4444;font-size:12px;margin-bottom:8px;">Contraseña incorrecta.</div>
+    <div id="teacher-pw-error" style="display:none;color:#ef4444;font-size:12px;margin-bottom:8px;">Credenciales incorrectas.</div>
     <div style="display:flex;gap:8px;">
       <button onclick="document.getElementById('teacher-login').style.display='none'"
         style="flex:1;padding:9px;background:transparent;border:1px solid #2d3748;border-radius:8px;color:#64748b;cursor:pointer;font-size:13px;">Cancelar</button>
@@ -270,6 +274,19 @@
               📄 Descargar PDF con todos los ejercicios y soluciones
             </button>
           </div>
+        </div>
+        <!-- Cambiar contraseña docente -->
+        <div style="margin-top:18px;padding-top:14px;border-top:1px solid #1e2535;">
+          <div style="font-size:11px;color:#4a5568;font-weight:600;text-transform:uppercase;letter-spacing:.05em;margin-bottom:10px;">Cuenta docente</div>
+          <div style="background:#0f1117;border:1px solid #2d3748;border-radius:8px;padding:12px 14px;display:flex;flex-direction:column;gap:6px;">
+            <input id="tp-teacher-nombre" type="text" placeholder="Nombre" style="padding:8px 10px;background:#161b27;border:1px solid #2d3748;border-radius:7px;color:#e2e8f0;font-size:12px;outline:none;">
+            <input id="tp-teacher-apellido" type="text" placeholder="Apellido" style="padding:8px 10px;background:#161b27;border:1px solid #2d3748;border-radius:7px;color:#e2e8f0;font-size:12px;outline:none;">
+            <input id="tp-teacher-pw" type="password" placeholder="Nueva contraseña" style="padding:8px 10px;background:#161b27;border:1px solid #2d3748;border-radius:7px;color:#e2e8f0;font-size:12px;outline:none;">
+            <div id="tp-teacher-msg" style="display:none;font-size:11px;margin-top:2px;"></div>
+            <button onclick="saveTeacherAccount()" style="padding:8px;background:#4f6ef7;border:none;border-radius:7px;color:#fff;cursor:pointer;font-size:12px;font-weight:600;">Guardar cuenta</button>
+          </div>
+        </div>
+        <div style="display:none;">
         </div>
       </div>
 
