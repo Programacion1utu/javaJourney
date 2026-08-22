@@ -2259,24 +2259,38 @@ function _buildExercisePdf(lessons) {
     y += lines.length * size * 0.42 + 1.5;
   };
 
-  const getTextFrom = (el) => (el ? (el.innerText || el.textContent || '').trim() : '');
+  const getTextFrom = (el) => {
+    if (!el) return '';
+    // reemplazar <br> con espacio antes de leer el texto
+    el.querySelectorAll('br').forEach(br => br.replaceWith(' '));
+    return (el.innerText || el.textContent || '').replace(/\s+/g, ' ').trim();
+  };
+
+  const clean = s => s
+    .replace(/[\u{1F300}-\u{1FFFF}]/gu, '')
+    .replace(/[☀-➿]/g, '')
+    .replace(/\s+/g, ' ')
+    .trim();
 
   const extractLesson = (html) => {
     const tmp = document.createElement('div');
     tmp.innerHTML = html;
-    // Párrafos de explicación (excluir bloques de código bg-slate-800)
+    // Párrafos de explicación (excluir bloques de código slate-800)
     const parts = [];
     tmp.querySelectorAll('p').forEach(p => {
-      const t = getTextFrom(p).replace(/\s+/g, ' ');
+      // excluir párrafos dentro de bloques de código
+      if (p.closest('[class*="slate-800"]')) return;
+      const t = getTextFrom(p.cloneNode(true));
       if (t) parts.push(t);
     });
-    // Bloque de tarea
-    const tareaDiv = tmp.querySelector('.bg-indigo-900\\/30, [class*="indigo-900"]');
-    const tarea = tareaDiv ? getTextFrom(tareaDiv).replace(/\s+/g, ' ').replace(/[\u{1F300}-\u{1FFFF}]/gu, '') : '';
-    return { desc: parts.join(' '), tarea: tarea.replace(/^\s*Tarea:\s*/, 'Tarea: ') };
+    // Bloque de tarea — buscar por class que contenga "indigo"
+    let tareaDiv = null;
+    tmp.querySelectorAll('div').forEach(d => {
+      if (!tareaDiv && d.className && d.className.includes('indigo')) tareaDiv = d;
+    });
+    const tarea = tareaDiv ? clean(getTextFrom(tareaDiv.cloneNode(true))) : '';
+    return { desc: clean(parts.join(' ')), tarea: tarea.replace(/^\s*Tarea:\s*/i, 'Tarea: ') };
   };
-
-  const clean = s => s.replace(/[\u{1F300}-\u{1FFFF}]/gu, '').replace(/[☀-➿]/g, '').trim();
 
   // Encabezado global
   line('Java Journey - Ejercicios de Programacion Java', { size: 15, bold: true, color: [79, 110, 247] });
@@ -2330,19 +2344,31 @@ function _buildExercisePdf(lessons) {
       const tokColors = { kw:[0,50,200], string:[180,20,20], comment:[110,110,110], num:[0,130,0], id:[0,0,0], op:[0,0,0] };
       const codeFS = 8;
       const codeLineH = codeFS * 0.42 + 1.2;
+      const rightMargin = 210 - margin;
+      const charW = doc.getStringUnitWidth('M') * codeFS * 0.352;
       studentCode.split('\n').forEach(rawLine => {
         checkY(codeLineH + 0.5);
         doc.setFontSize(codeFS);
-        const indent = rawLine.match(/^(\s*)/)[1].replace(/\t/g, '    ');
-        let x = margin + doc.getStringUnitWidth(indent) * codeFS * 0.352;
-        const trimmed = rawLine.trimStart();
+        const expanded = rawLine.replace(/\t/g, '    ');
+        const indent = expanded.match(/^(\s*)/)[1];
+        let x = margin + indent.length * charW;
+        const trimmed = expanded.trimStart();
         if (!trimmed) { y += codeLineH; return; }
+        // si la línea completa no cabe, renderizarla como texto plano truncado
+        const fullW = (indent.length + trimmed.length) * charW;
+        if (fullW > contentW) {
+          doc.setFont('courier', 'normal');
+          doc.setTextColor(0, 0, 0);
+          const maxChars = Math.floor(contentW / charW) - 1;
+          doc.text(expanded.slice(0, maxChars), margin, y);
+          y += codeLineH; return;
+        }
         tokenize(trimmed).forEach(tok => {
-          const [r,g,b] = tokColors[tok.t] || [200,200,200];
+          const [r,g,b] = tokColors[tok.t] || [0,0,0];
           doc.setTextColor(r,g,b);
           doc.setFont('courier', tok.t === 'kw' ? 'bold' : 'normal');
           const w = doc.getStringUnitWidth(tok.v) * codeFS * 0.352;
-          if (x + w > 210 - margin) { y += codeLineH; x = margin + 8; }
+          if (x + w > rightMargin) { y += codeLineH; checkY(codeLineH); x = margin + 4; }
           doc.text(tok.v, x, y);
           x += w;
         });

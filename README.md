@@ -61,9 +61,17 @@ Configurar en Vercel → Settings → Environment Variables:
 |---|---|
 | `DATABASE_URL` | Connection string de Neon PostgreSQL |
 | `JWT_SECRET` | Clave secreta para firmar tokens JWT (larga y aleatoria) |
-| `TEACHER_PASSWORD_HASH` | SHA-256 de la contraseña docente (ver abajo) |
+| `TEACHER_PASSWORD_HASH` | SHA-256 de la contraseña docente de emergencia (ver abajo) |
 
-### Obtener el hash de la contraseña docente
+### Contraseña docente — sistema de doble capa
+
+La autenticación docente funciona en dos capas:
+
+1. **Base de datos (principal):** La cuenta docente (nombre + apellido + contraseña) se guarda en la tabla `teachers`. Se configura desde el panel docente → pestaña Temas → sección "Cuenta docente". Una vez configurada, el login requiere nombre, apellido y contraseña.
+
+2. **Variable de entorno (fallback de emergencia):** Si no hay cuenta en la BD o se olvida la contraseña, se puede ingresar dejando nombre y apellido vacíos y usando el hash de `TEACHER_PASSWORD_HASH`. Sirve para recuperar el acceso y configurar una nueva cuenta en BD.
+
+### Generar el hash para TEACHER_PASSWORD_HASH
 
 ```powershell
 # En PowerShell:
@@ -107,6 +115,16 @@ CREATE TABLE IF NOT EXISTS quiz_progress (
   PRIMARY KEY (student_id, topic_id)
 );
 
+CREATE TABLE IF NOT EXISTS teachers (
+  id            SERIAL PRIMARY KEY,
+  nombre        TEXT NOT NULL,
+  apellido      TEXT NOT NULL,
+  password_hash TEXT NOT NULL
+);
+
+CREATE UNIQUE INDEX IF NOT EXISTS teachers_nombre_apellido_idx
+ON teachers (LOWER(nombre), LOWER(apellido));
+
 CREATE TABLE IF NOT EXISTS config (
   key   VARCHAR(50) PRIMARY KEY,
   value JSONB
@@ -132,12 +150,17 @@ ON CONFLICT (key) DO NOTHING;
 
 ### Para la docente
 
-1. Hacer **triple clic** en el ícono ☕ del encabezado
-2. Ingresar la contraseña docente
+1. Hacer clic en **"Acceso docente"** (enlace discreto al pie del formulario de login de estudiante), o hacer **triple clic** en el ícono ☕ de la barra lateral
+2. Ingresar nombre, apellido y contraseña docente (si aún no se configuró cuenta en BD, dejar nombre y apellido vacíos y usar la contraseña de `TEACHER_PASSWORD_HASH`)
 3. El panel tiene tres pestañas:
-   - **Temas:** habilitar/deshabilitar temas para el grupo
+   - **Temas:** habilitar/deshabilitar temas para el grupo; configurar cuenta docente; descargar PDF con todos los ejercicios
    - **Estudiantes:** crear cuentas, resetear contraseñas, eliminar estudiantes
    - **Progreso:** tabla con lecciones completadas, quizzes y puntaje promedio por estudiante; filtrable por grupo
+
+### Recuperar acceso docente si se olvida la contraseña
+
+- Usar el fallback de variable de entorno: dejar nombre y apellido vacíos en el login e ingresar la contraseña original (`TEACHER_PASSWORD_HASH`)
+- Una vez dentro, ir a Temas → Cuenta docente → configurar nueva contraseña
 
 ---
 
@@ -150,6 +173,7 @@ Todos los endpoints retornan JSON. Los que requieren autenticación usan `Author
 | GET | `/api/config` | — | Temas habilitados |
 | POST | `/api/auth/student` | — | Login estudiante → token JWT (7 días) |
 | POST | `/api/auth/teacher` | — | Login docente → token JWT (8 horas) |
+| PUT | `/api/auth/teacher` | Docente | Guardar/actualizar cuenta docente en BD |
 | GET | `/api/student/progress` | Estudiante | Lecciones y quizzes completados |
 | POST | `/api/verify` | Estudiante | Verificar salida de lección |
 | GET | `/api/quiz/questions?topicId=N` | Estudiante | Preguntas del quiz (sin respuestas) |
