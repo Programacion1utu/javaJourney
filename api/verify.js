@@ -69,7 +69,7 @@ module.exports = async function handler(req, res) {
         ON CONFLICT DO NOTHING
       `;
     }
-    res.status(200).json({ correct });
+    res.status(200).json({ correct, expected: correct ? undefined : expected });
   } catch (err) {
     console.error(err);
     const status = err.message === 'No autorizado' ? 401 : 500;
