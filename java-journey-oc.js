@@ -1,4 +1,4 @@
-﻿// ─── TEMAS ────────────────────────────────────────────────────────────────────
+// ─── TEMAS ────────────────────────────────────────────────────────────────────
 const TOPICS = [  {
  id: 1,  label: "Hola Mundo",                 lessons: [1, 2] }
 ,  {
@@ -1983,7 +1983,6 @@ async function verifyOutput() {
       result.innerHTML = '✅ <strong>¡Correcto!</strong>';
       completedLessons.add(currentLesson);
       renderSidebar();
-      apiPost('/api/lesson/complete', { lessonId: currentLesson }, studentToken).catch(() => {});
     } else {
       result.style.cssText = 'display:block;font-size:12px;border-radius:6px;padding:4px 10px;background:rgba(239,68,68,.15);border:1px solid rgba(239,68,68,.4);color:#fca5a5;';
       const esperado = (data.expected || '').replace(/\n/g, '↵\n');
