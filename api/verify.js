@@ -9,17 +9,17 @@ module.exports = async function handler(req, res) {
   // ── EJECUTAR CÓDIGO ──────────────────────────────────────────────────────────
   if (req.body && req.body.code !== undefined) {
     const { code, stdin } = req.body;
-    const wandboxBody = JSON.stringify({
-      compiler: 'openjdk-jdk-22+36',
-      code: code.replace(/public\s+class\s+Main/, 'class Main'),
-      stdin: stdin || ''
-    });
 
-    const callWandbox = async () => {
-      const r = await fetch('https://wandbox.org/api/compile.json', {
+    const callPiston = async () => {
+      const r = await fetch('https://emkc.org/api/v2/piston/execute', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: wandboxBody
+        body: JSON.stringify({
+          language: 'java',
+          version: '*',
+          files: [{ name: 'Main.java', content: code }],
+          stdin: stdin || ''
+        })
       });
       if (!r.ok) throw new Error('HTTP ' + r.status);
       return r.json();
@@ -28,27 +28,21 @@ module.exports = async function handler(req, res) {
     try {
       let data;
       try {
-        data = await callWandbox();
+        data = await callPiston();
       } catch (firstErr) {
-        console.error('Wandbox intento 1 falló:', firstErr && firstErr.message ? firstErr.message : firstErr);
+        console.error('Piston intento 1 falló:', firstErr && firstErr.message ? firstErr.message : firstErr);
         // Reintento único tras 1.5s si falla
         await new Promise(r => setTimeout(r, 1500));
-        data = await callWandbox();
+        data = await callPiston();
       }
 
-      const stdout = (data.program_output || '').trim();
-      const stderr = (data.program_error || '').trim();
-      const compileErr = (data.compiler_error || '').trim();
-
-      // Error de recursos de Wandbox → mensaje amigable
-      const isResourceErr = stderr.includes('OCI') || stderr.includes('crun') || stdout.includes('OCI');
-      if (isResourceErr) {
-        return res.status(503).json({ error: 'Servidor ocupado. Intentar de nuevo en unos segundos.' });
-      }
+      const stdout = ((data.run && data.run.stdout) || '').trim();
+      const stderr = ((data.run && data.run.stderr) || '').trim();
+      const compileErr = ((data.compile && data.compile.stderr) || '').trim();
 
       return res.status(200).json({ stdout, stderr, compileErr });
     } catch (e) {
-      console.error('Wandbox no disponible tras reintento:', e && e.message ? e.message : e);
+      console.error('Piston no disponible tras reintento:', e && e.message ? e.message : e);
       return res.status(503).json({ error: 'El servidor de ejecución no está disponible. Intentar de nuevo.' });
     }
   }
