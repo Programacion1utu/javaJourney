@@ -12,8 +12,7 @@ module.exports = async function handler(req, res) {
     const wandboxBody = JSON.stringify({
       compiler: 'openjdk-jdk-22+36',
       code: code.replace(/public\s+class\s+Main/, 'class Main'),
-      stdin: stdin || '',
-      'runtime-option-raw': '-Dfile.encoding=UTF-8 -Dstdout.encoding=UTF-8'
+      stdin: stdin || ''
     });
 
     const callWandbox = async () => {
