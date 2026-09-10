@@ -30,7 +30,8 @@ module.exports = async function handler(req, res) {
       let data;
       try {
         data = await callWandbox();
-      } catch {
+      } catch (firstErr) {
+        console.error('Wandbox intento 1 falló:', firstErr && firstErr.message ? firstErr.message : firstErr);
         // Reintento único tras 1.5s si falla
         await new Promise(r => setTimeout(r, 1500));
         data = await callWandbox();
@@ -48,6 +49,7 @@ module.exports = async function handler(req, res) {
 
       return res.status(200).json({ stdout, stderr, compileErr });
     } catch (e) {
+      console.error('Wandbox no disponible tras reintento:', e && e.message ? e.message : e);
       return res.status(503).json({ error: 'El servidor de ejecución no está disponible. Intentar de nuevo.' });
     }
   }
