@@ -1,5 +1,5 @@
-const { getDb } = require('../../lib/db');
-const { requireStudent } = require('../../lib/auth');
+const { getDb } = require('../_lib/db');
+const { requireStudent } = require('../_lib/auth');
 
 module.exports = async function handler(req, res) {
   if (req.method !== 'GET') return res.status(405).end();

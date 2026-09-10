@@ -1,6 +1,7 @@
-const { getDb } = require('../lib/db');
-const { requireStudent } = require('../lib/auth');
-const { EXPECTED_OUTPUTS } = require('../lib/expected-outputs');
+const { createHash } = require('crypto');
+const { getDb } = require('./_lib/db');
+const { requireStudent } = require('./_lib/auth');
+const { EXPECTED_OUTPUT_HASHES } = require('./_lib/expected-outputs');
 
 module.exports = async function handler(req, res) {
   if (req.method !== 'POST') return res.status(405).end();
@@ -55,11 +56,12 @@ module.exports = async function handler(req, res) {
   try {
     const student = requireStudent(req);
     const { lessonId, output } = req.body;
-    const expected = EXPECTED_OUTPUTS[lessonId];
-    if (!expected) return res.status(400).json({ error: 'Lección no encontrada' });
+    const expectedHash = EXPECTED_OUTPUT_HASHES[lessonId];
+    if (!expectedHash) return res.status(400).json({ error: 'Lección no encontrada' });
 
     const normalize = s => s.replace(/\r\n/g, '\n').trim();
-    const correct = normalize(output) === normalize(expected);
+    const outputHash = createHash('sha256').update(normalize(output || '')).digest('hex');
+    const correct = outputHash === expectedHash;
 
     if (correct) {
       const sql = getDb();
@@ -69,7 +71,8 @@ module.exports = async function handler(req, res) {
         ON CONFLICT DO NOTHING
       `;
     }
-    res.status(200).json({ correct, expected: correct ? undefined : expected });
+    // Nunca devolver la salida esperada: un intento fallido no debe filtrar la respuesta.
+    res.status(200).json({ correct });
   } catch (err) {
     console.error(err);
     const status = err.message === 'No autorizado' ? 401 : 500;
