@@ -10,14 +10,13 @@ module.exports = async function handler(req, res) {
   if (req.body && req.body.code !== undefined) {
     const { code, stdin } = req.body;
 
-    const callPiston = async () => {
-      const r = await fetch('https://emkc.org/api/v2/piston/execute', {
+    const callJudge0 = async () => {
+      const r = await fetch('https://ce.judge0.com/submissions?base64_encoded=false&wait=true', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          language: 'java',
-          version: '*',
-          files: [{ name: 'Main.java', content: code }],
+          source_code: code,
+          language_id: 62, // OpenJDK 13.0.1
           stdin: stdin || ''
         })
       });
@@ -28,21 +27,21 @@ module.exports = async function handler(req, res) {
     try {
       let data;
       try {
-        data = await callPiston();
+        data = await callJudge0();
       } catch (firstErr) {
-        console.error('Piston intento 1 falló:', firstErr && firstErr.message ? firstErr.message : firstErr);
+        console.error('Judge0 intento 1 falló:', firstErr && firstErr.message ? firstErr.message : firstErr);
         // Reintento único tras 1.5s si falla
         await new Promise(r => setTimeout(r, 1500));
-        data = await callPiston();
+        data = await callJudge0();
       }
 
-      const stdout = ((data.run && data.run.stdout) || '').trim();
-      const stderr = ((data.run && data.run.stderr) || '').trim();
-      const compileErr = ((data.compile && data.compile.stderr) || '').trim();
+      const stdout = (data.stdout || '').trim();
+      const stderr = (data.stderr || '').trim();
+      const compileErr = (data.compile_output || '').trim();
 
       return res.status(200).json({ stdout, stderr, compileErr });
     } catch (e) {
-      console.error('Piston no disponible tras reintento:', e && e.message ? e.message : e);
+      console.error('Judge0 no disponible tras reintento:', e && e.message ? e.message : e);
       return res.status(503).json({ error: 'El servidor de ejecución no está disponible. Intentar de nuevo.' });
     }
   }
