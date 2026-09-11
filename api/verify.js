@@ -1,7 +1,7 @@
 const { createHash } = require('crypto');
-const { getDb } = require('./lib/db');
-const { requireStudent } = require('./lib/auth');
-const { EXPECTED_OUTPUT_HASHES } = require('./lib/expected-outputs');
+const { getDb } = require('./_lib/db');
+const { requireStudent } = require('./_lib/auth');
+const { EXPECTED_OUTPUT_HASHES } = require('./_lib/expected-outputs');
 
 module.exports = async function handler(req, res) {
   if (req.method !== 'POST') return res.status(405).end();

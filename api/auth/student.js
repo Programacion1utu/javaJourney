@@ -1,5 +1,5 @@
-const { getDb } = require('../lib/db');
-const { hashPassword, signStudent } = require('../lib/auth');
+const { getDb } = require('../_lib/db');
+const { hashPassword, signStudent } = require('../_lib/auth');
 
 module.exports = async function handler(req, res) {
   if (req.method !== 'POST') return res.status(405).end();
