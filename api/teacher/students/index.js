@@ -1,5 +1,5 @@
-const { getDb } = require('../../_lib/db');
-const { requireTeacher, hashPassword } = require('../../_lib/auth');
+const { getDb } = require('../../lib/db');
+const { requireTeacher, hashPassword } = require('../../lib/auth');
 
 module.exports = async function handler(req, res) {
   try {
