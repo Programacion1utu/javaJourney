@@ -230,7 +230,7 @@ const LESSONS = [
 \n}`,    hint: 'Usar println tres veces. Poner cada operación entre paréntesis dentro del mensaje: "Suma: " + (a + b).',  }
 ,  {
  id: 10, title: "División y módulo", subtitle: "Operadores  /  y  %",    explanation: `<h2 class="text-base font-bold mb-3">División y resto</h2><div class="bg-slate-800/60 rounded-lg p-4 mb-4 mono text-sm text-slate-300 leading-7"><span class="text-purple-400">int</span> a = <span class="text-orange-300">10</span>, b = <span class="text-orange-300">3</span>;
-<br>a / b  <span class="text-slate-500">// 3  — división entera (descarta decimales)</span><br>a % b  <span class="text-slate-500">// 1  — resto de la división</span></div><p class="text-slate-400 text-sm mb-3">La división entre enteros da un resultado entero. Para obtener decimales, al menos uno debe ser <code class="text-yellow-300">double</code>.</p><div class="bg-indigo-900/30 border border-indigo-700/40 rounded-lg p-3 text-sm text-indigo-200">  <span class="font-bold">🎯 Tarea:</span> Un salón tiene 30 estudiantes que forman grupos de 7. Calcular cuántos grupos completos se forman y cuántos estudiantes sobran. Imprimir cada dato en su propia línea.</div>`,    starterCode: `public class Main {
+<br>a / b  <span class="text-slate-500">// 3  — división entera (descarta decimales)</span><br>a % b  <span class="text-slate-500">// 1  — resto de la división</span></div><p class="text-slate-400 text-sm mb-3">La división entre enteros da un resultado entero. Para obtener decimales, al menos uno debe ser <code class="text-yellow-300">double</code>.</p><div class="bg-indigo-900/30 border border-indigo-700/40 rounded-lg p-3 text-sm text-indigo-200">  <span class="font-bold">🎯 Tarea:</span> Un salón tiene 30 estudiantes que forman grupos de 7. Calcular cuántos grupos completos se forman y cuántos estudiantes sobran. Imprimir en dos líneas con el formato exacto:<br>  <code class="text-yellow-300">Grupos: valor</code><br>  <code class="text-yellow-300">Sobran: valor</code></div>`,    starterCode: `public class Main {
 \n    public static void main(String[] args) {
 \n        int estudiantes = 30;
 \n        int porGrupo = 7;
@@ -285,8 +285,8 @@ const LESSONS = [
 </code> <code class="text-yellow-300">&lt;
 </code> <code class="text-yellow-300">&gt;
 =</code> <code class="text-yellow-300">&lt;
-=</code></p><div class="bg-indigo-900/30 border border-indigo-700/40 rounded-lg p-3 text-sm text-indigo-200">  <span class="font-bold">🎯 Tarea:</span> Con <code class="text-indigo-300">temperatura = 35</code>: si es mayor a 30, imprimir un mensaje de calor;
- si no, un mensaje de temperatura normal.</div>`,    starterCode: `public class Main {
+=</code></p><div class="bg-indigo-900/30 border border-indigo-700/40 rounded-lg p-3 text-sm text-indigo-200">  <span class="font-bold">🎯 Tarea:</span> Con <code class="text-indigo-300">temperatura = 35</code>: si es mayor a 30, imprimir exactamente <code class="text-yellow-300">Hace calor</code>;
+ si no, imprimir exactamente <code class="text-yellow-300">Temperatura normal</code>.</div>`,    starterCode: `public class Main {
 \n    public static void main(String[] args) {
 \n        int temperatura = 35;
 \n        // Escribir el if / else\n\n    }
@@ -307,7 +307,7 @@ const LESSONS = [
 &nbsp;
 <span class="text-green-300">System</span>.out.<span class="text-blue-300">println</span>(<span class="text-orange-300">"Reprobado"</span>);
 <br>}
-</div><div class="bg-indigo-900/30 border border-indigo-700/40 rounded-lg p-3 text-sm text-indigo-200">  <span class="font-bold">🎯 Tarea:</span> Con <code class="text-indigo-300">int hora = 14</code>: usar if/else if/else para imprimir el saludo correspondiente a la hora (mañana, tarde o noche).</div>`,    starterCode: `public class Main {
+</div><div class="bg-indigo-900/30 border border-indigo-700/40 rounded-lg p-3 text-sm text-indigo-200">  <span class="font-bold">🎯 Tarea:</span> Con <code class="text-indigo-300">int hora = 14</code>: si la hora es menor a 12 imprimir <code class="text-yellow-300">Buenos días</code>; si es menor a 20 imprimir <code class="text-yellow-300">Buenas tardes</code>; en cualquier otro caso imprimir <code class="text-yellow-300">Buenas noches</code>.</div>`,    starterCode: `public class Main {
 \n    public static void main(String[] args) {
 \n        int hora = 14;
 \n        // Escribir if / else if / else\n\n    }
@@ -433,7 +433,7 @@ i++;
 <br><span class="text-green-300">System</span>.out.<span class="text-blue-300">println</span>(<span class="text-orange-300">"Resultado: "</span> + resultado);
  <span class="text-slate-500">// 11</span></div><div class="bg-amber-900/30 border border-amber-700/40 rounded-lg p-3 text-sm text-amber-200 mb-3">  💡 <strong>void</strong> = no devuelve nada &nbsp;
 |&nbsp;
- <strong>int / double / String</strong> = devuelve ese tipo</div><div class="bg-indigo-900/30 border border-indigo-700/40 rounded-lg p-3 text-sm text-indigo-200">  <span class="font-bold">🎯 Tarea:</span> Crear <code class="text-indigo-300">static double calcularArea(double base, double altura)</code> que retorne el área de un triángulo (base × altura / 2). Llamarla con base=6 y altura=4 e imprimir el resultado.</div>`,    starterCode: `public class Main {
+ <strong>int / double / String</strong> = devuelve ese tipo</div><div class="bg-indigo-900/30 border border-indigo-700/40 rounded-lg p-3 text-sm text-indigo-200">  <span class="font-bold">🎯 Tarea:</span> Crear <code class="text-indigo-300">static double calcularArea(double base, double altura)</code> que retorne el área de un triángulo (base × altura / 2). Llamarla con base=6 y altura=4 e imprimir el resultado con el formato <code class="text-yellow-300">Área: valor</code>.</div>`,    starterCode: `public class Main {
 \n\n    static double calcularArea(double base, double altura) {
 \n        // Calcular y retornar el área\n\n    }
 \n\n    public static void main(String[] args) {
@@ -449,7 +449,7 @@ i++;
 <br>}
 <br><br><span class="text-green-300">String</span> msg = <span class="text-blue-300">crearSaludo</span>(<span class="text-orange-300">"María"</span>, <span class="text-orange-300">17</span>);
 <br><span class="text-green-300">System</span>.out.<span class="text-blue-300">println</span>(msg);
-</div><div class="bg-indigo-900/30 border border-indigo-700/40 rounded-lg p-3 text-sm text-indigo-200">  <span class="font-bold">🎯 Tarea:</span> Crear <code class="text-indigo-300">static String clasificar(int nota)</code> que retorne una categoría según la nota: la más alta (≥ 90), la media (≥ 60) y la más baja. Probar con notas 95, 75 y 40 e imprimir cada resultado.</div>`,    starterCode: `public class Main {
+</div><div class="bg-indigo-900/30 border border-indigo-700/40 rounded-lg p-3 text-sm text-indigo-200">  <span class="font-bold">🎯 Tarea:</span> Crear <code class="text-indigo-300">static String clasificar(int nota)</code> que retorne <code class="text-yellow-300">Destacado</code> si la nota es mayor o igual a 90, <code class="text-yellow-300">Logrado</code> si es mayor o igual a 60, o <code class="text-yellow-300">En proceso</code> en cualquier otro caso. Probar con notas 95, 75 y 40 e imprimir cada resultado.</div>`,    starterCode: `public class Main {
 \n\n    static String clasificar(int nota) {
 \n        // Retornar la clasificación según la nota\n\n    }
 \n\n    public static void main(String[] args) {
@@ -467,7 +467,7 @@ i++;
 &nbsp;
 <span class="text-green-300">System</span>.out.<span class="text-blue-300">println</span>(<span class="text-orange-300">"Vuelta "</span> + i);
 <br>}
-<br><span class="text-slate-500">// Vuelta 1 / Vuelta 2 / Vuelta 3</span></div><div class="bg-indigo-900/30 border border-indigo-700/40 rounded-lg p-3 text-sm text-indigo-200">  <span class="font-bold">🎯 Tarea:</span> Usar un for para imprimir la tabla de multiplicar del 3 del 3×1 al 3×5, una línea por resultado con el formato <em>3 x N = resultado</em>.</div>`,    starterCode: `public class Main {
+<br><span class="text-slate-500">// Vuelta 1 / Vuelta 2 / Vuelta 3</span></div><div class="bg-indigo-900/30 border border-indigo-700/40 rounded-lg p-3 text-sm text-indigo-200">  <span class="font-bold">🎯 Tarea:</span> Usar un for para imprimir la tabla de multiplicar del 3, desde 3×1 hasta 3×5, una línea por resultado con el formato <em>3 x N = resultado</em>.</div>`,    starterCode: `public class Main {
 \n    public static void main(String[] args) {
 \n        // Escribir el for del 1 al 5\n\n    }
 \n}`,    hint: 'El for va del 1 al 5 (i <= 5). Dentro armar el mensaje: "3 x " + i + " = " + (3 * i). Los paréntesis fuerzan que la multiplicación se calcule antes.',  }
@@ -494,7 +494,7 @@ suma += i;
 ;
 <br>notas[<span class="text-orange-300">0</span>]  <span class="text-slate-500">// 85 — primer elemento</span><br>notas[<span class="text-orange-300">2</span>]  <span class="text-slate-500">// 78 — tercer elemento</span><br>notas.length  <span class="text-slate-500">// 3 — cantidad de elementos</span></div><div class="bg-indigo-900/30 border border-indigo-700/40 rounded-lg p-3 text-sm text-indigo-200">  <span class="font-bold">🎯 Tarea:</span> Con el array <code class="text-indigo-300">String[] materias = {
 "Matemática", "Inglés", "Programación"}
-</code>, imprimir en líneas separadas: la primera materia, la última y el total de elementos.</div>`,    starterCode: `public class Main {
+</code>, imprimir en tres líneas con el formato exacto: <code class="text-yellow-300">Primera: valor</code>, <code class="text-yellow-300">Última: valor</code> y <code class="text-yellow-300">Total: valor</code>.</div>`,    starterCode: `public class Main {
 \n    public static void main(String[] args) {
 \n        String[] materias = {
 "Matemática", "Inglés", "Programación"}
@@ -554,7 +554,7 @@ suma += i;
  id: 29, title: "La palabra clave final", subtitle: "Valores que no cambian",    explanation: `<h2 class="text-base font-bold mb-3">Constantes con final</h2><p class="text-slate-300 text-sm mb-4">Una <strong>constante</strong> es una variable cuyo valor no puede cambiar después de asignarse. Se declara con la palabra clave <code class="text-indigo-400">final</code>. Por convención, el nombre va en <strong>MAYÚSCULAS</strong>.</p><div class="bg-slate-800/60 rounded-lg p-4 mb-4 mono text-sm text-slate-300 leading-7"><span class="text-purple-400">final double</span> TASA_IVA = <span class="text-orange-300">0.22</span>;
 <br><span class="text-purple-400">final int</span> MAX_INTENTOS = <span class="text-orange-300">3</span>;
 <br><br><span class="text-slate-500">// Error: no se puede reasignar una constante</span><br><span class="text-slate-500">// TASA_IVA = 0.10;
- ← Error de compilación</span></div><div class="bg-amber-900/30 border border-amber-700/40 rounded-lg p-3 text-sm text-amber-200 mb-3">  💡 Usar constantes hace el código más legible y facilita los cambios: si la tasa del IVA cambia, solo se modifica en un lugar.</div><div class="bg-indigo-900/30 border border-indigo-700/40 rounded-lg p-3 text-sm text-indigo-200">  <span class="font-bold">🎯 Tarea:</span> Declarar <code class="text-indigo-300">final double PRECIO_BASE = 1000.0</code> y <code class="text-indigo-300">final double DESCUENTO = 0.15</code>. Calcular el precio con descuento (PRECIO_BASE − PRECIO_BASE × DESCUENTO) e imprimirlo.</div>`,    starterCode: `public class Main {
+ ← Error de compilación</span></div><div class="bg-amber-900/30 border border-amber-700/40 rounded-lg p-3 text-sm text-amber-200 mb-3">  💡 Usar constantes hace el código más legible y facilita los cambios: si la tasa del IVA cambia, solo se modifica en un lugar.</div><div class="bg-indigo-900/30 border border-indigo-700/40 rounded-lg p-3 text-sm text-indigo-200">  <span class="font-bold">🎯 Tarea:</span> Declarar <code class="text-indigo-300">final double PRECIO_BASE = 1000.0</code> y <code class="text-indigo-300">final double DESCUENTO = 0.15</code>. Calcular el precio con descuento (PRECIO_BASE − PRECIO_BASE × DESCUENTO) e imprimirlo con el formato <code class="text-yellow-300">Precio final: valor</code>.</div>`,    starterCode: `public class Main {
 \n    public static void main(String[] args) {
 \n        final double PRECIO_BASE = 1000.0;
 \n        final double DESCUENTO = 0.15;
@@ -566,7 +566,7 @@ suma += i;
 <br><br><span class="text-purple-400">double</span> radio = <span class="text-orange-300">5.0</span>;
 <br><span class="text-purple-400">double</span> area = PI * radio * radio;
 <br><span class="text-green-300">System</span>.out.<span class="text-blue-300">println</span>(<span class="text-orange-300">"Área: "</span> + area);
-</div><div class="bg-indigo-900/30 border border-indigo-700/40 rounded-lg p-3 text-sm text-indigo-200">  <span class="font-bold">🎯 Tarea:</span> Usando <code class="text-indigo-300">final int HORAS_DIA = 24</code> y <code class="text-indigo-300">final int DIAS_SEMANA = 7</code>, calcular el producto de ambas constantes e imprimir el total de horas en una semana.</div>`,    starterCode: `public class Main {
+</div><div class="bg-indigo-900/30 border border-indigo-700/40 rounded-lg p-3 text-sm text-indigo-200">  <span class="font-bold">🎯 Tarea:</span> Usando <code class="text-indigo-300">final int HORAS_DIA = 24</code> y <code class="text-indigo-300">final int DIAS_SEMANA = 7</code>, calcular el producto de ambas constantes e imprimirlo con el formato <code class="text-yellow-300">Horas en una semana: valor</code>.</div>`,    starterCode: `public class Main {
 \n    public static void main(String[] args) {
 \n        final int HORAS_DIA = 24;
 \n        final int DIAS_SEMANA = 7;
@@ -577,7 +577,7 @@ suma += i;
  id: 31, title: "Widening — conversión implícita", subtitle: "De menor a mayor tipo",    explanation: `<h2 class="text-base font-bold mb-3">Conversión implícita (widening)</h2><p class="text-slate-300 text-sm mb-4">Java convierte automáticamente un tipo de dato <strong>más pequeño</strong> a uno <strong>más grande</strong> sin necesidad de indicarlo. No hay pérdida de información.</p><div class="bg-slate-800/60 rounded-lg p-4 mb-4 mono text-sm text-slate-300 leading-7"><span class="text-purple-400">int</span> entero = <span class="text-orange-300">42</span>;
 <br><span class="text-purple-400">double</span> decimal = entero;
  <span class="text-slate-500">// 42 → 42.0 automáticamente</span><br><span class="text-green-300">System</span>.out.<span class="text-blue-300">println</span>(decimal);
- <span class="text-slate-500">// 42.0</span><br><br><span class="text-slate-500">// Orden: byte → short → int → long → float → double</span></div><div class="bg-indigo-900/30 border border-indigo-700/40 rounded-lg p-3 text-sm text-indigo-200">  <span class="font-bold">🎯 Tarea:</span> Declarar <code class="text-indigo-300">int cantidad = 7</code> y asignarla a una variable <code class="text-indigo-300">double resultado</code>. Dividir resultado entre 2 e imprimir el valor obtenido.</div>`,    starterCode: `public class Main {
+ <span class="text-slate-500">// 42.0</span><br><br><span class="text-slate-500">// Orden: byte → short → int → long → float → double</span></div><div class="bg-indigo-900/30 border border-indigo-700/40 rounded-lg p-3 text-sm text-indigo-200">  <span class="font-bold">🎯 Tarea:</span> Declarar <code class="text-indigo-300">int cantidad = 7</code> y asignarla a una variable <code class="text-indigo-300">double resultado</code>. Dividir resultado entre 2 e imprimir con el formato <code class="text-yellow-300">Resultado: valor</code>.</div>`,    starterCode: `public class Main {
 \n    public static void main(String[] args) {
 \n        int cantidad = 7;
 \n        // Asignar cantidad a una variable double\n        double resultado = cantidad;
@@ -631,7 +631,7 @@ suma += i;
   <span class="text-slate-500">// x = x + 5 → 15</span><br>x -= <span class="text-orange-300">3</span>;
   <span class="text-slate-500">// x = x - 3 → 12</span><br>x *= <span class="text-orange-300">2</span>;
   <span class="text-slate-500">// x = x * 2 → 24</span><br>x /= <span class="text-orange-300">4</span>;
-  <span class="text-slate-500">// x = x / 4 → 6</span></div><div class="bg-indigo-900/30 border border-indigo-700/40 rounded-lg p-3 text-sm text-indigo-200">  <span class="font-bold">🎯 Tarea:</span> Empezar con <code class="text-indigo-300">int puntos = 100</code>. Aplicar en orden: sumar 50, restar 30, multiplicar por 2 usando +=, -= y *=. Imprimir el valor final de puntos.</div>`,    starterCode: `public class Main {
+  <span class="text-slate-500">// x = x / 4 → 6</span></div><div class="bg-indigo-900/30 border border-indigo-700/40 rounded-lg p-3 text-sm text-indigo-200">  <span class="font-bold">🎯 Tarea:</span> Empezar con <code class="text-indigo-300">int puntos = 100</code>. Aplicar en orden: sumar 50, restar 30, multiplicar por 2 usando +=, -= y *=. Imprimir el valor final con el formato <code class="text-yellow-300">Puntos: valor</code>.</div>`,    starterCode: `public class Main {
 \n    public static void main(String[] args) {
 \n        int puntos = 100;
 \n        // Sumar 50\n\n        // Restar 30\n\n        // Multiplicar por 2\n\n        System.out.println("Puntos: " + puntos);
@@ -641,7 +641,7 @@ suma += i;
  id: 36, title: "Operador %=", subtitle: "Módulo con atajo",    explanation: `<h2 class="text-base font-bold mb-3">El atajo %=</h2><p class="text-slate-300 text-sm mb-4"><code class="text-indigo-400">%=</code> aplica el módulo y reasigna: <code class="text-indigo-400">x %= n</code> es lo mismo que <code class="text-indigo-400">x = x % n</code>.</p><div class="bg-slate-800/60 rounded-lg p-4 mb-4 mono text-sm text-slate-300 leading-7"><span class="text-purple-400">int</span> x = <span class="text-orange-300">17</span>;
 <br>x %= <span class="text-orange-300">5</span>;
  <span class="text-slate-500">// x = 17 % 5 → 2 (resto de 17/5)</span><br><span class="text-green-300">System</span>.out.<span class="text-blue-300">println</span>(x);
- <span class="text-slate-500">// 2</span></div><p class="text-slate-400 text-sm mb-3">Recordar que todos los atajos funcionan igual con variables de tipo <code class="text-yellow-300">double</code>.</p><div class="bg-indigo-900/30 border border-indigo-700/40 rounded-lg p-3 text-sm text-indigo-200">  <span class="font-bold">🎯 Tarea:</span> Hay 23 estudiantes para distribuir en mesas de 4. Usando <code class="text-yellow-300">%=</code>, calcular cuántos estudiantes no tienen mesa completa e imprimir:<br>  <code class="text-yellow-300">Estudiantes sin mesa completa: 3</code></div>`,    starterCode: `public class Main {
+ <span class="text-slate-500">// 2</span></div><p class="text-slate-400 text-sm mb-3">Recordar que todos los atajos funcionan igual con variables de tipo <code class="text-yellow-300">double</code>.</p><div class="bg-indigo-900/30 border border-indigo-700/40 rounded-lg p-3 text-sm text-indigo-200">  <span class="font-bold">🎯 Tarea:</span> El código ya está completo. Hay 23 estudiantes para distribuir en mesas de 4; usando <code class="text-yellow-300">%=</code> se calcula cuántos no tienen mesa completa. Ejecutar y verificar que imprime <code class="text-yellow-300">Estudiantes sin mesa completa: 3</code>.</div>`,    starterCode: `public class Main {
 \n    public static void main(String[] args) {
 \n        int estudiantes = 23;
 \n        estudiantes %= 4;
@@ -675,7 +675,7 @@ suma += i;
 &nbsp;
 <span class="text-green-300">System</span>.out.<span class="text-blue-300">println</span>(<span class="text-orange-300">"Día válido"</span>);
 <br>}
-</div><div class="bg-indigo-900/30 border border-indigo-700/40 rounded-lg p-3 text-sm text-indigo-200">  <span class="font-bold">🎯 Tarea:</span> Con <code class="text-indigo-300">int temperatura = 38</code>: usar if/else if/else para imprimir un diagnóstico según la temperatura: un caso para fiebre (> 37), uno para temperatura normal (== 37) y uno para hipotermia.</div>`,    starterCode: `public class Main {
+</div><div class="bg-indigo-900/30 border border-indigo-700/40 rounded-lg p-3 text-sm text-indigo-200">  <span class="font-bold">🎯 Tarea:</span> Con <code class="text-indigo-300">int temperatura = 38</code>: si es mayor a 37 imprimir <code class="text-yellow-300">Fiebre</code>; si es igual a 37 imprimir <code class="text-yellow-300">Temperatura normal</code>; en cualquier otro caso imprimir <code class="text-yellow-300">Hipotermia</code>.</div>`,    starterCode: `public class Main {
 \n    public static void main(String[] args) {
 \n        int temperatura = 38;
 \n        // Escribir el if / else if / else usando operadores de comparación\n\n    }
@@ -693,8 +693,8 @@ suma += i;
 &nbsp;
 <span class="text-green-300">System</span>.out.<span class="text-blue-300">println</span>(<span class="text-orange-300">"Fin de semana"</span>);
 <br>}
-</div><div class="bg-indigo-900/30 border border-indigo-700/40 rounded-lg p-3 text-sm text-indigo-200">  <span class="font-bold">🎯 Tarea:</span> Con <code class="text-indigo-300">int nota = 75</code> y <code class="text-indigo-300">boolean entrego = true</code>: si la nota es mayor o igual a 60 Y entregó la tarea, imprimir un mensaje de aprobado;
- si no, uno de reprobado.</div>`,    starterCode: `public class Main {
+</div><div class="bg-indigo-900/30 border border-indigo-700/40 rounded-lg p-3 text-sm text-indigo-200">  <span class="font-bold">🎯 Tarea:</span> Con <code class="text-indigo-300">int nota = 75</code> y <code class="text-indigo-300">boolean entrego = true</code>: si la nota es mayor o igual a 60 Y entregó la tarea, imprimir <code class="text-yellow-300">Aprobado</code>;
+ si no, imprimir <code class="text-yellow-300">Reprobado</code>.</div>`,    starterCode: `public class Main {
 \n    public static void main(String[] args) {
 \n        int nota = 75;
 \n        boolean entrego = true;
@@ -707,8 +707,8 @@ suma += i;
 &nbsp;
 <span class="text-green-300">System</span>.out.<span class="text-blue-300">println</span>(<span class="text-orange-300">"Sin conexión"</span>);
 <br>}
-<br><br><span class="text-slate-500">// !true = false</span><br><span class="text-slate-500">// !false = true</span></div><p class="text-slate-400 text-sm mb-3"><code>!condicion</code> es una forma más clara de escribir <code>condicion == false</code>.</p><div class="bg-indigo-900/30 border border-indigo-700/40 rounded-lg p-3 text-sm text-indigo-200">  <span class="font-bold">🎯 Tarea:</span> Con <code class="text-indigo-300">boolean pagado = false</code>: si NO está pagado, imprimir un mensaje de pago pendiente;
- si está pagado, un mensaje de pago registrado.</div>`,    starterCode: `public class Main {
+<br><br><span class="text-slate-500">// !true = false</span><br><span class="text-slate-500">// !false = true</span></div><p class="text-slate-400 text-sm mb-3"><code>!condicion</code> es una forma más clara de escribir <code>condicion == false</code>.</p><div class="bg-indigo-900/30 border border-indigo-700/40 rounded-lg p-3 text-sm text-indigo-200">  <span class="font-bold">🎯 Tarea:</span> Con <code class="text-indigo-300">boolean pagado = false</code>: si NO está pagado, imprimir <code class="text-yellow-300">Pago pendiente</code>;
+ si está pagado, imprimir <code class="text-yellow-300">Pago registrado</code>.</div>`,    starterCode: `public class Main {
 \n    public static void main(String[] args) {
 \n        boolean pagado = false;
 \n        // Usar ! para verificar si NO está pagado\n\n    }
@@ -750,7 +750,7 @@ $85.50</code></div>`,    starterCode: `public class Main {
 |&nbsp;
  <strong>%f</strong> = decimal &nbsp;
 |&nbsp;
- <strong>%.2f</strong> = 2 decimales</div><div class="bg-indigo-900/30 border border-indigo-700/40 rounded-lg p-3 text-sm text-indigo-200">  <span class="font-bold">🎯 Tarea:</span> Usando printf, imprimir tres líneas con los datos de un producto: nombre con %s, precio con %.2f y stock con %d. Cada dato en su propia línea.</div>`,    starterCode: `public class Main {
+ <strong>%.2f</strong> = 2 decimales</div><div class="bg-indigo-900/30 border border-indigo-700/40 rounded-lg p-3 text-sm text-indigo-200">  <span class="font-bold">🎯 Tarea:</span> Usando printf, imprimir tres líneas con el formato exacto: <code class="text-yellow-300">Producto: %s</code>, <code class="text-yellow-300">Precio: $%.2f</code> y <code class="text-yellow-300">Stock: %d unidades</code>, usando nombre="Aceite", precio=125.0 y stock=48.</div>`,    starterCode: `public class Main {
 \n    public static void main(String[] args) {
 \n        String nombre = "Aceite";
 \n        double precio = 125.0;
@@ -813,7 +813,7 @@ $85.50</code></div>`,    starterCode: `public class Main {
 &nbsp;
 <span class="text-purple-400">default</span>: <span class="text-green-300">System</span>.out.<span class="text-blue-300">println</span>(<span class="text-orange-300">"Color desconocido"</span>);
 <br>}
-</div><div class="bg-indigo-900/30 border border-indigo-700/40 rounded-lg p-3 text-sm text-indigo-200">  <span class="font-bold">🎯 Tarea:</span> Con <code class="text-indigo-300">String turno = "tarde"</code>, agregar los cases faltantes al switch para imprimir el saludo correspondiente al turno.</div>`,    starterCode: `public class Main {
+</div><div class="bg-indigo-900/30 border border-indigo-700/40 rounded-lg p-3 text-sm text-indigo-200">  <span class="font-bold">🎯 Tarea:</span> Con <code class="text-indigo-300">String turno = "tarde"</code>, agregar los cases faltantes para imprimir <code class="text-yellow-300">Buenos días</code> (mañana), <code class="text-yellow-300">Buenas tardes</code> (tarde) o <code class="text-yellow-300">Buenas noches</code> (noche) según corresponda.</div>`,    starterCode: `public class Main {
 \n    public static void main(String[] args) {
 \n        String turno = "tarde";
 \n        switch (turno) {
@@ -960,7 +960,7 @@ $85.50</code></div>`,    starterCode: `public class Main {
 &nbsp;
 <span class="text-green-300">System</span>.out.<span class="text-blue-300">println</span>();
 <br>}
-<span class="text-slate-500"> // 1,1 1,2 1,3 / 2,1 2,2 2,3 / 3,1 3,2 3,3</span></div><div class="bg-indigo-900/30 border border-indigo-700/40 rounded-lg p-3 text-sm text-indigo-200">  <span class="font-bold">🎯 Tarea:</span> Imprimir las tablas de multiplicar del 2 y del 3 (del ×1 al ×5):<br>  <code class="text-yellow-300">2 x 1 = 2  ...  2 x 5 = 10<br>3 x 1 = 3  ...  3 x 5 = 15</code></div>`,    starterCode: `public class Main {
+<span class="text-slate-500"> // 1,1 1,2 1,3 / 2,1 2,2 2,3 / 3,1 3,2 3,3</span></div><div class="bg-indigo-900/30 border border-indigo-700/40 rounded-lg p-3 text-sm text-indigo-200">  <span class="font-bold">🎯 Tarea:</span> El código ya está completo. Ejecutar y verificar que imprime las tablas de multiplicar del 2 y del 3 (del ×1 al ×5).</div>`,    starterCode: `public class Main {
 \n    public static void main(String[] args) {
 \n        // Bucle externo: tabla (2 y 3)\n        for (int tabla = 2;
  tabla <= 3;
@@ -1065,7 +1065,7 @@ $85.50</code></div>`,    starterCode: `public class Main {
 \n    }
 \n}`,    hint: 'El código ya está casi completo. Ingresar 10 y 4 en la pestaña I/O. El cociente usa printf con %.2f para mostrar 2 decimales.',  }
 ,  {
- id: 60, title: "Calculadora con switch", subtitle: "Elegir operación",    explanation: `<h2 class="text-base font-bold mb-3">Calculadora con menú de operación</h2><p class="text-slate-300 text-sm mb-4">Una calculadora más completa permite al usuario elegir la operación. Se leen dos números y un operador, y se usa <code class="text-indigo-400">switch</code> para ejecutar la operación correspondiente.</p><div class="bg-slate-800/60 rounded-lg p-4 mb-4 mono text-sm text-slate-300 leading-7"><span class="text-slate-500">// Entrada (pestaña I/O):</span><br><span class="text-slate-500">// 15</span><br><span class="text-slate-500">// 4</span><br><span class="text-slate-500">// *</span><br><br><span class="text-slate-500">// Salida esperada: 15.0 * 4.0 = 60.00</span></div><div class="bg-slate-700/40 rounded-lg p-3 text-sm text-slate-300 mb-3">  💡 En la pestaña <strong>I/O</strong> ingresar: primer número, segundo número, operador (cada uno en una línea).</div><div class="bg-indigo-900/30 border border-indigo-700/40 rounded-lg p-3 text-sm text-indigo-200">  <span class="font-bold">🎯 Tarea:</span> Completar el case de multiplicación y el de división (con verificación de divisor cero).</div>`,    starterCode: `import java.util.Scanner;
+ id: 60, title: "Calculadora con switch", subtitle: "Elegir operación",    explanation: `<h2 class="text-base font-bold mb-3">Calculadora con menú de operación</h2><p class="text-slate-300 text-sm mb-4">Una calculadora más completa permite al usuario elegir la operación. Se leen dos números y un operador, y se usa <code class="text-indigo-400">switch</code> para ejecutar la operación correspondiente.</p><div class="bg-slate-800/60 rounded-lg p-4 mb-4 mono text-sm text-slate-300 leading-7"><span class="text-slate-500">// Entrada (pestaña I/O):</span><br><span class="text-slate-500">// 15</span><br><span class="text-slate-500">// 4</span><br><span class="text-slate-500">// *</span><br><br><span class="text-slate-500">// Salida esperada: 15.0 * 4.0 = 60.00</span></div><div class="bg-slate-700/40 rounded-lg p-3 text-sm text-slate-300 mb-3">  💡 En la pestaña <strong>I/O</strong> ingresar: primer número, segundo número, operador (cada uno en una línea).</div><div class="bg-indigo-900/30 border border-indigo-700/40 rounded-lg p-3 text-sm text-indigo-200">  <span class="font-bold">🎯 Tarea:</span> El código ya está completo. Ejecutar y probar distintas combinaciones (por ejemplo <code class="text-yellow-300">10 4 +</code>, <code class="text-yellow-300">15 4 *</code>, <code class="text-yellow-300">7 0 /</code> para ver el mensaje de error de división por cero).</div>`,    starterCode: `import java.util.Scanner;
 \n\npublic class Main {
 \n    public static void main(String[] args) {
 \n        Scanner sc = new Scanner(System.in);
@@ -1094,7 +1094,7 @@ $85.50</code></div>`,    starterCode: `public class Main {
 \n}`,    hint: 'El código ya está completo. Probar con distintas combinaciones: 10 4 + / 15 3 * / 7 0 / (para ver el error de división por cero).',  }
 ,  // ══ TEMA 31: Desafíos Finales ═════════════════════════════════════════════════
   {
- id: 61, title: "Patrón de números", subtitle: "Triángulo numérico",    explanation: `<h2 class="text-base font-bold mb-3">Desafío: Patrón de números</h2><p class="text-slate-300 text-sm mb-4">Usar bucles anidados para imprimir un triángulo donde cada fila muestra los números del 1 hasta el número de la fila.</p><div class="bg-slate-800/60 rounded-lg p-4 mb-4 mono text-sm text-slate-300 leading-7"><span class="text-slate-500">// Salida esperada:</span><br><span class="text-orange-300">1</span><br><span class="text-orange-300">1 2</span><br><span class="text-orange-300">1 2 3</span><br><span class="text-orange-300">1 2 3 4</span><br><span class="text-orange-300">1 2 3 4 5</span></div><div class="bg-indigo-900/30 border border-indigo-700/40 rounded-lg p-3 text-sm text-indigo-200">  <span class="font-bold">🎯 Tarea:</span> Imprimir el triángulo numérico de 5 filas. En cada fila los números van de 1 hasta el número de fila.</div>`,    starterCode: `public class Main {
+ id: 61, title: "Patrón de números", subtitle: "Triángulo numérico",    explanation: `<h2 class="text-base font-bold mb-3">Desafío: Patrón de números</h2><p class="text-slate-300 text-sm mb-4">Usar bucles anidados para imprimir un triángulo donde cada fila muestra los números del 1 hasta el número de la fila.</p><div class="bg-slate-800/60 rounded-lg p-4 mb-4 mono text-sm text-slate-300 leading-7"><span class="text-slate-500">// Salida esperada:</span><br><span class="text-orange-300">1</span><br><span class="text-orange-300">1 2</span><br><span class="text-orange-300">1 2 3</span><br><span class="text-orange-300">1 2 3 4</span><br><span class="text-orange-300">1 2 3 4 5</span></div><div class="bg-indigo-900/30 border border-indigo-700/40 rounded-lg p-3 text-sm text-indigo-200">  <span class="font-bold">🎯 Tarea:</span> El código ya está completo. Ejecutar y verificar que imprime el triángulo numérico de 5 filas (cada fila del 1 hasta el número de fila).</div>`,    starterCode: `public class Main {
 \n    public static void main(String[] args) {
 \n        // Bucle externo: filas del 1 al 5\n        for (int fila = 1;
  fila <= 5;
