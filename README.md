@@ -4,8 +4,6 @@ Plataforma educativa interactiva para aprender Java paso a paso. Diseñada para 
 
 **URL oficial:** https://java-journey-beta.vercel.app
 
-> ⚠️ Este repositorio también se publica automáticamente vía GitHub Pages (`programacion1utu.github.io/javaJourney`). Esa URL **no debe usarse** para dar clase: GitHub Pages solo sirve archivos estáticos y no puede ejecutar las funciones de `api/` (login, progreso, quizzes, panel docente), por lo que en esa dirección la app carga pero nada que dependa del backend funciona. La única versión funcional es la de Vercel.
-
 ---
 
 ## Características
