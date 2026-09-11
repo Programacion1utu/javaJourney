@@ -11,18 +11,20 @@ module.exports = async function handler(req, res) {
     const { code, stdin } = req.body;
 
     const callJudge0 = async () => {
-      const r = await fetch('https://ce.judge0.com/submissions?base64_encoded=false&wait=true', {
+      const r = await fetch('https://ce.judge0.com/submissions?base64_encoded=true&wait=true', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          source_code: code,
+          source_code: Buffer.from(code, 'utf8').toString('base64'),
           language_id: 62, // OpenJDK 13.0.1
-          stdin: stdin || ''
+          stdin: Buffer.from(stdin || '', 'utf8').toString('base64')
         })
       });
       if (!r.ok) throw new Error('HTTP ' + r.status);
       return r.json();
     };
+
+    const decode64 = s => s ? Buffer.from(s, 'base64').toString('utf8') : '';
 
     try {
       let data;
@@ -35,9 +37,9 @@ module.exports = async function handler(req, res) {
         data = await callJudge0();
       }
 
-      const stdout = (data.stdout || '').trim();
-      const stderr = (data.stderr || '').trim();
-      const compileErr = (data.compile_output || '').trim();
+      const stdout = decode64(data.stdout).trim();
+      const stderr = decode64(data.stderr).trim();
+      const compileErr = decode64(data.compile_output).trim();
 
       return res.status(200).json({ stdout, stderr, compileErr });
     } catch (e) {
