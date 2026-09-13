@@ -2003,9 +2003,8 @@ async function verifyOutput() {
       renderSidebar();
     } else {
       result.style.cssText = 'display:block;font-size:12px;border-radius:6px;padding:4px 10px;background:var(--tint-danger-bg);border:1px solid var(--tint-danger-border);color:var(--quiz-wrong-text);';
-      const esperado = (data.expected || '').replace(/\n/g, '↵\n');
       const obtenido = lastOutput.replace(/\n/g, '↵\n');
-      result.innerHTML = `❌ <strong>No coincide.</strong><br><span style="color:var(--text-muted);font-family:monospace;font-size:11px;">Esperado:&nbsp; <span style="color:var(--quiz-correct-text);">${esperado.replace(/</g,'&lt;')}</span><br>Obtenido: <span style="color:var(--quiz-wrong-text);">${obtenido.replace(/</g,'&lt;')}</span></span>`;
+      result.innerHTML = `❌ <strong>No coincide.</strong><br><span style="color:var(--text-muted);font-family:monospace;font-size:11px;">Obtenido: <span style="color:var(--quiz-wrong-text);">${obtenido.replace(/</g,'&lt;')}</span><br>Revisar la "📤 Salida esperada" de la consigna y volver a intentar.</span>`;
     }
   } catch {
     result.style.cssText = 'display:block;font-size:12px;border-radius:6px;padding:3px 10px;background:var(--tint-warning-bg);color:var(--warning);';
