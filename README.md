@@ -198,7 +198,6 @@ Todos los endpoints retornan JSON. Los que requieren autenticación usan `Author
 - Las salidas esperadas de las lecciones se guardan como hash SHA-256 (`api/_lib/expected-outputs.js`) y `POST /api/verify` nunca devuelve el valor esperado, ni siquiera cuando la verificación falla — solo un booleano `correct`
 - Todo el código que no debe ser público vive bajo `api/_lib/` (prefijo `_`), no en la raíz del repo, para que Vercel no lo sirva como archivo estático
 - Los headers incluyen `Cache-Control: no-store` donde corresponde para evitar caché de datos sensibles
-- **Resuelto — exposición vía GitHub Pages:** este repo se publicaba también por GitHub Pages, que servía como archivo estático el contenido íntegro de `api/`, incluido `api/_lib/quizzes.js` (respuestas de quiz en texto plano). Se desactivó GitHub Pages (Settings → Pages → Source → None); el único deploy activo es Vercel.
 
 ---
 
@@ -208,7 +207,7 @@ Todos los endpoints retornan JSON. Los que requieren autenticación usan `Author
 - **Backend:** Vercel Serverless Functions (Node.js, CommonJS)
 - **Base de datos:** Neon PostgreSQL (`@neondatabase/serverless`)
 - **Autenticación:** JWT (`jsonwebtoken`)
-- **Deploy:** GitHub → Vercel (automático en cada push a `main`). GitHub Pages ya no publica este repo (desactivado, ver nota en Seguridad)
+- **Deploy:** GitHub → Vercel (automático en cada push a `main`)
 
 ---
 
