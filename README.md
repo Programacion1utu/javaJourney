@@ -9,7 +9,7 @@ Plataforma educativa interactiva para aprender Java paso a paso. Diseñada para 
 ## Características
 
 - 31 temas de Java organizados en acordeón
-- Lecciones con editor de código embebido (CodeMirror); el botón "Ejecutar" corre el código en el servidor (Wandbox) y el botón "Verificar" compara la salida contra la esperada, también en el servidor
+- Lecciones con editor de código embebido (CodeMirror); el botón "Ejecutar" corre el código en el servidor (Judge0) y el botón "Verificar" compara la salida contra la esperada, también en el servidor
 - Quiz de opción múltiple al final de cada tema
 - Sistema de progreso por estudiante (persistido en base de datos)
 - Panel docente para gestión de temas, estudiantes y progreso del grupo
@@ -144,7 +144,7 @@ ON CONFLICT (key) DO NOTHING;
 
 ### Para el estudiante
 
-1. Ingresar a https://java-journey-beta.vercel.app (no usar el link de GitHub Pages, ver aviso arriba)
+1. Ingresar a https://java-journey-beta.vercel.app
 2. Completar el formulario de login (Nombre / Apellido / Contraseña)
 3. Navegar por los temas habilitados por la docente
 4. En cada lección: leer el contenido, escribir el código en el editor embebido, presionar "Ejecutar" para ver la salida y "Verificar" para comprobarla
@@ -198,7 +198,7 @@ Todos los endpoints retornan JSON. Los que requieren autenticación usan `Author
 - Las salidas esperadas de las lecciones se guardan como hash SHA-256 (`api/_lib/expected-outputs.js`) y `POST /api/verify` nunca devuelve el valor esperado, ni siquiera cuando la verificación falla — solo un booleano `correct`
 - Todo el código que no debe ser público vive bajo `api/_lib/` (prefijo `_`), no en la raíz del repo, para que Vercel no lo sirva como archivo estático
 - Los headers incluyen `Cache-Control: no-store` donde corresponde para evitar caché de datos sensibles
-- **Pendiente conocido:** mientras GitHub Pages siga publicando este mismo repo, seguirá sirviendo como archivo estático el contenido íntegro de `api/`, incluido `api/_lib/quizzes.js` (con las respuestas de opción múltiple en texto plano, ver `db/schema.sql` para dimensionar el impacto). El hash protege las salidas de lecciones pero no las respuestas de quiz, que son de baja cardinalidad (2 a 4 opciones). La única forma de cerrar esto del todo es dejar de publicar este repo por GitHub Pages, o mover `QUIZZES` a la base de datos en vez de a un archivo versionado.
+- **Exposición vía GitHub Pages — fix aplicado:** este repo se publicaba también por GitHub Pages, que servía como archivo estático el contenido íntegro de `api/`, incluido `api/_lib/quizzes.js` (respuestas de quiz en texto plano). Como el único deploy funcional es Vercel, se debe desactivar GitHub Pages en Settings → Pages → Source → None para cerrar ese vector del todo (paso manual, solo lo puede hacer quien administra el repo en GitHub); hecho eso, ya no hace falta mover `QUIZZES` a la base de datos por este motivo.
 
 ---
 
@@ -208,7 +208,7 @@ Todos los endpoints retornan JSON. Los que requieren autenticación usan `Author
 - **Backend:** Vercel Serverless Functions (Node.js, CommonJS)
 - **Base de datos:** Neon PostgreSQL (`@neondatabase/serverless`)
 - **Autenticación:** JWT (`jsonwebtoken`)
-- **Deploy:** GitHub → Vercel (automático en cada push a `main`). GitHub Pages también publica este repo automáticamente pero es solo un remanente estático sin backend — no usar esa URL (ver aviso al inicio de este README)
+- **Deploy:** GitHub → Vercel (automático en cada push a `main`). GitHub Pages también publicaba este repo; queda pendiente desactivarlo en Settings → Pages (ver nota en Seguridad) porque no aporta nada y expone contenido de `api/`
 
 ---
 
