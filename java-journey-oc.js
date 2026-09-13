@@ -1985,9 +1985,8 @@ async function verifyOutput() {
       renderSidebar();
     } else {
       result.style.cssText = 'display:block;font-size:12px;border-radius:6px;padding:4px 10px;background:rgba(239,68,68,.15);border:1px solid rgba(239,68,68,.4);color:#fca5a5;';
-      const esperado = (data.expected || '').replace(/\n/g, '↵\n');
       const obtenido = lastOutput.replace(/\n/g, '↵\n');
-      result.innerHTML = `❌ <strong>No coincide.</strong><br><span style="color:#94a3b8;font-family:monospace;font-size:11px;">Esperado:&nbsp; <span style="color:#86efac;">${esperado.replace(/</g,'&lt;')}</span><br>Obtenido: <span style="color:#fca5a5;">${obtenido.replace(/</g,'&lt;')}</span></span>`;
+      result.innerHTML = `❌ <strong>No coincide.</strong><br><span style="color:#94a3b8;font-family:monospace;font-size:11px;">Obtenido: <span style="color:#fca5a5;">${obtenido.replace(/</g,'&lt;')}</span><br>Revisar la "📤 Salida esperada" de la consigna y volver a intentar.</span>`;
     }
   } catch {
     result.style.cssText = 'display:block;font-size:12px;border-radius:6px;padding:3px 10px;background:rgba(234,179,8,.15);color:#fde047;';
