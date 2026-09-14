@@ -1220,9 +1220,58 @@ function toggleTheme() {
   try { localStorage.setItem('jj-theme', next); } catch (e) {}
   applyTheme(next);
 }
+// ─── PANELES REDIMENSIONABLES ───────────────────────────────────────────────
+function startPanelDrag(handle, onMove, cursorClass) {
+  if (!handle) return;
+  handle.addEventListener('mousedown', (e) => {
+    e.preventDefault();
+    handle.classList.add('dragging');
+    document.body.classList.add(cursorClass);
+    const move = (ev) => onMove(ev);
+    const up = () => {
+      handle.classList.remove('dragging');
+      document.body.classList.remove(cursorClass);
+      document.removeEventListener('mousemove', move);
+      document.removeEventListener('mouseup', up);
+    };
+    document.addEventListener('mousemove', move);
+    document.addEventListener('mouseup', up);
+  });
+}
+function setupResizablePanels() {
+  const explanationPanel = document.getElementById('explanation-panel');
+  const panelResizeH = document.getElementById('panel-resize-h');
+  const outputPanel = document.getElementById('output-panel');
+  const dragHandle = document.getElementById('drag-handle');
+  if (!explanationPanel || !outputPanel) return;
+
+  const savedWidth = parseInt(localStorage.getItem('jj-explanation-width'), 10);
+  if (savedWidth) explanationPanel.style.width = savedWidth + 'px';
+  const savedHeight = parseInt(localStorage.getItem('jj-output-height'), 10);
+  if (savedHeight) outputPanel.style.height = savedHeight + 'px';
+
+  startPanelDrag(panelResizeH, (e) => {
+    const rect = explanationPanel.parentElement.getBoundingClientRect();
+    let w = e.clientX - rect.left;
+    w = Math.max(220, Math.min(w, rect.width - 320));
+    explanationPanel.style.width = w + 'px';
+    localStorage.setItem('jj-explanation-width', w);
+    if (codeEditor) codeEditor.refresh();
+  }, 'resizing-h');
+
+  startPanelDrag(dragHandle, (e) => {
+    const rect = outputPanel.parentElement.getBoundingClientRect();
+    let h = rect.bottom - e.clientY;
+    h = Math.max(60, Math.min(h, rect.height - 150));
+    outputPanel.style.height = h + 'px';
+    localStorage.setItem('jj-output-height', h);
+    if (codeEditor) codeEditor.refresh();
+  }, 'resizing-v');
+}
 // ─── INIT ─────────────────────────────────────────────────────────────────────
 async function init() {
   applyTheme(document.documentElement.getAttribute('data-theme') === 'light' ? 'light' : 'dark');
+  setupResizablePanels();
   codeEditor = CodeMirror(document.getElementById('editor-wrapper'), {
     mode: 'text/x-java',
     theme: 'dracula',

@@ -124,9 +124,13 @@ code { margin: 0 0.15em; }
 .btn-sol { background: transparent; color: var(--text-faint); border: 1px solid var(--border); cursor: pointer; padding: 8px 16px; border-radius: 8px; font-size: 13px; font-weight: 500; transition: all .15s; }
 .btn-sol:hover { border-color: var(--danger); color: var(--danger); }
 
-/* Divider drag handle */
+/* Divider drag handles (paneles redimensionables) */
 #drag-handle { height: 5px; background: var(--border); cursor: row-resize; flex-shrink: 0; transition: background .15s; }
-#drag-handle:hover { background: var(--accent); }
+#drag-handle:hover, #drag-handle.dragging { background: var(--accent); }
+.resize-handle-v { width: 5px; background: var(--border); cursor: col-resize; flex-shrink: 0; transition: background .15s; }
+.resize-handle-v:hover, .resize-handle-v.dragging { background: var(--accent); }
+body.resizing-h, body.resizing-h * { cursor: col-resize !important; user-select: none !important; }
+body.resizing-v, body.resizing-v * { cursor: row-resize !important; user-select: none !important; }
 
 /* Switch de tema (claro/oscuro) */
 #theme-switch { position: relative; width: 38px; height: 22px; border-radius: 99px; background: var(--toggle-off-bg); border: none; cursor: pointer; flex-shrink: 0; padding: 0; transition: background .18s; }
