@@ -1203,8 +1203,26 @@ function isTopicAccessible(topicId) {
   }
   return true;
 }
+// ─── TEMA (claro / oscuro) ──────────────────────────────────────────────────
+function applyTheme(theme) {
+  if (theme === 'light') document.documentElement.setAttribute('data-theme', 'light');
+  else document.documentElement.removeAttribute('data-theme');
+  const btn = document.getElementById('theme-switch');
+  if (!btn) return;
+  btn.setAttribute('aria-pressed', theme === 'light' ? 'true' : 'false');
+  btn.title = theme === 'light' ? 'Cambiar a modo oscuro' : 'Cambiar a modo claro';
+  const knob = btn.querySelector('.knob');
+  if (knob) knob.textContent = theme === 'light' ? '🌙' : '☀️';
+}
+function toggleTheme() {
+  const current = document.documentElement.getAttribute('data-theme') === 'light' ? 'light' : 'dark';
+  const next = current === 'light' ? 'dark' : 'light';
+  try { localStorage.setItem('jj-theme', next); } catch (e) {}
+  applyTheme(next);
+}
 // ─── INIT ─────────────────────────────────────────────────────────────────────
 async function init() {
+  applyTheme(document.documentElement.getAttribute('data-theme') === 'light' ? 'light' : 'dark');
   codeEditor = CodeMirror(document.getElementById('editor-wrapper'), {
     mode: 'text/x-java',
     theme: 'dracula',
@@ -1353,8 +1371,8 @@ function switchTab(tab) {
 t}`).style.display = t === tab ? 'block' : 'none';
     const btn = document.getElementById(`tab-${
 t}`);
-    btn.style.borderBottomColor = t === tab ? '#4f6ef7' : 'transparent';
-    btn.style.color = t === tab ? '#818cf8' : '#4a5568';
+    btn.style.borderBottomColor = t === tab ? 'var(--accent)' : 'transparent';
+    btn.style.color = t === tab ? 'var(--accent-soft)' : 'var(--text-faintest)';
   }
 );
   if (tab === 'progreso' || tab === 'estudiantes') loadStudents();
@@ -1365,10 +1383,10 @@ function renderTeacherPanel() {
   TOPICS.forEach((topic, topicIdx) => {
     const enabled = enabledTopics.has(topic.id);
     const row = document.createElement('div');
-    row.style.cssText = 'display:flex;align-items:center;justify-content:space-between;padding:9px 0;border-bottom:1px solid #1e2535;';
+    row.style.cssText = 'display:flex;align-items:center;justify-content:space-between;padding:9px 0;border-bottom:1px solid var(--border);';
     row.innerHTML = `      <span style="font-size:13px;
 color:${
-enabled ? '#e2e8f0' : '#4a5568'}
+enabled ? 'var(--text)' : 'var(--text-faintest)'}
 ;
 ">${
 topicIdx + 1}
@@ -1382,7 +1400,7 @@ border-radius:12px;
 border:none;
 cursor:pointer;
         background:${
-enabled ? '#4f6ef7' : '#2d3748'}
+enabled ? 'var(--accent)' : 'var(--toggle-off-bg)'}
 ;
 position:relative;
 transition:background .2s;
@@ -1394,7 +1412,7 @@ enabled ? 'right:4px' : 'left:4px'}
 ;
           width:16px;
 height:16px;
-background:#fff;
+background:var(--toggle-knob);
 border-radius:50%;
 transition:all .2s;
 "></span>      </button>`;
@@ -1445,23 +1463,23 @@ function renderStudentList() {
   if (!list) return;
   list.innerHTML = '';
   if (!_allStudents.length) {
-    list.innerHTML = '<div style="font-size:12px; color:#4a5568; text-align:center; padding:12px; ">Sin estudiantes registrados</div>';
+    list.innerHTML = '<div style="font-size:12px; color:var(--text-faintest); text-align:center; padding:12px; ">Sin estudiantes registrados</div>';
     return;
   }
   _allStudents.forEach(s => {
     const row = document.createElement('div');
-    row.style.cssText = 'display:flex; align-items:center; justify-content:space-between; padding:9px 12px; background:#0f1117; border:1px solid #1e2535; border-radius:8px; gap:8px; ';
+    row.style.cssText = 'display:flex; align-items:center; justify-content:space-between; padding:9px 12px; background:var(--bg); border:1px solid var(--border); border-radius:8px; gap:8px; ';
     row.innerHTML = `      <div style="flex:1;
 min-width:0;
 ">        <div style="font-size:13px;
-color:#e2e8f0;
+color:var(--text);
 font-weight:500;
 ">${
 s.nombre}
  ${
 s.apellido}
 </div>        <div style="font-size:11px;
-color:#4a5568;
+color:var(--text-faintest);
 ">${
 s.grupo}
  · ${
@@ -1471,18 +1489,18 @@ s.quizzes_completed}
  quizzes</div>      </div>      <button onclick="openResetModal(${
 s.id}
 ,'${ s.nombre} ${ s.apellido} ')" title="Resetear contraseña"        style="background:none;
-border:1px solid #2d3748;
+border:1px solid var(--border-2);
 border-radius:6px;
-color:#94a3b8;
+color:var(--text-muted);
 cursor:pointer;
 font-size:12px;
 padding:5px 8px;
 ">🔑</button>      <button onclick="deleteStudent(${
 s.id}
 ,'${ s.nombre} ${ s.apellido} ')" title="Eliminar"        style="background:none;
-border:1px solid #2d3748;
+border:1px solid var(--border-2);
 border-radius:6px;
-color:#ef4444;
+color:var(--danger);
 cursor:pointer;
 font-size:12px;
 padding:5px 8px;
@@ -1515,42 +1533,42 @@ function renderProgressTable() {
 )      : '—';
     const lessPct = Math.round(s.lessons_completed / totalLessons * 100);
     const tr = document.createElement('tr');
-    tr.style.cssText = 'border-bottom:1px solid #1e2535; ';
+    tr.style.cssText = 'border-bottom:1px solid var(--border); ';
     tr.innerHTML = `      <td style="padding:9px 10px;
-color:#e2e8f0;
+color:var(--text);
 ">${
 s.nombre}
  ${
 s.apellido}
 </td>      <td style="padding:9px 10px;
-color:#64748b;
+color:var(--text-faint);
 ">${
 s.grupo}
 </td>      <td style="padding:9px 10px;
 text-align:center;
 ">        <span style="color:${
-lessPct >= 80 ? '#22c55e' : lessPct >= 40 ? '#f59e0b' : '#e2e8f0'}
+lessPct >= 80 ? 'var(--success)' : lessPct >= 40 ? 'var(--warning)' : 'var(--text)'}
 ;
 ">${
 s.lessons_completed}
-</span>        <span style="color:#4a5568;
+</span>        <span style="color:var(--text-faintest);
 font-size:11px;
 "> / ${
 totalLessons}
 </span>      </td>      <td style="padding:9px 10px;text-align:center;">
-        <span onclick='showQuizDetail(${JSON.stringify(s)})' style="color:#818cf8;cursor:pointer;text-decoration:underline;text-underline-offset:2px;">${s.quizzes_completed}</span>
-        <span style="color:#4a5568;font-size:11px;"> / ${totalQuizzes}</span>
+        <span onclick='showQuizDetail(${JSON.stringify(s)})' style="color:var(--accent-soft);cursor:pointer;text-decoration:underline;text-underline-offset:2px;">${s.quizzes_completed}</span>
+        <span style="color:var(--text-faintest);font-size:11px;"> / ${totalQuizzes}</span>
       </td>      <td style="padding:9px 10px;
 text-align:center;
 ">        ${
 s.quiz_avg_score != null          ? `<span style="color:${
-s.quiz_avg_score>=80?'#22c55e':s.quiz_avg_score>=60?'#f59e0b':'#ef4444'}
+s.quiz_avg_score>=80?'var(--success)':s.quiz_avg_score>=60?'var(--warning)':'var(--danger)'}
 ;
 ">${
 s.quiz_avg_score}
-%</span>`          : '<span style="color:#4a5568; ">—</span>'}
+%</span>`          : '<span style="color:var(--text-faintest); ">—</span>'}
       </td>      <td style="padding:9px 10px;
-color:#64748b;
+color:var(--text-faint);
 ">${
 lastAccess}
 </td>`;
@@ -1564,14 +1582,14 @@ function showQuizDetail(s) {
   document.getElementById('qd-title').textContent = `${s.nombre} ${s.apellido} — Quizzes`;
   const list = document.getElementById('qd-list');
   if (!details.length) {
-    list.innerHTML = '<p style="color:#64748b;font-size:13px;">Sin quizzes completados.</p>';
+    list.innerHTML = '<p style="color:var(--text-faint);font-size:13px;">Sin quizzes completados.</p>';
   } else {
     list.innerHTML = details.map(d => {
       const topic = QUIZZES_CLIENT.find(q => q.topicId === d.topicId);
       const title = topic ? topic.title : `Tema ${d.topicId}`;
-      const color = d.score >= 80 ? '#22c55e' : d.score >= 60 ? '#f59e0b' : '#ef4444';
-      return `<div style="display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid #1e2535;">
-        <span style="font-size:13px;color:#e2e8f0;">${title}</span>
+      const color = d.score >= 80 ? 'var(--success)' : d.score >= 60 ? 'var(--warning)' : 'var(--danger)';
+      return `<div style="display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid var(--border);">
+        <span style="font-size:13px;color:var(--text);">${title}</span>
         <span style="font-size:13px;font-weight:bold;color:${color};">${d.score}%</span>
       </div>`;
     }).join('');
@@ -1658,7 +1676,7 @@ function renderSidebar() {
     const header = document.createElement('div');
     header.className = `topic-header${
 isAccessible ? '' : ' disabled'}`;
-    const lockIcon = !isEnabled      ? '<span style="font-size:11px; color:#4a5568; margin-left:auto; ">🔒</span>'      : (!isAccessible        ? '<span style="font-size:11px; color:#4a5568; margin-left:auto; " title="Completar el tema anterior primero">🔒</span>'        : (isDone ? '<span style="font-size:11px; color:#22c55e; margin-left:auto; ">✅</span>' : ''));
+    const lockIcon = !isEnabled      ? '<span style="font-size:11px; color:var(--text-faintest); margin-left:auto; ">🔒</span>'      : (!isAccessible        ? '<span style="font-size:11px; color:var(--text-faintest); margin-left:auto; " title="Completar el tema anterior primero">🔒</span>'        : (isDone ? '<span style="font-size:11px; color:var(--success); margin-left:auto; ">✅</span>' : ''));
     header.innerHTML = `      <span class="topic-arrow${
 isOpen ? ' open' : ''}
 ">▶</span>      <span class="topic-label">${
@@ -1749,7 +1767,7 @@ function selectLesson(id) {
   // Limpiar output
   const outputDisplay = document.getElementById('output-display');
   outputDisplay.textContent = 'Presionar ▶ Ejecutar para ver la salida…';
-  outputDisplay.style.color = '#94a3b8';
+  outputDisplay.style.color = 'var(--text-muted)';
   lastOutput = '';
   const verifyResult = document.getElementById('verify-result');
   verifyResult.style.display = 'none';
@@ -1818,11 +1836,11 @@ function importProgress(event) {
         codeEditor.setValue(data.code[currentLesson]);
       }
       result.style.display = 'block';
-      result.style.cssText = 'display:block;margin-top:10px;font-size:12px;border-radius:6px;padding:6px 10px;background:rgba(34,197,94,.15);border:1px solid rgba(34,197,94,.4);color:#86efac;';
+      result.style.cssText = 'display:block;margin-top:10px;font-size:12px;border-radius:6px;padding:6px 10px;background:var(--tint-success-bg);border:1px solid var(--tint-success-border);color:var(--quiz-correct-text);';
       result.textContent = `✅ Importado correctamente — ${count} lección${count !== 1 ? 'es' : ''} restaurada${count !== 1 ? 's' : ''}.`;
     } catch {
       result.style.display = 'block';
-      result.style.cssText = 'display:block;margin-top:10px;font-size:12px;border-radius:6px;padding:6px 10px;background:rgba(239,68,68,.15);border:1px solid rgba(239,68,68,.4);color:#fca5a5;';
+      result.style.cssText = 'display:block;margin-top:10px;font-size:12px;border-radius:6px;padding:6px 10px;background:var(--tint-danger-bg);border:1px solid var(--tint-danger-border);color:var(--quiz-wrong-text);';
       result.textContent = '❌ Archivo inválido. Verificar que sea un archivo de progreso de Java Journey.';
     }
     event.target.value = '';
@@ -1842,7 +1860,7 @@ async function runCode() {
   btn.disabled = true;
   spinner.style.display = 'inline';
   outputDisplay.textContent = 'Compilando…';
-  outputDisplay.style.color = '#64748b';
+  outputDisplay.style.color = 'var(--text-faint)';
   document.getElementById('verify-result').style.display = 'none';
   document.getElementById('verify-bar').style.display = 'none';
 
@@ -1855,7 +1873,7 @@ async function runCode() {
     const data = await res.json();
 
     if (!res.ok) {
-      outputDisplay.style.color = '#f87171';
+      outputDisplay.style.color = 'var(--danger)';
       outputDisplay.textContent = data.error || 'Error del servidor. Intentar de nuevo.';
       lastOutput = '';
       return;
@@ -1866,15 +1884,15 @@ async function runCode() {
     const stderr = (data.stderr || '').trim();
 
     if (compileErr) {
-      outputDisplay.style.color = '#f87171';
+      outputDisplay.style.color = 'var(--danger)';
       outputDisplay.textContent = compileErr;
       lastOutput = '';
     } else if (stderr && !stdout) {
-      outputDisplay.style.color = '#f87171';
+      outputDisplay.style.color = 'var(--danger)';
       outputDisplay.textContent = stderr;
       lastOutput = '';
     } else {
-      outputDisplay.style.color = '#e2e8f0';
+      outputDisplay.style.color = 'var(--text)';
       outputDisplay.textContent = stdout || '(sin salida)';
       lastOutput = stdout;
       if (VERIFIABLE_LESSONS.has(currentLesson)) {
@@ -1882,7 +1900,7 @@ async function runCode() {
       }
     }
   } catch (e) {
-    outputDisplay.style.color = '#f87171';
+    outputDisplay.style.color = 'var(--danger)';
     outputDisplay.textContent = data?.error || 'Error de conexión. Intentar de nuevo.';
     lastOutput = '';
   } finally {
@@ -1929,7 +1947,7 @@ function copyShareMessage() {
   const btn = document.getElementById('share-copy-btn');
   const ok = () => {
     btn.textContent = '✓ Copiado';
-    btn.style.background = '#16a34a';
+    btn.style.background = 'var(--success)';
     setTimeout(() => {
  btn.textContent = 'Copiar mensaje';
  btn.style.background = '';
@@ -1973,23 +1991,23 @@ async function verifyOutput() {
   const output = lastOutput.replace(/\r\n/g, '\n');
   const result = document.getElementById('verify-result');
   result.style.display = 'block';
-  result.style.cssText = 'display:block;font-size:12px;border-radius:6px;padding:3px 10px;background:#1e2535;color:#94a3b8;';
+  result.style.cssText = 'display:block;font-size:12px;border-radius:6px;padding:3px 10px;background:var(--border);color:var(--text-muted);';
   result.textContent = 'Verificando…';
   try {
     const res = await apiPost('/api/verify', { lessonId: currentLesson, output }, studentToken);
     const data = await res.json();
     if (data.correct) {
-      result.style.cssText = 'display:block;font-size:12px;border-radius:6px;padding:3px 10px;background:rgba(34,197,94,.15);border:1px solid rgba(34,197,94,.4);color:#86efac;';
+      result.style.cssText = 'display:block;font-size:12px;border-radius:6px;padding:3px 10px;background:var(--tint-success-bg);border:1px solid var(--tint-success-border);color:var(--quiz-correct-text);';
       result.innerHTML = '✅ <strong>¡Correcto!</strong>';
       completedLessons.add(currentLesson);
       renderSidebar();
     } else {
-      result.style.cssText = 'display:block;font-size:12px;border-radius:6px;padding:4px 10px;background:rgba(239,68,68,.15);border:1px solid rgba(239,68,68,.4);color:#fca5a5;';
+      result.style.cssText = 'display:block;font-size:12px;border-radius:6px;padding:4px 10px;background:var(--tint-danger-bg);border:1px solid var(--tint-danger-border);color:var(--quiz-wrong-text);';
       const obtenido = lastOutput.replace(/\n/g, '↵\n');
-      result.innerHTML = `❌ <strong>No coincide.</strong><br><span style="color:#94a3b8;font-family:monospace;font-size:11px;">Obtenido: <span style="color:#fca5a5;">${obtenido.replace(/</g,'&lt;')}</span><br>Revisar la "📤 Salida esperada" de la consigna y volver a intentar.</span>`;
+      result.innerHTML = `❌ <strong>No coincide.</strong><br><span style="color:var(--text-muted);font-family:monospace;font-size:11px;">Obtenido: <span style="color:var(--quiz-wrong-text);">${obtenido.replace(/</g,'&lt;')}</span><br>Revisar la "📤 Salida esperada" de la consigna y volver a intentar.</span>`;
     }
   } catch {
-    result.style.cssText = 'display:block;font-size:12px;border-radius:6px;padding:3px 10px;background:rgba(234,179,8,.15);color:#fde047;';
+    result.style.cssText = 'display:block;font-size:12px;border-radius:6px;padding:3px 10px;background:var(--tint-warning-bg);color:var(--warning);';
     result.textContent = 'Error de conexión.';
   }
 }
@@ -2050,13 +2068,13 @@ total}`;
   q.opts.forEach((opt, i) => {
     const btn = document.createElement('button');
     btn.textContent = opt;
-    btn.style.cssText = 'text-align:left; padding:10px 14px; border-radius:8px; border:1px solid #2d3748; background:#1a1f2e; color:#cbd5e1; font-size:13px; cursor:pointer; transition:all .15s; ';
+    btn.style.cssText = 'text-align:left; padding:10px 14px; border-radius:8px; border:1px solid var(--option-border); background:var(--option-bg); color:var(--option-text); font-size:13px; cursor:pointer; transition:all .15s; ';
     btn.onmouseover = () => {
- if (!quizAnswered) btn.style.borderColor = '#4f6ef7';
+ if (!quizAnswered) btn.style.borderColor = 'var(--accent)';
  }
 ;
     btn.onmouseout  = () => {
- if (!quizAnswered) btn.style.borderColor = '#2d3748';
+ if (!quizAnswered) btn.style.borderColor = 'var(--option-border)';
  }
 ;
     btn.onclick = () => selectAnswer(i);
@@ -2098,23 +2116,23 @@ async function selectAnswer(idx) {
  i < btns.length;
  i++) {
     if (i === correctIndex) {
-      btns[i].style.background = '#14532d';
-      btns[i].style.borderColor = '#22c55e';
-      btns[i].style.color = '#86efac';
+      btns[i].style.background = 'var(--quiz-correct-bg)';
+      btns[i].style.borderColor = 'var(--quiz-correct-border)';
+      btns[i].style.color = 'var(--quiz-correct-text)';
     }
  else if (!correct && i === idx) {
-      btns[i].style.background = '#450a0a';
-      btns[i].style.borderColor = '#ef4444';
-      btns[i].style.color = '#fca5a5';
+      btns[i].style.background = 'var(--quiz-wrong-bg)';
+      btns[i].style.borderColor = 'var(--quiz-wrong-border)';
+      btns[i].style.color = 'var(--quiz-wrong-text)';
     }
   }
   if (correct) quizScore++;
   const fb = document.getElementById('qz-feedback');
   fb.style.display = 'block';
-  fb.style.background = correct ? '#14532d33' : '#450a0a33';
+  fb.style.background = correct ? 'var(--quiz-correct-fb-bg)' : 'var(--quiz-wrong-fb-bg)';
   fb.style.border = `1px solid ${
-correct ? '#22c55e55' : '#ef444455'}`;
-  fb.style.color = correct ? '#86efac' : '#fca5a5';
+correct ? 'var(--quiz-correct-fb-border)' : 'var(--quiz-wrong-fb-border)'}`;
+  fb.style.color = correct ? 'var(--quiz-correct-text)' : 'var(--quiz-wrong-text)';
   fb.textContent = (correct ? '✓ Correcto. ' : '✗ Incorrecto. ') + explanation;
   const nextBtn = document.getElementById('qz-next');
   const isLast = currentQIndex === currentQuiz.questions.length - 1;
@@ -2403,9 +2421,9 @@ function renderPdfToggle() {
   const toggle = document.getElementById('tp-pdf-toggle');
   const knob = document.getElementById('tp-pdf-knob');
   if (!toggle) return;
-  toggle.style.background = allowQuizPdf ? '#4f6ef7' : '#2d3748';
+  toggle.style.background = allowQuizPdf ? 'var(--accent)' : 'var(--toggle-off-bg)';
   knob.style.left = allowQuizPdf ? '23px' : '3px';
-  knob.style.background = allowQuizPdf ? '#fff' : '#64748b';
+  knob.style.background = allowQuizPdf ? 'var(--toggle-knob)' : 'var(--text-faint)';
 }
 async function toggleAllowQuizPdf() {
   allowQuizPdf = !allowQuizPdf;
@@ -2423,7 +2441,7 @@ async function saveTeacherAccount() {
   const pw = document.getElementById('tp-teacher-pw').value;
   const msg = document.getElementById('tp-teacher-msg');
   if (!nombre || !apellido || !pw) {
-    msg.style.display = 'block'; msg.style.color = '#ef4444'; msg.textContent = 'Completar todos los campos.'; return;
+    msg.style.display = 'block'; msg.style.color = 'var(--danger)'; msg.textContent = 'Completar todos los campos.'; return;
   }
   try {
     const res = await fetch('/api/auth/teacher', {
@@ -2432,10 +2450,10 @@ async function saveTeacherAccount() {
       body: JSON.stringify({ nombre, apellido, newPassword: pw })
     });
     if (!res.ok) throw new Error();
-    msg.style.display = 'block'; msg.style.color = '#22c55e'; msg.textContent = 'Cuenta guardada. Usar estos datos la próxima vez.';
+    msg.style.display = 'block'; msg.style.color = 'var(--success)'; msg.textContent = 'Cuenta guardada. Usar estos datos la próxima vez.';
     document.getElementById('tp-teacher-pw').value = '';
   } catch {
-    msg.style.display = 'block'; msg.style.color = '#ef4444'; msg.textContent = 'Error al guardar.';
+    msg.style.display = 'block'; msg.style.color = 'var(--danger)'; msg.textContent = 'Error al guardar.';
   }
 }
 // ─── SECUENCIA SECRETA "doc" abre panel docente ────────────────────────────────
