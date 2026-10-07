@@ -1,19 +1,30 @@
 # Java Journey ☕
 
-Plataforma educativa interactiva para aprender Java paso a paso. Diseñada para estudiantes de 1ero BT Tecnologías de la Información – UTU.
+Plataforma educativa interactiva para aprender Java paso a paso. Diseñada para estudiantes de 2do BT Tecnologías de la Información – UTU.
 
-**URL oficial:** https://java-journey-beta.vercel.app
+**URL:** https://java-journey-beta.vercel.app
 
 ---
 
 ## Características
 
 - 31 temas de Java organizados en acordeón
-- Lecciones con editor de código embebido (CodeMirror); el botón "Ejecutar" corre el código en el servidor (Judge0) y el botón "Verificar" compara la salida contra la esperada, también en el servidor
+- Lecciones con editor de código y verificación de salida en el servidor
 - Quiz de opción múltiple al final de cada tema
 - Sistema de progreso por estudiante (persistido en base de datos)
 - Panel docente para gestión de temas, estudiantes y progreso del grupo
-- **Seguridad:** las respuestas de los quizzes y las salidas esperadas de las lecciones no se envían al cliente en ningún endpoint; las salidas esperadas se guardan como hash SHA-256 (ver `api/_lib/expected-outputs.js`) para que tampoco queden legibles si el archivo se llegara a exponer
+- **Seguridad:** respuestas correctas y salidas esperadas nunca se envían al cliente
+
+---
+
+## Documentación y recursos docentes
+
+| Recurso | Enlace | Contenido |
+|---|---|---|
+| Soluciones | https://programacion1utu.github.io/javaJourney/soluciones.html | Solución de las 62 lecciones, ordenadas por tema como en la barra lateral, con la salida esperada de cada una y buscador por número de tema o título |
+| Arquitectura Vercel | https://programacion1utu.github.io/javaJourney/arquitectura-vercel.html | Diseño técnico de la migración a Vercel: stack, flujo de acceso de estudiantes y docente, tablas, endpoints, seguridad y orden de implementación |
+
+> ⚠ La página de soluciones es pública: cualquier persona con el enlace puede ver las salidas esperadas. Compartirla con el grupo solo cuando corresponda.
 
 ---
 
@@ -23,12 +34,13 @@ Plataforma educativa interactiva para aprender Java paso a paso. Diseñada para 
 java-journey/
 ├── index.html              # Página principal (UI completa)
 ├── java-journey-oc.js      # Lógica del cliente (JS vanilla)
-├── java-journey-oc.css     # Estilos
+├── soluciones.html         # Solucionario de las 62 lecciones (GitHub Pages)
+├── arquitectura-vercel.html # Documento de diseño técnico (GitHub Pages)
 ├── vercel.json             # Configuración Vercel
 ├── package.json            # Dependencias Node.js
 ├── api/
 │   ├── config.js           # GET  /api/config
-│   ├── verify.js           # POST /api/verify (ejecutar código y verificar salida)
+│   ├── verify.js           # POST /api/verify
 │   ├── auth/
 │   │   ├── student.js      # POST /api/auth/student
 │   │   └── teacher.js      # POST /api/auth/teacher
@@ -38,21 +50,19 @@ java-journey/
 │   │   ├── questions.js    # GET  /api/quiz/questions
 │   │   ├── answer.js       # POST /api/quiz/answer
 │   │   └── complete.js     # POST /api/quiz/complete
-│   ├── teacher/
-│   │   ├── topics.js       # PUT  /api/teacher/topics
-│   │   └── students/
-│   │       ├── index.js    # GET + POST /api/teacher/students
-│   │       └── [id].js     # DELETE + PUT /api/teacher/students/:id
-│   └── _lib/                # ⚠ Código solo-servidor (Vercel lo excluye del deploy estático
-│       ├── db.js            #   por el prefijo "_"; NO debe volver a vivir en la raíz del repo)
-│       ├── auth.js          # JWT helpers, hashPassword
-│       ├── quizzes.js       # Datos de quizzes (con la respuesta correcta)
-│       └── expected-outputs.js # Hashes SHA-256 de las salidas esperadas, no el texto plano
+│   └── teacher/
+│       ├── topics.js       # PUT  /api/teacher/topics
+│       └── students/
+│           ├── index.js    # GET + POST /api/teacher/students
+│           └── [id].js     # DELETE + PUT /api/teacher/students/:id
+├── lib/
+│   ├── db.js               # Conexión Neon (singleton)
+│   ├── auth.js             # JWT helpers, hashPassword
+│   ├── quizzes.js          # ⚠ Datos de quizzes (solo servidor)
+│   └── expected-outputs.js # ⚠ Salidas esperadas (solo servidor)
 └── db/
     └── schema.sql          # Esquema PostgreSQL
 ```
-
-> Nota histórica: hasta septiembre 2026 estos módulos vivían en una carpeta `lib/` en la raíz del repo. Como GitHub Pages y el modo "estático" de Vercel publican tal cual todo archivo que no esté bajo `api/`, esos archivos (incluidas las respuestas de los quizzes) quedaban descargables directamente desde la URL pública del sitio. Por eso se movieron dentro de `api/_lib/`. Además, una subida accidental por la interfaz web de GitHub había dejado copias duplicadas de todo el proyecto en `lib/`, `lib/lib/` y `teacher/` (ya eliminadas).
 
 ---
 
@@ -147,7 +157,7 @@ ON CONFLICT (key) DO NOTHING;
 1. Ingresar a https://java-journey-beta.vercel.app
 2. Completar el formulario de login (Nombre / Apellido / Contraseña)
 3. Navegar por los temas habilitados por la docente
-4. En cada lección: leer el contenido, escribir el código en el editor embebido, presionar "Ejecutar" para ver la salida y "Verificar" para comprobarla
+4. En cada lección: leer el contenido, ejecutar el código en el editor externo, ingresar la salida y verificar
 5. Al completar todas las lecciones de un tema: rendir el quiz
 6. El progreso queda guardado automáticamente
 
@@ -187,6 +197,16 @@ Todos los endpoints retornan JSON. Los que requieren autenticación usan `Author
 | DELETE | `/api/teacher/students/:id` | Docente | Eliminar estudiante |
 | PUT | `/api/teacher/students/:id` | Docente | Resetear contraseña |
 | PUT | `/api/teacher/topics` | Docente | Actualizar temas habilitados |
+
+---
+
+## Seguridad
+
+- Las contraseñas se almacenan como SHA-256 (nunca en texto plano)
+- Los tokens JWT expiran: estudiantes 7 días, docente 8 horas
+- Las respuestas correctas de los quizzes **nunca se envían al cliente** — la verificación ocurre en el servidor (`api/quiz/answer.js`)
+- Las salidas esperadas de las lecciones tampoco se exponen al cliente (`lib/expected-outputs.js`)
+- Los headers incluyen `Cache-Control: no-store` donde corresponde para evitar caché de datos sensibles
 
 ---
 
