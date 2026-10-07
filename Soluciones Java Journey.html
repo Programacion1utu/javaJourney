@@ -1,0 +1,998 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#faf9f5;color:#141413}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Soluciones Java Journey</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Source+Sans+3:wght@400;600&family=JetBrains+Mono:wght@400;600&display=swap">
+<style>
+/* Layout: índice de temas compacto arriba + lista de ejercicios en una columna legible, código en bloques oscuros tipo editor */
+:root{
+  --bg:#f5f4f0; --surface:#ffffff; --fg:#22201c; --muted:#6c675e; --line:#e3dfd6;
+  --accent:#b4530a; --accent-soft:#fbeedd;
+  --code-bg:#211f2b; --code-fg:#ece8f5; --out-bg:#eef6f0; --out-fg:#1f5133;
+  --info-bg:#eef2fb; --info-fg:#2f4a86; --warn-bg:#fdf5df; --warn-fg:#7a5600; --bad-bg:#fcebea; --bad-fg:#9b2a22;
+  --display:'Bricolage Grotesque',system-ui,sans-serif; --body:'Source Sans 3',system-ui,sans-serif; --mono:'JetBrains Mono',ui-monospace,Consolas,monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#17161a; --surface:#201f24; --fg:#ecebe6; --muted:#a29d93; --line:#34323a;
+  --accent:#f0a35e; --accent-soft:#3a2a1b; --code-bg:#121117; --code-fg:#ece8f5; --out-bg:#16291e; --out-fg:#a6e3bb;
+  --info-bg:#1c2438; --info-fg:#a9bff0; --warn-bg:#33290f; --warn-fg:#f2d27a; --bad-bg:#3a1a18; --bad-fg:#f4aaa3; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#17161a; --surface:#201f24; --fg:#ecebe6; --muted:#a29d93; --line:#34323a;
+  --accent:#f0a35e; --accent-soft:#3a2a1b; --code-bg:#121117; --code-fg:#ece8f5; --out-bg:#16291e; --out-fg:#a6e3bb;
+  --info-bg:#1c2438; --info-fg:#a9bff0; --warn-bg:#33290f; --warn-fg:#f2d27a; --bad-bg:#3a1a18; --bad-fg:#f4aaa3; color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--fg);font:16px/1.55 var(--body);margin:0}
+.wrap{max-width:860px;margin:0 auto;padding-inline:16px;padding-block:32px 64px}
+h1{font:800 clamp(1.8rem,5vw,2.6rem)/1.05 var(--display);margin:0 0 8px;letter-spacing:-.01em;text-wrap:balance}
+.lede{color:var(--muted);margin:0 0 20px;max-width:62ch}
+.tools{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--bg);padding-block:10px;border-bottom:1px solid var(--line);margin-bottom:16px}
+#q{width:100%;font:inherit;padding:10px 12px;border:1px solid var(--line);border-radius:8px;background:var(--surface);color:var(--fg)}
+#q:focus-visible,.copy:focus-visible,.toc a:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.toc{display:flex;flex-wrap:wrap;gap:6px;margin:0 0 28px}
+.toc a{display:inline-flex;gap:6px;align-items:baseline;text-decoration:none;color:var(--fg);font-size:.85rem;padding:4px 10px;border:1px solid var(--line);border-radius:999px;background:var(--surface)}
+.toc a span{font:600 .75rem var(--mono);color:var(--accent)}
+.toc a:hover{border-color:var(--accent)}
+.topic{margin-bottom:36px}
+.topic h2{font:800 1.35rem/1.2 var(--display);display:flex;align-items:baseline;gap:10px;margin:0 0 14px;padding-bottom:8px;border-bottom:2px solid var(--fg)}
+.tn{font:600 .9rem var(--mono);color:var(--accent);background:var(--accent-soft);padding:2px 8px;border-radius:6px;font-variant-numeric:tabular-nums}
+.opt{font:600 .7rem var(--body);text-transform:uppercase;letter-spacing:.08em;color:var(--muted)}
+.ex{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:16px;margin-bottom:14px;min-width:0}
+.ex header{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 10px;margin-bottom:6px}
+.exn{font:600 .72rem var(--body);text-transform:uppercase;letter-spacing:.08em;color:var(--accent)}
+.ex h3{font:600 1.05rem var(--display);margin:0}
+.lid{margin-left:auto;font:.72rem var(--mono);color:var(--muted)}
+.task{margin:0 0 10px;color:var(--muted);max-width:70ch}
+.note{margin:0 0 10px;padding:8px 12px;border-radius:8px;font-size:.9rem}
+.note code{font:.85em var(--mono)}
+.note.info{background:var(--info-bg);color:var(--info-fg)}
+.note.warn{background:var(--warn-bg);color:var(--warn-fg)}
+.note.bad{background:var(--bad-bg);color:var(--bad-fg)}
+.codewrap{position:relative}
+.code{background:var(--code-bg);color:var(--code-fg);font:.82rem/1.6 var(--mono);padding:14px 16px;border-radius:8px;overflow-x:auto;margin:0}
+.copy{position:absolute;top:8px;right:8px;font:600 .72rem var(--body);padding:4px 10px;border-radius:6px;border:1px solid #ffffff33;background:#ffffff14;color:var(--code-fg);cursor:pointer}
+.copy:hover{background:#ffffff26}
+.out{display:flex;gap:10px;align-items:flex-start;background:var(--out-bg);color:var(--out-fg);border-radius:8px;padding:8px 12px;margin-top:8px;min-width:0}
+.olabel{font:600 .68rem var(--body);text-transform:uppercase;letter-spacing:.08em;padding-top:3px;flex-shrink:0}
+.out pre{margin:0;font:.82rem/1.55 var(--mono);overflow-x:auto;white-space:pre}
+.empty{color:var(--muted)}
+@media (max-width:480px){.lid{margin-left:0;width:100%}}
+</style>
+<div class="wrap">
+<h1>Soluciones Java Journey</h1>
+<p class="lede">Las 62 lecciones, ordenadas por tema como aparecen en la barra lateral de la app. Cada solución está compilada y ejecutada, y su salida coincide con la que verifica la app, salvo los casos señalados en color.</p>
+<div class="tools"><input id="q" type="search" placeholder="Buscar por tema, número o título (ej. 23, switch, array)" autocomplete="off"></div>
+<nav class="toc" aria-label="Temas"><a href="#t1"><span>1</span>Hola Mundo</a><a href="#t2"><span>2</span>Comentarios</a><a href="#t3"><span>3</span>Variables numéricas</a><a href="#t4"><span>4</span>Variables de texto</a><a href="#t5"><span>5</span>Constantes</a><a href="#t6"><span>6</span>Conversión de tipos</a><a href="#t7"><span>7</span>Operaciones aritméticas</a><a href="#t8"><span>8</span>Incremento y decremento</a><a href="#t9"><span>9</span>Atajos aritméticos</a><a href="#t10"><span>10</span>Operadores de comparación</a><a href="#t11"><span>11</span>Operadores lógicos</a><a href="#t12"><span>12</span>Scanner</a><a href="#t13"><span>13</span>System.out.print</a><a href="#t14"><span>14</span>Formato de salida</a><a href="#t15"><span>15</span>Números Random</a><a href="#t16"><span>16</span>Condicional if / else</a><a href="#t17"><span>17</span>Comparación de Strings</a><a href="#t18"><span>18</span>Métodos de String</a><a href="#t19"><span>19</span>Bucle while</a><a href="#t20"><span>20</span>Bucle do-while</a><a href="#t21"><span>21</span>Bucle for</a><a href="#t22"><span>22</span>Switch</a><a href="#t23"><span>23</span>Bucles anidados</a><a href="#t24"><span>24</span>Procedimientos</a><a href="#t25"><span>25</span>Sobrecarga de métodos</a><a href="#t26"><span>26</span>Funciones</a><a href="#t27"><span>27</span>Arrays</a><a href="#t28"><span>28</span>Proyecto Calculadora</a><a href="#t29"><span>29</span>Desafíos Finales</a><a href="#t30"><span>30</span>Operador ternario</a><a href="#t31"><span>31</span>Break y Continue</a></nav>
+<main id="list"><section class="topic" id="t1"><h2><span class="tn">1</span>Hola Mundo</h2><article class="ex" id="l1" data-q="hola mundo hola mundo tu primer programa 1">
+  <header><span class="exn">Ejercicio 1</span><h3>Hola Mundo</h3><span class="lid">lección 1</span></header>
+  <p class="task">Escribir un programa que imprima en la consola un saludo que diga "Hola, Java!" — con coma y signo de exclamación.</p>
+  <div class="codewrap"><button class="copy" type="button" aria-label="Copiar código">Copiar</button><pre class="code"><code>public class Main {
+    public static void main(String[] args) {
+        System.out.println("Hola, Java!");
+    }
+}</code></pre></div>
+  <div class="out"><span class="olabel">Salida</span><pre>Hola, Java!</pre></div>
+</article><article class="ex" id="l2" data-q="hola mundo múltiples líneas imprimir varias líneas 1">
+  <header><span class="exn">Ejercicio 2</span><h3>Múltiples líneas</h3><span class="lid">lección 2</span></header>
+  <p class="task">Imprimir tres líneas con los datos de un estudiante: nombre (Ana), edad (17) y curso (2do BT). Cada dato en su propia línea con el formato Campo: valor.</p>
+  <div class="codewrap"><button class="copy" type="button" aria-label="Copiar código">Copiar</button><pre class="code"><code>public class Main {
+    public static void main(String[] args) {
+        System.out.println("Nombre: Ana");
+        System.out.println("Edad: 17");
+        System.out.println("Curso: 2do BT");
+    }
+}</code></pre></div>
+  <div class="out"><span class="olabel">Salida</span><pre>Nombre: Ana
+Edad: 17
+Curso: 2do BT</pre></div>
+</article></section><section class="topic" id="t2"><h2><span class="tn">2</span>Comentarios</h2><article class="ex" id="l27" data-q="comentarios comentarios de una línea el símbolo // 2">
+  <header><span class="exn">Ejercicio 1</span><h3>Comentarios de una línea</h3><span class="lid">lección 27</span></header>
+  <p class="task">El primer comentario ya está escrito como ejemplo. Agregar un comentario antes de int edad y antes de cada System.out.println (3 comentarios más). Ejecutar: la salida debe ser exactamente: Nombre: Lucas Edad: 17</p>
+  <div class="codewrap"><button class="copy" type="button" aria-label="Copiar código">Copiar</button><pre class="code"><code>public class Main {
+    public static void main(String[] args) {
+        // Guarda el nombre del estudiante
+        String nombre = "Lucas";
+        // Guarda la edad del estudiante
+        int edad = 17;
+        // Muestra el nombre
+        System.out.println("Nombre: " + nombre);
+        // Muestra la edad
+        System.out.println("Edad: " + edad);
+    }
+}</code></pre></div>
+  <div class="out"><span class="olabel">Salida</span><pre>Nombre: Lucas
+Edad: 17</pre></div>
+</article><article class="ex" id="l28" data-q="comentarios comentarios de bloque /* ... */ y buenas prácticas 2">
+  <header><span class="exn">Ejercicio 2</span><h3>Comentarios de bloque</h3><span class="lid">lección 28</span></header>
+  <p class="task">Agregar un comentario de bloque (/* ... */) al inicio del método main describiendo qué calcula el programa. Luego ejecutar para verificar que el comentario no afecta el resultado.</p>
+  <div class="codewrap"><button class="copy" type="button" aria-label="Copiar código">Copiar</button><pre class="code"><code>public class Main {
+    public static void main(String[] args) {
+        /* Calcula el área de un rectángulo
+           multiplicando la base por la altura */
+        double base = 6.0;
+        double altura = 4.0;
+        double area = base * altura;
+        System.out.println("Área: " + area);
+    }
+}</code></pre></div>
+  <div class="out"><span class="olabel">Salida</span><pre>Área: 24.0</pre></div>
+</article></section><section class="topic" id="t3"><h2><span class="tn">3</span>Variables numéricas</h2><article class="ex" id="l3" data-q="variables numéricas variables enteras el tipo int 3">
+  <header><span class="exn">Ejercicio 1</span><h3>Variables enteras</h3><span class="lid">lección 3</span></header>
+  <p class="task">Declarar cantidad = 5 y precio = 200. Imprimir cada variable en su propia línea con el formato NombreVariable: valor.</p>
+  <div class="codewrap"><button class="copy" type="button" aria-label="Copiar código">Copiar</button><pre class="code"><code>public class Main {
+    public static void main(String[] args) {
+        int cantidad = 5;
+        int precio = 200;
+        System.out.println("Cantidad: " + cantidad);
+        System.out.println("Precio: " + precio);
+    }
+}</code></pre></div>
+  <div class="out"><span class="olabel">Salida</span><pre>Cantidad: 5
+Precio: 200</pre></div>
+</article><article class="ex" id="l4" data-q="variables numéricas variables decimales el tipo double 3">
+  <header><span class="exn">Ejercicio 2</span><h3>Variables decimales</h3><span class="lid">lección 4</span></header>
+  <p class="task">Usando precioUnitario = 24.99 y cantidad = 3, calcular el total (precio × cantidad) e imprimirlo con el formato Total: valor.</p>
+  <div class="codewrap"><button class="copy" type="button" aria-label="Copiar código">Copiar</button><pre class="code"><code>public class Main {
+    public static void main(String[] args) {
+        double precioUnitario = 24.99;
+        int cantidad = 3;
+        double total = precioUnitario * cantidad;
+        System.out.println("Total: " + total);
+    }
+}</code></pre></div>
+  <div class="out"><span class="olabel">Salida</span><pre>Total: 74.97</pre></div>
+</article></section><section class="topic" id="t4"><h2><span class="tn">4</span>Variables de texto</h2><article class="ex" id="l7" data-q="variables de texto variables string texto en java 4">
+  <header><span class="exn">Ejercicio 1</span><h3>Variables String</h3><span class="lid">lección 7</span></header>
+  <p class="task">Declarar dos variables String: una con la ciudad Montevideo y otra con el país Uruguay. Imprimirlas combinadas en una sola línea con el formato Ciudad: valor, País: valor.</p>
+  <div class="codewrap"><button class="copy" type="button" aria-label="Copiar código">Copiar</button><pre class="code"><code>public class Main {
+    public static void main(String[] args) {
+        String ciudad = "Montevideo";
+        String pais = "Uruguay";
+        System.out.println("Ciudad: " + ciudad + ", País: " + pais);
+    }
+}</code></pre></div>
+  <div class="out"><span class="olabel">Salida</span><pre>Ciudad: Montevideo, País: Uruguay</pre></div>
+</article><article class="ex" id="l8" data-q="variables de texto boolean y char otros tipos primitivos 4">
+  <header><span class="exn">Ejercicio 2</span><h3>boolean y char</h3><span class="lid">lección 8</span></header>
+  <p class="task">Declarar boolean aprobado = true y char calificacion = 'B'. Imprimir cada variable en su propia línea con el formato NombreVariable: valor.</p>
+  <div class="codewrap"><button class="copy" type="button" aria-label="Copiar código">Copiar</button><pre class="code"><code>public class Main {
+    public static void main(String[] args) {
+        boolean aprobado = true;
+        char calificacion = 'B';
+        System.out.println("Aprobado: " + aprobado);
+        System.out.println("Calificación: " + calificacion);
+    }
+}</code></pre></div>
+  <div class="out"><span class="olabel">Salida</span><pre>Aprobado: true
+Calificación: B</pre></div>
+</article></section><section class="topic" id="t5"><h2><span class="tn">5</span>Constantes</h2><article class="ex" id="l29" data-q="constantes la palabra clave final valores que no cambian 5">
+  <header><span class="exn">Ejercicio 1</span><h3>La palabra clave final</h3><span class="lid">lección 29</span></header>
+  <p class="task">Declarar final double PRECIO_BASE = 1000.0 y final double DESCUENTO = 0.15. Calcular el precio con descuento (PRECIO_BASE − PRECIO_BASE × DESCUENTO) e imprimirlo.</p>
+  <div class="codewrap"><button class="copy" type="button" aria-label="Copiar código">Copiar</button><pre class="code"><code>public class Main {
+    public static void main(String[] args) {
+        final double PRECIO_BASE = 1000.0;
+        final double DESCUENTO = 0.15;
+        double precioFinal = PRECIO_BASE - (PRECIO_BASE * DESCUENTO);
+        System.out.println("Precio final: " + precioFinal);
+    }
+}</code></pre></div>
+  <div class="out"><span class="olabel">Salida</span><pre>Precio final: 850.0</pre></div>
+</article><article class="ex" id="l30" data-q="constantes constantes en práctica uso en cálculos reales 5">
+  <header><span class="exn">Ejercicio 2</span><h3>Constantes en práctica</h3><span class="lid">lección 30</span></header>
+  <p class="task">Usando final int HORAS_DIA = 24 y final int DIAS_SEMANA = 7, calcular el producto de ambas constantes e imprimir el total de horas en una semana.</p>
+  <div class="codewrap"><button class="copy" type="button" aria-label="Copiar código">Copiar</button><pre class="code"><code>public class Main {
+    public static void main(String[] args) {
+        final int HORAS_DIA = 24;
+        final int DIAS_SEMANA = 7;
+        System.out.println("Horas en una semana: " + (HORAS_DIA * DIAS_SEMANA));
+    }
+}</code></pre></div>
+  <div class="out"><span class="olabel">Salida</span><pre>Horas en una semana: 168</pre></div>
+</article></section><section class="topic" id="t6"><h2><span class="tn">6</span>Conversión de tipos</h2><article class="ex" id="l31" data-q="conversión de tipos widening — conversión implícita de menor a mayor tipo 6">
+  <header><span class="exn">Ejercicio 1</span><h3>Widening — conversión implícita</h3><span class="lid">lección 31</span></header>
+  <p class="task">Declarar int cantidad = 7 y asignarla a una variable double resultado. Dividir resultado entre 2 e imprimir el valor obtenido.</p>
+  <div class="codewrap"><button class="copy" type="button" aria-label="Copiar código">Copiar</button><pre class="code"><code>public class Main {
+    public static void main(String[] args) {
+        int cantidad = 7;
+        double resultado = cantidad;
+        resultado = resultado / 2;
+        System.out.println("Resultado: " + resultado);
+    }
+}</code></pre></div>
+  <div class="out"><span class="olabel">Salida</span><pre>Resultado: 3.5</pre></div>
+</article><article class="ex" id="l32" data-q="conversión de tipos narrowing — cast explícito de mayor a menor tipo 6">
+  <header><span class="exn">Ejercicio 2</span><h3>Narrowing — cast explícito</h3><span class="lid">lección 32</span></header>
+  <p class="task">Dividir 10 entre 3 de dos formas: división entera y con cast. Imprimir: División entera: 3 Con cast: 3</p>
+  <div class="codewrap"><button class="copy" type="button" aria-label="Copiar código">Copiar</button><pre class="code"><code>public class Main {
+    public static void main(String[] args) {
+        int divEntera = 10 / 3;
+        System.out.println("División entera: " + divEntera);
+        double decimal = 10.0 / 3;
+        int conCast = (int) decimal;
+        System.out.println("Con cast: " + conCast);
+    }
+}</code></pre></div>
+  <div class="out"><span class="olabel">Salida</span><pre>División entera: 3
+Con cast: 3</pre></div>
+</article></section><section class="topic" id="t7"><h2><span class="tn">7</span>Operaciones aritméticas</h2><article class="ex" id="l9" data-q="operaciones aritméticas suma, resta y producto operadores +  −  * 7">
+  <header><span class="exn">Ejercicio 1</span><h3>Suma, resta y producto</h3><span class="lid">lección 9</span></header>
+  <p class="task">Con a = 8 y b = 5, calcular la suma, la resta y el producto. Imprimir cada resultado en su propia línea con el formato Operación: valor.</p>
+  <div class="codewrap"><button class="copy" type="button" aria-label="Copiar código">Copiar</button><pre class="code"><code>public class Main {
+    public static void main(String[] args) {
+        int a = 8;
+        int b = 5;
+        System.out.println("Suma: " + (a + b));
+        System.out.println("Resta: " + (a - b));
+        System.out.println("Producto: " + (a * b));
+    }
+}</code></pre></div>
+  <div class="out"><span class="olabel">Salida</span><pre>Suma: 13
+Resta: 3
+Producto: 40</pre></div>
+</article><article class="ex" id="l10" data-q="operaciones aritméticas división y módulo operadores  /  y  % 7">
+  <header><span class="exn">Ejercicio 2</span><h3>División y módulo</h3><span class="lid">lección 10</span></header>
+  <p class="task">Un salón tiene 30 estudiantes que forman grupos de 7. Calcular cuántos grupos completos se forman y cuántos estudiantes sobran. Imprimir cada dato en su propia línea.</p>
+  <div class="codewrap"><button class="copy" type="button" aria-label="Copiar código">Copiar</button><pre class="code"><code>public class Main {
+    public static void main(String[] args) {
+        int estudiantes = 30;
+        int porGrupo = 7;
+        System.out.println("Grupos: " + (estudiantes / porGrupo));
+        System.out.println("Sobran: " + (estudiantes % porGrupo));
+    }
+}</code></pre></div>
+  <div class="out"><span class="olabel">Salida</span><pre>Grupos: 4
+Sobran: 2</pre></div>
+</article></section><section class="topic" id="t8"><h2><span class="tn">8</span>Incremento y decremento</h2><article class="ex" id="l33" data-q="incremento y decremento operadores ++ y -- incrementar y decrementar 8">
+  <header><span class="exn">Ejercicio 1</span><h3>Operadores ++ y --</h3><span class="lid">lección 33</span></header>
+  <p class="task">Empezar con int vidas = 3. Incrementar una vez e imprimir el valor. Luego decrementar dos veces e imprimir el nuevo valor. Cada impresión con el formato Vidas: valor.</p>
+  <div class="codewrap"><button class="copy" type="button" aria-label="Copiar código">Copiar</button><pre class="code"><code>public class Main {
+    public static void main(String[] args) {
+        int vidas = 3;
+        vidas++;
+        System.out.println("Vidas: " + vidas);
+        vidas--;
+        vidas--;
+        System.out.println("Vidas: " + vidas);
+    }
+}</code></pre></div>
+  <div class="out"><span class="olabel">Salida</span><pre>Vidas: 4
+Vidas: 2</pre></div>
+</article><article class="ex" id="l34" data-q="incremento y decremento pre vs post incremento ++i vs i++ 8">
+  <header><span class="exn">Ejercicio 2</span><h3>Pre vs Post incremento</h3><span class="lid">lección 34</span></header>
+  <p class="task">El código ya está escrito. Predecir los valores e imprimir para comprobar: a: 5 — i: 6 b: 6 — j: 6</p>
+  <div class="codewrap"><button class="copy" type="button" aria-label="Copiar código">Copiar</button><pre class="code"><code>public class Main {
+    public static void main(String[] args) {
+        int i = 5;
+        int a = i++;
+        System.out.println("a: " + a + " — i: " + i);
+        int j = 5;
+        int b = ++j;
+        System.out.println("b: " + b + " — j: " + j);
+    }
+}</code></pre></div>
+  <div class="out"><span class="olabel">Salida</span><pre>a: 5 — i: 6
+b: 6 — j: 6</pre></div>
+</article></section><section class="topic" id="t9"><h2><span class="tn">9</span>Atajos aritméticos</h2><article class="ex" id="l35" data-q="atajos aritméticos operadores de asignación compuesta +=  -=  *=  /= 9">
+  <header><span class="exn">Ejercicio 1</span><h3>Operadores de asignación compuesta</h3><span class="lid">lección 35</span></header>
+  <p class="task">Empezar con int puntos = 100. Aplicar en orden: sumar 50, restar 30, multiplicar por 2 usando +=, -= y *=. Imprimir el valor final de puntos.</p>
+  <div class="codewrap"><button class="copy" type="button" aria-label="Copiar código">Copiar</button><pre class="code"><code>public class Main {
+    public static void main(String[] args) {
+        int puntos = 100;
+        puntos += 50;
+        puntos -= 30;
+        puntos *= 2;
+        System.out.println("Puntos: " + puntos);
+    }
+}</code></pre></div>
+  <div class="out"><span class="olabel">Salida</span><pre>Puntos: 240</pre></div>
+</article><article class="ex" id="l36" data-q="atajos aritméticos operador %= módulo con atajo 9">
+  <header><span class="exn">Ejercicio 2</span><h3>Operador %=</h3><span class="lid">lección 36</span></header>
+  <p class="task">Hay 23 estudiantes para distribuir en mesas de 4. Usando %=, calcular cuántos estudiantes no tienen mesa completa e imprimir: Estudiantes sin mesa completa: 3</p>
+  <div class="codewrap"><button class="copy" type="button" aria-label="Copiar código">Copiar</button><pre class="code"><code>public class Main {
+    public static void main(String[] args) {
+        int estudiantes = 23;
+        estudiantes %= 4;
+        System.out.println("Estudiantes sin mesa completa: " + estudiantes);
+    }
+}</code></pre></div>
+  <div class="out"><span class="olabel">Salida</span><pre>Estudiantes sin mesa completa: 3</pre></div>
+</article></section><section class="topic" id="t10"><h2><span class="tn">10</span>Operadores de comparación</h2><article class="ex" id="l37" data-q="operadores de comparación operadores de comparación == != &gt; &lt; &gt;= &lt;= 10">
+  <header><span class="exn">Ejercicio 1</span><h3>Operadores de comparación</h3><span class="lid">lección 37</span></header>
+  <p class="task">Con int nota = 75, imprimir el resultado de comparar si la nota es mayor o igual a 60 e imprimir: ¿Aprobado? true</p>
+  <div class="codewrap"><button class="copy" type="button" aria-label="Copiar código">Copiar</button><pre class="code"><code>public class Main {
+    public static void main(String[] args) {
+        int nota = 75;
+        boolean aprobado = nota &gt;= 60;
+        System.out.println("¿Aprobado? " + aprobado);
+    }
+}</code></pre></div>
+  <div class="out"><span class="olabel">Salida</span><pre>¿Aprobado? true</pre></div>
+</article><article class="ex" id="l38" data-q="operadores de comparación comparaciones en condiciones usar == y != con if 10">
+  <header><span class="exn">Ejercicio 2</span><h3>Comparaciones en condiciones</h3><span class="lid">lección 38</span></header>
+  <p class="task">Con int temperatura = 38: usar if/else if/else para imprimir un diagnóstico según la temperatura: un caso para fiebre (&gt; 37), uno para temperatura normal (== 37) y uno para hipotermia.</p>
+  <div class="codewrap"><button class="copy" type="button" aria-label="Copiar código">Copiar</button><pre class="code"><code>public class Main {
+    public static void main(String[] args) {
+        int temperatura = 38;
+        if (temperatura &gt; 37) {
+            System.out.println("Fiebre");
+        } else if (temperatura == 37) {
+            System.out.println("Normal");
+        } else {
+            System.out.println("Hipotermia");
+        }
+    }
+}</code></pre></div>
+  <div class="out"><span class="olabel">Salida</span><pre>Fiebre</pre></div>
+</article></section><section class="topic" id="t11"><h2><span class="tn">11</span>Operadores lógicos</h2><article class="ex" id="l39" data-q="operadores lógicos and y or — &amp;&amp; y || combinar condiciones 11">
+  <header><span class="exn">Ejercicio 1</span><h3>AND y OR — &amp;&amp; y ||</h3><span class="lid">lección 39</span></header>
+  <p class="task">Con int nota = 75 y boolean entrego = true: si la nota es mayor o igual a 60 Y entregó la tarea, imprimir un mensaje de aprobado; si no, uno de reprobado.</p>
+  <div class="codewrap"><button class="copy" type="button" aria-label="Copiar código">Copiar</button><pre class="code"><code>public class Main {
+    public static void main(String[] args) {
+        int nota = 75;
+        boolean entrego = true;
+        if (nota &gt;= 60 &amp;&amp; entrego) {
+            System.out.println("Aprobado");
+        } else {
+            System.out.println("Reprobado");
+        }
+    }
+}</code></pre></div>
+  <div class="out"><span class="olabel">Salida</span><pre>Aprobado</pre></div>
+</article><article class="ex" id="l40" data-q="operadores lógicos not — el operador ! invertir una condición 11">
+  <header><span class="exn">Ejercicio 2</span><h3>NOT — el operador !</h3><span class="lid">lección 40</span></header>
+  <p class="task">Con boolean pagado = false: si NO está pagado, imprimir un mensaje de pago pendiente; si está pagado, un mensaje de pago registrado.</p>
+  <div class="codewrap"><button class="copy" type="button" aria-label="Copiar código">Copiar</button><pre class="code"><code>public class Main {
+    public static void main(String[] args) {
+        boolean pagado = false;
+        if (!pagado) {
+            System.out.println("Pago pendiente");
+        } else {
+            System.out.println("Pago registrado");
+        }
+    }
+}</code></pre></div>
+  <div class="out"><span class="olabel">Salida</span><pre>Pago pendiente</pre></div>
+</article></section><section class="topic" id="t12"><h2><span class="tn">12</span>Scanner</h2><article class="ex" id="l5" data-q="scanner scanner — leer texto entrada del usuario 12">
+  <header><span class="exn">Ejercicio 1</span><h3>Scanner — leer texto</h3><span class="lid">lección 5</span></header>
+  <p class="task">Leer un nombre con nextLine() e imprimir: Bienvenido, [nombre]!</p><p class="note info">Sin verificación automática (usa Scanner). Ejemplo con entrada <code>Ana</code>.</p>
+  <div class="codewrap"><button class="copy" type="button" aria-label="Copiar código">Copiar</button><pre class="code"><code>import java.util.Scanner;
+
+public class Main {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        String nombre = sc.nextLine();
+        System.out.println("Bienvenido, " + nombre + "!");
+    }
+}</code></pre></div>
+  <div class="out"><span class="olabel">Salida</span><pre>Bienvenido, Ana!</pre></div>
+</article><article class="ex" id="l6" data-q="scanner scanner — leer números nextint y nextdouble 12">
+  <header><span class="exn">Ejercicio 2</span><h3>Scanner — leer números</h3><span class="lid">lección 6</span></header>
+  <p class="task">Leer dos números enteros e imprimir su suma: Suma: [resultado]</p><p class="note info">Sin verificación automática (usa Scanner). Ejemplo con entrada <code>7 5</code>.</p>
+  <div class="codewrap"><button class="copy" type="button" aria-label="Copiar código">Copiar</button><pre class="code"><code>import java.util.Scanner;
+
+public class Main {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        int a = sc.nextInt();
+        int b = sc.nextInt();
+        System.out.println("Suma: " + (a + b));
+    }
+}</code></pre></div>
+  <div class="out"><span class="olabel">Salida</span><pre>Suma: 12</pre></div>
+</article></section><section class="topic" id="t13"><h2><span class="tn">13</span>System.out.print</h2><article class="ex" id="l41" data-q="system.out.print print vs println salida sin salto de línea 13">
+  <header><span class="exn">Ejercicio 1</span><h3>print vs println</h3><span class="lid">lección 41</span></header>
+  <p class="task">Usando solo System.out.print, imprimir los números del 1 al 5 separados por espacios, todos en una sola línea.</p>
+  <div class="codewrap"><button class="copy" type="button" aria-label="Copiar código">Copiar</button><pre class="code"><code>public class Main {
+    public static void main(String[] args) {
+        System.out.print(1 + " ");
+        System.out.print(2 + " ");
+        System.out.print(3 + " ");
+        System.out.print(4 + " ");
+        System.out.print(5);
+    }
+}</code></pre></div>
+  <div class="out"><span class="olabel">Salida</span><pre>1 2 3 4 5</pre></div>
+</article><article class="ex" id="l42" data-q="system.out.print secuencias de escape \n  \t  \"  \\ 13">
+  <header><span class="exn">Ejercicio 2</span><h3>Secuencias de escape</h3><span class="lid">lección 42</span></header>
+  <p class="task">Con un solo println, imprimir usando secuencias de escape: Producto: Yerba Precio: $85.50</p>
+  <div class="codewrap"><button class="copy" type="button" aria-label="Copiar código">Copiar</button><pre class="code"><code>public class Main {
+    public static void main(String[] args) {
+        System.out.println("Producto:\tYerba\nPrecio:\t$85.50");
+    }
+}</code></pre></div>
+  <div class="out"><span class="olabel">Salida</span><pre>Producto:	Yerba
+Precio:	$85.50</pre></div>
+</article></section><section class="topic" id="t14"><h2><span class="tn">14</span>Formato de salida</h2><article class="ex" id="l43" data-q="formato de salida printf y especificadores %d  %s  %f 14">
+  <header><span class="exn">Ejercicio 1</span><h3>printf y especificadores</h3><span class="lid">lección 43</span></header>
+  <p class="task">Usando printf, imprimir tres líneas con los datos de un producto: nombre con %s, precio con %.2f y stock con %d. Cada dato en su propia línea.</p>
+  <div class="codewrap"><button class="copy" type="button" aria-label="Copiar código">Copiar</button><pre class="code"><code>public class Main {
+    public static void main(String[] args) {
+        String nombre = "Aceite";
+        double precio = 125.0;
+        int stock = 48;
+        System.out.printf("Producto: %s%n", nombre);
+        System.out.printf("Precio: $%.2f%n", precio);
+        System.out.printf("Stock: %d unidades%n", stock);
+    }
+}</code></pre></div>
+  <div class="out"><span class="olabel">Salida</span><pre>Producto: Aceite
+Precio: $125.00
+Stock: 48 unidades</pre></div>
+</article><article class="ex" id="l44" data-q="formato de salida string.format formato en variables 14">
+  <header><span class="exn">Ejercicio 2</span><h3>String.format</h3><span class="lid">lección 44</span></header>
+  <p class="task">Construir un String formateado con los datos de un estudiante e imprimirlo: Estudiante: Valentina — Promedio: 8.75</p>
+  <div class="codewrap"><button class="copy" type="button" aria-label="Copiar código">Copiar</button><pre class="code"><code>public class Main {
+    public static void main(String[] args) {
+        String nombre = "Valentina";
+        double promedio = 8.75;
+        String reporte = String.format("Estudiante: %s — Promedio: %.2f", nombre, promedio);
+        System.out.println(reporte);
+    }
+}</code></pre></div>
+  <div class="out"><span class="olabel">Salida</span><pre>Estudiante: Valentina — Promedio: 8.75</pre></div>
+</article></section><section class="topic" id="t15"><h2><span class="tn">15</span>Números Random</h2><article class="ex" id="l25" data-q="números random clase random generar números aleatorios 15">
+  <header><span class="exn">Ejercicio 1</span><h3>Clase Random</h3><span class="lid">lección 25</span></header>
+  <p class="task">Simular el lanzamiento de un dado de 6 caras e imprimir: Resultado del dado: 4 (el número varía cada ejecución)</p><p class="note info">Sin verificación automática: el número cambia en cada ejecución (1 a 6).</p>
+  <div class="codewrap"><button class="copy" type="button" aria-label="Copiar código">Copiar</button><pre class="code"><code>import java.util.Random;
+
+public class Main {
+    public static void main(String[] args) {
+        Random rnd = new Random();
+        int dado = rnd.nextInt(6) + 1;
+        System.out.println("Resultado del dado: " + dado);
+    }
+}</code></pre></div>
+  <div class="out"><span class="olabel">Salida</span><pre>Resultado del dado: 2</pre></div>
+</article><article class="ex" id="l26" data-q="números random clase random rangos personalizados 15">
+  <header><span class="exn">Ejercicio 2</span><h3>Clase Random</h3><span class="lid">lección 26</span></header>
+  <p class="task">Usando la clase Random, generar e imprimir: — Un número entero entre 50 y 100 — Un booleano aleatorio Número: 73 Cara: true</p><p class="note info">Sin verificación automática: los valores cambian en cada ejecución (50 a 100, true/false).</p>
+  <div class="codewrap"><button class="copy" type="button" aria-label="Copiar código">Copiar</button><pre class="code"><code>import java.util.Random;
+
+public class Main {
+    public static void main(String[] args) {
+        Random rnd = new Random();
+        int numero = rnd.nextInt(51) + 50;
+        boolean cara = rnd.nextBoolean();
+        System.out.println("Número: " + numero);
+        System.out.println("Cara: " + cara);
+    }
+}</code></pre></div>
+  <div class="out"><span class="olabel">Salida</span><pre>Número: 91
+Cara: true</pre></div>
+</article></section><section class="topic" id="t16"><h2><span class="tn">16</span>Condicional if / else</h2><article class="ex" id="l11" data-q="condicional if / else condicional if / else tomar decisiones 16">
+  <header><span class="exn">Ejercicio 1</span><h3>Condicional if / else</h3><span class="lid">lección 11</span></header>
+  <p class="task">Con temperatura = 35: si es mayor a 30, imprimir un mensaje de calor; si no, un mensaje de temperatura normal.</p>
+  <div class="codewrap"><button class="copy" type="button" aria-label="Copiar código">Copiar</button><pre class="code"><code>public class Main {
+    public static void main(String[] args) {
+        int temperatura = 35;
+        if (temperatura &gt; 30) {
+            System.out.println("Hace calor");
+        } else {
+            System.out.println("Temperatura normal");
+        }
+    }
+}</code></pre></div>
+  <div class="out"><span class="olabel">Salida</span><pre>Hace calor</pre></div>
+</article><article class="ex" id="l12" data-q="condicional if / else if / else anidado varias condiciones 16">
+  <header><span class="exn">Ejercicio 2</span><h3>if / else anidado</h3><span class="lid">lección 12</span></header>
+  <p class="task">Con int hora = 14: usar if/else if/else para imprimir el saludo correspondiente a la hora (mañana, tarde o noche).</p>
+  <div class="codewrap"><button class="copy" type="button" aria-label="Copiar código">Copiar</button><pre class="code"><code>public class Main {
+    public static void main(String[] args) {
+        int hora = 14;
+        if (hora &lt; 12) {
+            System.out.println("Buenos días");
+        } else if (hora &lt; 20) {
+            System.out.println("Buenas tardes");
+        } else {
+            System.out.println("Buenas noches");
+        }
+    }
+}</code></pre></div>
+  <div class="out"><span class="olabel">Salida</span><pre>Buenas tardes</pre></div>
+</article></section><section class="topic" id="t17"><h2><span class="tn">17</span>Comparación de Strings</h2><article class="ex" id="l49" data-q="comparación de strings equals() vs == comparar contenido de texto 17">
+  <header><span class="exn">Ejercicio 1</span><h3>equals() vs ==</h3><span class="lid">lección 49</span></header>
+  <p class="task">Con String clave = "Java2025" y un intento de acceso, verificar si coincide e imprimir: Acceso concedido o Acceso denegado</p>
+  <div class="codewrap"><button class="copy" type="button" aria-label="Copiar código">Copiar</button><pre class="code"><code>public class Main {
+    public static void main(String[] args) {
+        String clave = "Java2025";
+        String intento = "Java2025";
+        if (clave.equals(intento)) {
+            System.out.println("Acceso concedido");
+        } else {
+            System.out.println("Acceso denegado");
+        }
+    }
+}</code></pre></div>
+  <div class="out"><span class="olabel">Salida</span><pre>Acceso concedido</pre></div>
+</article><article class="ex" id="l50" data-q="comparación de strings equalsignorecase y compareto comparaciones avanzadas 17">
+  <header><span class="exn">Ejercicio 2</span><h3>equalsIgnoreCase y compareTo</h3><span class="lid">lección 50</span></header>
+  <p class="task">Con String pais = "uruguay", verificar con equalsIgnoreCase si coincide con "Uruguay" e imprimir: País verificado: true</p>
+  <div class="codewrap"><button class="copy" type="button" aria-label="Copiar código">Copiar</button><pre class="code"><code>public class Main {
+    public static void main(String[] args) {
+        String pais = "uruguay";
+        boolean coincide = pais.equalsIgnoreCase("Uruguay");
+        System.out.println("País verificado: " + coincide);
+    }
+}</code></pre></div>
+  <div class="out"><span class="olabel">Salida</span><pre>País verificado: true</pre></div>
+</article></section><section class="topic" id="t18"><h2><span class="tn">18</span>Métodos de String</h2><article class="ex" id="l51" data-q="métodos de string length, charat, substring manipular texto 18">
+  <header><span class="exn">Ejercicio 1</span><h3>length, charAt, substring</h3><span class="lid">lección 51</span></header>
+  <p class="task">Con String ciudad = "Montevideo", imprimir: Largo: 10 Primera letra: M Primeras 5 letras: Monte</p>
+  <div class="codewrap"><button class="copy" type="button" aria-label="Copiar código">Copiar</button><pre class="code"><code>public class Main {
+    public static void main(String[] args) {
+        String ciudad = "Montevideo";
+        System.out.println("Largo: " + ciudad.length());
+        System.out.println("Primera letra: " + ciudad.charAt(0));
+        System.out.println("Primeras 5 letras: " + ciudad.substring(0, 5));
+    }
+}</code></pre></div>
+  <div class="out"><span class="olabel">Salida</span><pre>Largo: 10
+Primera letra: M
+Primeras 5 letras: Monte</pre></div>
+</article><article class="ex" id="l52" data-q="métodos de string touppercase, contains, replace transformar texto 18">
+  <header><span class="exn">Ejercicio 2</span><h3>toUpperCase, contains, replace</h3><span class="lid">lección 52</span></header>
+  <p class="task">Con String frase = "java es genial", imprimir la frase en mayúsculas y luego reemplazar "genial" por "poderoso": JAVA ES GENIAL java es poderoso</p>
+  <div class="codewrap"><button class="copy" type="button" aria-label="Copiar código">Copiar</button><pre class="code"><code>public class Main {
+    public static void main(String[] args) {
+        String frase = "java es genial";
+        System.out.println(frase.toUpperCase());
+        System.out.println(frase.replace("genial", "poderoso"));
+    }
+}</code></pre></div>
+  <div class="out"><span class="olabel">Salida</span><pre>JAVA ES GENIAL
+java es poderoso</pre></div>
+</article></section><section class="topic" id="t19"><h2><span class="tn">19</span>Bucle while</h2><article class="ex" id="l13" data-q="bucle while bucle while repetir mientras... 19">
+  <header><span class="exn">Ejercicio 1</span><h3>Bucle while</h3><span class="lid">lección 13</span></header>
+  <p class="task">Usar un while para imprimir los números del 1 al 5, uno por línea.</p>
+  <div class="codewrap"><button class="copy" type="button" aria-label="Copiar código">Copiar</button><pre class="code"><code>public class Main {
+    public static void main(String[] args) {
+        int i = 1;
+        while (i &lt;= 5) {
+            System.out.println(i);
+            i++;
+        }
+    }
+}</code></pre></div>
+  <div class="out"><span class="olabel">Salida</span><pre>1
+2
+3
+4
+5</pre></div>
+</article><article class="ex" id="l14" data-q="bucle while acumulador con while sumar con un bucle 19">
+  <header><span class="exn">Ejercicio 2</span><h3>Acumulador con while</h3><span class="lid">lección 14</span></header>
+  <p class="task">Calcular la suma de los números pares del 2 al 10 (2+4+6+8+10) usando while e imprimir el resultado con el formato Suma de pares: valor.</p>
+  <div class="codewrap"><button class="copy" type="button" aria-label="Copiar código">Copiar</button><pre class="code"><code>public class Main {
+    public static void main(String[] args) {
+        int suma = 0;
+        int i = 2;
+        while (i &lt;= 10) {
+            suma += i;
+            i += 2;
+        }
+        System.out.println("Suma de pares: " + suma);
+    }
+}</code></pre></div>
+  <div class="out"><span class="olabel">Salida</span><pre>Suma de pares: 30</pre></div>
+</article></section><section class="topic" id="t20"><h2><span class="tn">20</span>Bucle do-while</h2><article class="ex" id="l19" data-q="bucle do-while bucle do-while ejecutar al menos una vez 20">
+  <header><span class="exn">Ejercicio 1</span><h3>Bucle do-while</h3><span class="lid">lección 19</span></header>
+  <p class="task">Usar un do-while para imprimir los números del 1 al 4, uno por línea. La condición debe ir al final del bloque.</p>
+  <div class="codewrap"><button class="copy" type="button" aria-label="Copiar código">Copiar</button><pre class="code"><code>public class Main {
+    public static void main(String[] args) {
+        int i = 1;
+        do {
+            System.out.println(i);
+            i++;
+        } while (i &lt;= 4);
+    }
+}</code></pre></div>
+  <div class="out"><span class="olabel">Salida</span><pre>1
+2
+3
+4</pre></div>
+</article><article class="ex" id="l20" data-q="bucle do-while do-while con acumulador sumar con do-while 20">
+  <header><span class="exn">Ejercicio 2</span><h3>do-while con acumulador</h3><span class="lid">lección 20</span></header>
+  <p class="task">Usando do-while, calcular la suma de los números impares del 1 al 9 (1+3+5+7+9) e imprimir el resultado con el formato Suma de impares: valor.</p>
+  <div class="codewrap"><button class="copy" type="button" aria-label="Copiar código">Copiar</button><pre class="code"><code>public class Main {
+    public static void main(String[] args) {
+        int suma = 0;
+        int i = 1;
+        do {
+            suma += i;
+            i += 2;
+        } while (i &lt;= 9);
+        System.out.println("Suma de impares: " + suma);
+    }
+}</code></pre></div>
+  <div class="out"><span class="olabel">Salida</span><pre>Suma de impares: 25</pre></div>
+</article></section><section class="topic" id="t21"><h2><span class="tn">21</span>Bucle for</h2><article class="ex" id="l15" data-q="bucle for bucle for repetir un número fijo de veces 21">
+  <header><span class="exn">Ejercicio 1</span><h3>Bucle for</h3><span class="lid">lección 15</span></header>
+  <p class="task">Usar un for para imprimir la tabla de multiplicar del 3 del 3×1 al 3×5, una línea por resultado con el formato 3 x N = resultado.</p>
+  <div class="codewrap"><button class="copy" type="button" aria-label="Copiar código">Copiar</button><pre class="code"><code>public class Main {
+    public static void main(String[] args) {
+        for (int n = 1; n &lt;= 5; n++) {
+            System.out.println("3 x " + n + " = " + (3 * n));
+        }
+    }
+}</code></pre></div>
+  <div class="out"><span class="olabel">Salida</span><pre>3 x 1 = 3
+3 x 2 = 6
+3 x 3 = 9
+3 x 4 = 12
+3 x 5 = 15</pre></div>
+</article><article class="ex" id="l16" data-q="bucle for for con acumulador calcular con un bucle 21">
+  <header><span class="exn">Ejercicio 2</span><h3>for con acumulador</h3><span class="lid">lección 16</span></header>
+  <p class="task">Calcular el factorial de 5 (5×4×3×2×1) usando un for e imprimir el resultado con el formato 5! = valor.</p>
+  <div class="codewrap"><button class="copy" type="button" aria-label="Copiar código">Copiar</button><pre class="code"><code>public class Main {
+    public static void main(String[] args) {
+        int factorial = 1;
+        for (int i = 5; i &gt;= 1; i--) {
+            factorial *= i;
+        }
+        System.out.println("5! = " + factorial);
+    }
+}</code></pre></div>
+  <div class="out"><span class="olabel">Salida</span><pre>5! = 120</pre></div>
+</article></section><section class="topic" id="t22"><h2><span class="tn">22</span>Switch</h2><article class="ex" id="l45" data-q="switch sentencia switch múltiples casos 22">
+  <header><span class="exn">Ejercicio 1</span><h3>Sentencia switch</h3><span class="lid">lección 45</span></header>
+  <p class="task">Con int mes = 3, agregar el case faltante al switch para que imprima el nombre del mes correspondiente.</p>
+  <div class="codewrap"><button class="copy" type="button" aria-label="Copiar código">Copiar</button><pre class="code"><code>public class Main {
+    public static void main(String[] args) {
+        int mes = 3;
+        switch (mes) {
+            case 1: System.out.println("Enero"); break;
+            case 2: System.out.println("Febrero"); break;
+            case 3: System.out.println("Marzo"); break;
+            default: System.out.println("Mes no válido");
+        }
+    }
+}</code></pre></div>
+  <div class="out"><span class="olabel">Salida</span><pre>Marzo</pre></div>
+</article><article class="ex" id="l46" data-q="switch switch con string evaluar texto 22">
+  <header><span class="exn">Ejercicio 2</span><h3>Switch con String</h3><span class="lid">lección 46</span></header>
+  <p class="task">Con String turno = "tarde", agregar los cases faltantes al switch para imprimir el saludo correspondiente al turno.</p>
+  <div class="codewrap"><button class="copy" type="button" aria-label="Copiar código">Copiar</button><pre class="code"><code>public class Main {
+    public static void main(String[] args) {
+        String turno = "tarde";
+        switch (turno) {
+            case "mañana": System.out.println("Buenos días"); break;
+            case "tarde":  System.out.println("Buenas tardes"); break;
+            case "noche":  System.out.println("Buenas noches"); break;
+            default: System.out.println("Turno no válido");
+        }
+    }
+}</code></pre></div>
+  <div class="out"><span class="olabel">Salida</span><pre>Buenas tardes</pre></div>
+</article></section><section class="topic" id="t23"><h2><span class="tn">23</span>Bucles anidados</h2><article class="ex" id="l55" data-q="bucles anidados bucles anidados for dentro de for 23">
+  <header><span class="exn">Ejercicio 1</span><h3>Bucles anidados</h3><span class="lid">lección 55</span></header>
+  <p class="task">Imprimir las tablas de multiplicar del 2 y del 3 (del ×1 al ×5): 2 x 1 = 2 ... 2 x 5 = 10 3 x 1 = 3 ... 3 x 5 = 15</p>
+  <div class="codewrap"><button class="copy" type="button" aria-label="Copiar código">Copiar</button><pre class="code"><code>public class Main {
+    public static void main(String[] args) {
+        for (int tabla = 2; tabla &lt;= 3; tabla++) {
+            for (int i = 1; i &lt;= 5; i++) {
+                System.out.println(tabla + " x " + i + " = " + (tabla * i));
+            }
+        }
+    }
+}</code></pre></div>
+  <div class="out"><span class="olabel">Salida</span><pre>2 x 1 = 2
+2 x 2 = 4
+2 x 3 = 6
+2 x 4 = 8
+2 x 5 = 10
+3 x 1 = 3
+3 x 2 = 6
+3 x 3 = 9
+3 x 4 = 12
+3 x 5 = 15</pre></div>
+</article><article class="ex" id="l56" data-q="bucles anidados patrón de asteriscos triángulo con bucles anidados 23">
+  <header><span class="exn">Ejercicio 2</span><h3>Patrón de asteriscos</h3><span class="lid">lección 56</span></header>
+  <p class="task">Imprimir un triángulo de asteriscos de 5 filas: la fila 1 tiene 1 asterisco, la fila 2 tiene 2, y así sucesivamente hasta la fila 5. Cada asterisco separado por un espacio.</p><p class="note warn">Cada fila termina en un espacio. La versión publicada lo marca como error; queda resuelto al desplegar el cambio en <code>api/verify.js</code>.</p>
+  <div class="codewrap"><button class="copy" type="button" aria-label="Copiar código">Copiar</button><pre class="code"><code>public class Main {
+    public static void main(String[] args) {
+        for (int i = 1; i &lt;= 5; i++) {
+            for (int j = 1; j &lt;= i; j++) {
+                System.out.print("* ");
+            }
+            System.out.println();
+        }
+    }
+}</code></pre></div>
+  <div class="out"><span class="olabel">Salida</span><pre>* 
+* * 
+* * * 
+* * * * 
+* * * * * </pre></div>
+</article></section><section class="topic" id="t24"><h2><span class="tn">24</span>Procedimientos</h2><article class="ex" id="l21" data-q="procedimientos procedimientos métodos sin retorno 24">
+  <header><span class="exn">Ejercicio 1</span><h3>Procedimientos</h3><span class="lid">lección 21</span></header>
+  <p class="task">Crear un procedimiento static void mostrarLinea() que imprima ---------- y llamarlo 3 veces desde main.</p>
+  <div class="codewrap"><button class="copy" type="button" aria-label="Copiar código">Copiar</button><pre class="code"><code>public class Main {
+    static void mostrarLinea() {
+        System.out.println("----------");
+    }
+
+    public static void main(String[] args) {
+        mostrarLinea();
+        mostrarLinea();
+        mostrarLinea();
+    }
+}</code></pre></div>
+  <div class="out"><span class="olabel">Salida</span><pre>----------
+----------
+----------</pre></div>
+</article><article class="ex" id="l22" data-q="procedimientos procedimientos con parámetros pasar datos a un método 24">
+  <header><span class="exn">Ejercicio 2</span><h3>Procedimientos con parámetros</h3><span class="lid">lección 22</span></header>
+  <p class="task">Crear static void mostrarProducto(String nombre, double precio) que imprima los datos de cada producto con el formato Producto: nombre — Precio: $valor. Llamarlo con tres productos: Arroz ($45.5), Aceite ($120.0) y Azúcar ($38.75).</p>
+  <div class="codewrap"><button class="copy" type="button" aria-label="Copiar código">Copiar</button><pre class="code"><code>public class Main {
+    static void mostrarProducto(String nombre, double precio) {
+        System.out.println("Producto: " + nombre + " — Precio: $" + precio);
+    }
+
+    public static void main(String[] args) {
+        mostrarProducto("Arroz", 45.5);
+        mostrarProducto("Aceite", 120.0);
+        mostrarProducto("Azúcar", 38.75);
+    }
+}</code></pre></div>
+  <div class="out"><span class="olabel">Salida</span><pre>Producto: Arroz — Precio: $45.5
+Producto: Aceite — Precio: $120.0
+Producto: Azúcar — Precio: $38.75</pre></div>
+</article></section><section class="topic" id="t25"><h2><span class="tn">25</span>Sobrecarga de métodos</h2><article class="ex" id="l57" data-q="sobrecarga de métodos sobrecarga de métodos mismo nombre, distintos parámetros 25">
+  <header><span class="exn">Ejercicio 1</span><h3>Sobrecarga de métodos</h3><span class="lid">lección 57</span></header>
+  <p class="task">El código ya tiene dos versiones de describir. Ejecutar y ver cómo Java elige cuál usar: Número: 42 Texto: Hola</p>
+  <div class="codewrap"><button class="copy" type="button" aria-label="Copiar código">Copiar</button><pre class="code"><code>public class Main {
+    static void describir(int n) {
+        System.out.println("Número: " + n);
+    }
+
+    static void describir(String s) {
+        System.out.println("Texto: " + s);
+    }
+
+    public static void main(String[] args) {
+        describir(42);
+        describir("Hola");
+    }
+}</code></pre></div>
+  <div class="out"><span class="olabel">Salida</span><pre>Número: 42
+Texto: Hola</pre></div>
+</article><article class="ex" id="l58" data-q="sobrecarga de métodos sobrecarga con distintos parámetros flexibilidad en métodos 25">
+  <header><span class="exn">Ejercicio 2</span><h3>Sobrecarga con distintos parámetros</h3><span class="lid">lección 58</span></header>
+  <p class="task">Calcular el promedio de 2 notas y de 3 notas usando el mismo nombre de método e imprimir: Promedio de 2: 7.5 Promedio de 3: 8.0</p>
+  <div class="codewrap"><button class="copy" type="button" aria-label="Copiar código">Copiar</button><pre class="code"><code>public class Main {
+    static double promedio(double a, double b) {
+        return (a + b) / 2;
+    }
+
+    static double promedio(double a, double b, double c) {
+        return (a + b + c) / 3;
+    }
+
+    public static void main(String[] args) {
+        System.out.println("Promedio de 2: " + promedio(6, 9));
+        System.out.println("Promedio de 3: " + promedio(7, 8, 9));
+    }
+}</code></pre></div>
+  <div class="out"><span class="olabel">Salida</span><pre>Promedio de 2: 7.5
+Promedio de 3: 8.0</pre></div>
+</article></section><section class="topic" id="t26"><h2><span class="tn">26</span>Funciones</h2><article class="ex" id="l23" data-q="funciones funciones métodos que devuelven un valor 26">
+  <header><span class="exn">Ejercicio 1</span><h3>Funciones</h3><span class="lid">lección 23</span></header>
+  <p class="task">Crear static double calcularArea(double base, double altura) que retorne el área de un triángulo (base × altura / 2). Llamarla con base=6 y altura=4 e imprimir el resultado.</p>
+  <div class="codewrap"><button class="copy" type="button" aria-label="Copiar código">Copiar</button><pre class="code"><code>public class Main {
+    static double calcularArea(double base, double altura) {
+        return base * altura / 2;
+    }
+
+    public static void main(String[] args) {
+        double area = calcularArea(6, 4);
+        System.out.println("Área: " + area);
+    }
+}</code></pre></div>
+  <div class="out"><span class="olabel">Salida</span><pre>Área: 12.0</pre></div>
+</article><article class="ex" id="l24" data-q="funciones funciones con string retornar texto 26">
+  <header><span class="exn">Ejercicio 2</span><h3>Funciones con String</h3><span class="lid">lección 24</span></header>
+  <p class="task">Crear static String clasificar(int nota) que retorne una categoría según la nota: la más alta (≥ 90), la media (≥ 60) y la más baja. Probar con notas 95, 75 y 40 e imprimir cada resultado.</p>
+  <div class="codewrap"><button class="copy" type="button" aria-label="Copiar código">Copiar</button><pre class="code"><code>public class Main {
+    static String clasificar(int nota) {
+        if (nota &gt;= 90) return "Destacado";
+        else if (nota &gt;= 60) return "Logrado";
+        else return "En proceso";
+    }
+
+    public static void main(String[] args) {
+        System.out.println(clasificar(95));
+        System.out.println(clasificar(75));
+        System.out.println(clasificar(40));
+    }
+}</code></pre></div>
+  <div class="out"><span class="olabel">Salida</span><pre>Destacado
+Logrado
+En proceso</pre></div>
+</article></section><section class="topic" id="t27"><h2><span class="tn">27</span>Arrays</h2><article class="ex" id="l17" data-q="arrays arrays — declarar y acceder listas de valores 27">
+  <header><span class="exn">Ejercicio 1</span><h3>Arrays — declarar y acceder</h3><span class="lid">lección 17</span></header>
+  <p class="task">Con el array String[] materias = { "Matemática", "Inglés", "Programación"} , imprimir en líneas separadas: la primera materia, la última y el total de elementos.</p>
+  <div class="codewrap"><button class="copy" type="button" aria-label="Copiar código">Copiar</button><pre class="code"><code>public class Main {
+    public static void main(String[] args) {
+        String[] materias = {"Matemática", "Inglés", "Programación"};
+        System.out.println("Primera: " + materias[0]);
+        System.out.println("Última: " + materias[materias.length - 1]);
+        System.out.println("Total: " + materias.length);
+    }
+}</code></pre></div>
+  <div class="out"><span class="olabel">Salida</span><pre>Primera: Matemática
+Última: Programación
+Total: 3</pre></div>
+</article><article class="ex" id="l18" data-q="arrays recorrer un array for con array 27">
+  <header><span class="exn">Ejercicio 2</span><h3>Recorrer un array</h3><span class="lid">lección 18</span></header>
+  <p class="task">Dado el array int[] precios = { 100, 250, 80, 320, 150} , recorrer el array con un for, acumular la suma de todos los precios e imprimir el total.</p>
+  <div class="codewrap"><button class="copy" type="button" aria-label="Copiar código">Copiar</button><pre class="code"><code>public class Main {
+    public static void main(String[] args) {
+        int[] precios = {100, 250, 80, 320, 150};
+        int total = 0;
+        for (int i = 0; i &lt; precios.length; i++) {
+            total += precios[i];
+        }
+        System.out.println("Total: " + total);
+    }
+}</code></pre></div>
+  <div class="out"><span class="olabel">Salida</span><pre>Total: 900</pre></div>
+</article></section><section class="topic" id="t28"><h2><span class="tn">28</span>Proyecto Calculadora</h2><article class="ex" id="l59" data-q="proyecto calculadora calculadora básica scanner + operaciones 28">
+  <header><span class="exn">Ejercicio 1</span><h3>Calculadora básica</h3><span class="lid">lección 59</span></header>
+  <p class="task">Completar el programa para que imprima con los datos 10 y 4: Suma: 14 Resta: 6 Producto: 40 Cociente: 2.50</p><p class="note info">Sin verificación automática (usa Scanner). Entrada: <code>10 4</code>.</p>
+  <div class="codewrap"><button class="copy" type="button" aria-label="Copiar código">Copiar</button><pre class="code"><code>import java.util.Scanner;
+
+public class Main {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        double a = sc.nextDouble();
+        double b = sc.nextDouble();
+        System.out.println("Suma: " + (int)(a + b));
+        System.out.println("Resta: " + (int)(a - b));
+        System.out.println("Producto: " + (int)(a * b));
+        System.out.printf("Cociente: %.2f%n", a / b);
+    }
+}</code></pre></div>
+  <div class="out"><span class="olabel">Salida</span><pre>Suma: 14
+Resta: 6
+Producto: 40
+Cociente: 2.50</pre></div>
+</article><article class="ex" id="l60" data-q="proyecto calculadora calculadora con switch elegir operación 28">
+  <header><span class="exn">Ejercicio 2</span><h3>Calculadora con switch</h3><span class="lid">lección 60</span></header>
+  <p class="task">Completar el case de multiplicación y el de división (con verificación de divisor cero).</p><p class="note info">Sin verificación automática (usa Scanner). Entrada de ejemplo: <code>10 4 /</code>.</p>
+  <div class="codewrap"><button class="copy" type="button" aria-label="Copiar código">Copiar</button><pre class="code"><code>import java.util.Scanner;
+
+public class Main {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        double a = sc.nextDouble();
+        double b = sc.nextDouble();
+        String op = sc.next();
+        double resultado = 0;
+        switch (op) {
+            case "+": resultado = a + b; break;
+            case "-": resultado = a - b; break;
+            case "*": resultado = a * b; break;
+            case "/":
+                if (b != 0) {
+                    resultado = a / b;
+                } else {
+                    System.out.println("Error: división por cero");
+                    return;
+                }
+                break;
+            default:
+                System.out.println("Operador no válido");
+                return;
+        }
+        System.out.printf("%.1f %s %.1f = %.2f%n", a, op, b, resultado);
+    }
+}</code></pre></div>
+  <div class="out"><span class="olabel">Salida</span><pre>10.0 / 4.0 = 2.50</pre></div>
+</article></section><section class="topic" id="t29"><h2><span class="tn">29</span>Desafíos Finales</h2><article class="ex" id="l61" data-q="desafíos finales patrón de números triángulo numérico 29">
+  <header><span class="exn">Ejercicio 1</span><h3>Patrón de números</h3><span class="lid">lección 61</span></header>
+  <p class="task">Imprimir el triángulo numérico de 5 filas. En cada fila los números van de 1 hasta el número de fila.</p><p class="note warn">Mismo caso que el patrón de asteriscos: espacio al final de cada fila. Queda resuelto al desplegar el cambio en <code>api/verify.js</code>.</p>
+  <div class="codewrap"><button class="copy" type="button" aria-label="Copiar código">Copiar</button><pre class="code"><code>public class Main {
+    public static void main(String[] args) {
+        for (int fila = 1; fila &lt;= 5; fila++) {
+            for (int j = 1; j &lt;= fila; j++) {
+                System.out.print(j + " ");
+            }
+            System.out.println();
+        }
+    }
+}</code></pre></div>
+  <div class="out"><span class="olabel">Salida</span><pre>1 
+1 2 
+1 2 3 
+1 2 3 4 
+1 2 3 4 5 </pre></div>
+</article><article class="ex" id="l62" data-q="desafíos finales calculadora de notas promedio y clasificación 29">
+  <header><span class="exn">Ejercicio 2</span><h3>Calculadora de notas</h3><span class="lid">lección 62</span></header>
+  <p class="task">El código ya está completo. Ejecutar y verificar que calcula correctamente el promedio de las 5 notas y la clasificación correspondiente.</p><p class="note bad">La salida esperada cargada en la app dice <b>Clasificación: Destacado</b>, pero con promedio 86.60 el código da <b>Logrado</b> (Destacado es ≥ 90). Ningún estudiante puede aprobar esta lección hasta corregir <code>lib/expected-outputs.js</code>.</p>
+  <div class="codewrap"><button class="copy" type="button" aria-label="Copiar código">Copiar</button><pre class="code"><code>public class Main {
+    public static void main(String[] args) {
+        int[] notas = {85, 92, 78, 90, 88};
+        int suma = 0;
+        for (int n : notas) {
+            suma += n;
+        }
+        double promedio = (double) suma / notas.length;
+        System.out.printf("Promedio: %.2f%n", promedio);
+        String clasificacion;
+        if (promedio &gt;= 90) clasificacion = "Destacado";
+        else if (promedio &gt;= 70) clasificacion = "Logrado";
+        else clasificacion = "En proceso";
+        System.out.println("Clasificación: " + clasificacion);
+    }
+}</code></pre></div>
+  <div class="out"><span class="olabel">Salida</span><pre>Promedio: 86.60
+Clasificación: Logrado</pre></div>
+</article></section><section class="topic" id="t30"><h2><span class="tn">30</span>Operador ternario <span class="opt">opcional</span></h2><article class="ex" id="l47" data-q="operador ternario operador ternario condicion ? si : no 30">
+  <header><span class="exn">Ejercicio 1</span><h3>Operador ternario</h3><span class="lid">lección 47</span></header>
+  <p class="task">Con int numero = -7, usar el ternario para determinar si es positivo o no positivo e imprimir: -7 es: no positivo</p>
+  <div class="codewrap"><button class="copy" type="button" aria-label="Copiar código">Copiar</button><pre class="code"><code>public class Main {
+    public static void main(String[] args) {
+        int numero = -7;
+        String tipo = (numero &gt; 0) ? "positivo" : "no positivo";
+        System.out.println(numero + " es: " + tipo);
+    }
+}</code></pre></div>
+  <div class="out"><span class="olabel">Salida</span><pre>-7 es: no positivo</pre></div>
+</article><article class="ex" id="l48" data-q="operador ternario ternario en práctica simplificar decisiones 30">
+  <header><span class="exn">Ejercicio 2</span><h3>Ternario en práctica</h3><span class="lid">lección 48</span></header>
+  <p class="task">Con int a = 15 y int b = 28, usar el ternario para encontrar el mayor e imprimir: El mayor es: 28</p>
+  <div class="codewrap"><button class="copy" type="button" aria-label="Copiar código">Copiar</button><pre class="code"><code>public class Main {
+    public static void main(String[] args) {
+        int a = 15;
+        int b = 28;
+        int mayor = (a &gt; b) ? a : b;
+        System.out.println("El mayor es: " + mayor);
+    }
+}</code></pre></div>
+  <div class="out"><span class="olabel">Salida</span><pre>El mayor es: 28</pre></div>
+</article></section><section class="topic" id="t31"><h2><span class="tn">31</span>Break y Continue <span class="opt">opcional</span></h2><article class="ex" id="l53" data-q="break y continue sentencia break salir de un bucle 31">
+  <header><span class="exn">Ejercicio 1</span><h3>Sentencia break</h3><span class="lid">lección 53</span></header>
+  <p class="task">Buscar el primer número divisible por 7 entre 1 y 50 e imprimir cuál es: Primer múltiplo de 7: 7</p>
+  <div class="codewrap"><button class="copy" type="button" aria-label="Copiar código">Copiar</button><pre class="code"><code>public class Main {
+    public static void main(String[] args) {
+        for (int i = 1; i &lt;= 50; i++) {
+            if (i % 7 == 0) {
+                System.out.println("Primer múltiplo de 7: " + i);
+                break;
+            }
+        }
+    }
+}</code></pre></div>
+  <div class="out"><span class="olabel">Salida</span><pre>Primer múltiplo de 7: 7</pre></div>
+</article><article class="ex" id="l54" data-q="break y continue sentencia continue saltar una iteración 31">
+  <header><span class="exn">Ejercicio 2</span><h3>Sentencia continue</h3><span class="lid">lección 54</span></header>
+  <p class="task">Imprimir los números del 1 al 10 en una sola línea, saltando los múltiplos de 3 con continue.</p>
+  <div class="codewrap"><button class="copy" type="button" aria-label="Copiar código">Copiar</button><pre class="code"><code>public class Main {
+    public static void main(String[] args) {
+        for (int i = 1; i &lt;= 10; i++) {
+            if (i % 3 == 0) {
+                continue;
+            }
+            System.out.print(i + " ");
+        }
+    }
+}</code></pre></div>
+  <div class="out"><span class="olabel">Salida</span><pre>1 2 4 5 7 8 10 </pre></div>
+</article></section><p class="empty" id="none" hidden>No hay ejercicios que coincidan con la búsqueda.</p></main>
+</div>
+<script>
+document.querySelectorAll('.copy').forEach(b=>b.addEventListener('click',()=>{
+  const code=b.nextElementSibling.innerText;
+  const done=()=>{b.textContent='Copiado';setTimeout(()=>b.textContent='Copiar',1400)};
+  const fallback=()=>{const r=document.createRange();r.selectNodeContents(b.nextElementSibling);const s=getSelection();s.removeAllRanges();s.addRange(r);b.textContent='Seleccionado'};
+  try{navigator.clipboard.writeText(code).then(done,fallback)}catch(e){fallback()}
+}));
+const q=document.getElementById('q');
+q.addEventListener('input',()=>{
+  const v=q.value.trim().toLowerCase(); let any=false;
+  document.querySelectorAll('.topic').forEach(sec=>{
+    const num=sec.id.slice(1); let show=false;
+    sec.querySelectorAll('.ex').forEach(ex=>{const m=!v||(/^\d+$/.test(v)?num===v:ex.dataset.q.includes(v));ex.hidden=!m;show=show||m});
+    sec.hidden=!show; any=any||show;
+  });
+  document.getElementById('none').hidden=any;
+});
+</script>
+
+</body></html>
