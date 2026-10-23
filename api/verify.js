@@ -55,7 +55,9 @@ module.exports = async function handler(req, res) {
     const expectedHash = EXPECTED_OUTPUT_HASHES[lessonId];
     if (!expectedHash) return res.status(400).json({ error: 'Lección no encontrada' });
 
-    const normalize = s => s.replace(/\r\n/g, '\n').trim();
+    // Normalizar: \r\n -> \n, quitar espacios/tabs al final de cada línea y trim general.
+    // Así un patrón impreso con print("* ") (espacio al final de cada fila) se acepta igual.
+    const normalize = s => s.replace(/\r\n/g, '\n').replace(/[ \t]+$/gm, '').trim();
     const outputHash = createHash('sha256').update(normalize(output || '')).digest('hex');
     const correct = outputHash === expectedHash;
 
