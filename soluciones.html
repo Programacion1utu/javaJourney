@@ -683,7 +683,7 @@ java es poderoso</pre></div>
 3 x 5 = 15</pre></div>
 </article><article class="ex" id="l56" data-q="bucles anidados patrón de asteriscos triángulo con bucles anidados 23">
   <header><span class="exn">Ejercicio 2</span><h3>Patrón de asteriscos</h3><span class="lid">lección 56</span></header>
-  <p class="task">Imprimir un triángulo de asteriscos de 5 filas: la fila 1 tiene 1 asterisco, la fila 2 tiene 2, y así sucesivamente hasta la fila 5. Cada asterisco separado por un espacio.</p><p class="note warn">Cada fila termina en un espacio. La versión publicada lo marca como error; queda resuelto al desplegar el cambio en <code>api/verify.js</code>.</p>
+  <p class="task">Imprimir un triángulo de asteriscos de 5 filas: la fila 1 tiene 1 asterisco, la fila 2 tiene 2, y así sucesivamente hasta la fila 5. Cada asterisco separado por un espacio.</p><p class="note info">Cada fila termina en un espacio. La verificación ignora los espacios al final de cada línea, así que la salida se acepta igual.</p>
   <div class="codewrap"><button class="copy" type="button" aria-label="Copiar código">Copiar</button><pre class="code"><code>public class Main {
     public static void main(String[] args) {
         for (int i = 1; i &lt;= 5; i++) {
@@ -886,7 +886,7 @@ public class Main {
   <div class="out"><span class="olabel">Salida</span><pre>10.0 / 4.0 = 2.50</pre></div>
 </article></section><section class="topic" id="t29"><h2><span class="tn">29</span>Desafíos Finales</h2><article class="ex" id="l61" data-q="desafíos finales patrón de números triángulo numérico 29">
   <header><span class="exn">Ejercicio 1</span><h3>Patrón de números</h3><span class="lid">lección 61</span></header>
-  <p class="task">Imprimir el triángulo numérico de 5 filas. En cada fila los números van de 1 hasta el número de fila.</p><p class="note warn">Mismo caso que el patrón de asteriscos: espacio al final de cada fila. Queda resuelto al desplegar el cambio en <code>api/verify.js</code>.</p>
+  <p class="task">Imprimir el triángulo numérico de 5 filas. En cada fila los números van de 1 hasta el número de fila.</p><p class="note info">Mismo caso que el patrón de asteriscos: el espacio al final de cada fila no afecta la verificación.</p>
   <div class="codewrap"><button class="copy" type="button" aria-label="Copiar código">Copiar</button><pre class="code"><code>public class Main {
     public static void main(String[] args) {
         for (int fila = 1; fila &lt;= 5; fila++) {
@@ -904,7 +904,7 @@ public class Main {
 1 2 3 4 5 </pre></div>
 </article><article class="ex" id="l62" data-q="desafíos finales calculadora de notas promedio y clasificación 29">
   <header><span class="exn">Ejercicio 2</span><h3>Calculadora de notas</h3><span class="lid">lección 62</span></header>
-  <p class="task">El código ya está completo. Ejecutar y verificar que calcula correctamente el promedio de las 5 notas y la clasificación correspondiente.</p><p class="note bad">La salida esperada cargada en la app dice <b>Clasificación: Destacado</b>, pero con promedio 86.60 el código da <b>Logrado</b> (Destacado es ≥ 90). Ningún estudiante puede aprobar esta lección hasta corregir <code>lib/expected-outputs.js</code>.</p>
+  <p class="task">El código ya está completo. Ejecutar y verificar que calcula correctamente el promedio de las 5 notas y la clasificación correspondiente.</p>
   <div class="codewrap"><button class="copy" type="button" aria-label="Copiar código">Copiar</button><pre class="code"><code>public class Main {
     public static void main(String[] args) {
         int[] notas = {85, 92, 78, 90, 88};
