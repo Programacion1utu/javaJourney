@@ -32,6 +32,17 @@ CREATE TABLE IF NOT EXISTS quiz_progress (
 -- Si la tabla ya existe, agregar la columna answers:
 -- ALTER TABLE quiz_progress ADD COLUMN IF NOT EXISTS answers JSONB;
 
+-- Cuenta docente (login con nombre + apellido + contraseña)
+CREATE TABLE IF NOT EXISTS teachers (
+  id            SERIAL PRIMARY KEY,
+  nombre        TEXT NOT NULL,
+  apellido      TEXT NOT NULL,
+  password_hash TEXT NOT NULL
+);
+
+CREATE UNIQUE INDEX IF NOT EXISTS teachers_nombre_apellido_idx
+ON teachers (LOWER(nombre), LOWER(apellido));
+
 -- Configuración global (temas habilitados, etc.)
 CREATE TABLE IF NOT EXISTS config (
   key   VARCHAR(50) PRIMARY KEY,
