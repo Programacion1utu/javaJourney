@@ -1,4 +1,5 @@
-// Hashes SHA-256 (normalizado: \r\n -> \n, trim) de la salida esperada de cada lección.
+// Hashes SHA-256 de la salida esperada de cada lección, normalizada igual que en api/verify.js:
+// \r\n -> \n, sin espacios/tabs al final de cada línea, trim.
 // No se guarda el texto plano para que este archivo no revele las respuestas
 // si alguna vez queda accesible como archivo estático (ver api/verify.js).
 const EXPECTED_OUTPUT_HASHES = {
